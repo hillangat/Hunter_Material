@@ -1,0 +1,19 @@
+<!--component html goes here -->
+<div class='container' >
+    <mat-card class="example-card">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title><h2>Page Not Found</h2></mat-card-title>
+            <mat-card-subtitle>Error 404: Page not found.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>
+                Sorry but the page you are looking for could not be found.<br/>
+                Please click the home button below navigate to home page.
+            </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button (click)='goHome()' mat-button>Home</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

@@ -1,0 +1,178 @@
+<!--component html goes here -->
+<div class='app-tools' >
+    <mat-checkbox>Check me!</mat-checkbox>
+
+    <br/>
+    <br/>
+    <br/>
+    
+    <mat-radio-group>
+        <mat-radio-button value="1">Option 1</mat-radio-button>
+        <mat-radio-button value="2">Option 2</mat-radio-button>
+    </mat-radio-group>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="example-container">
+        <mat-form-field>
+          <mat-select placeholder="Select One Option">
+            <mat-option value="option">Option 1</mat-option>
+            <mat-option value="option">Option 2</mat-option>
+            <mat-option value="option">Option 3</mat-option>
+            <mat-option value="option">Option 4</mat-option>
+            <mat-option value="option">Option 5</mat-option>
+            <mat-option value="option">Option 6</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <mat-slider min="1" max="5" step="0.5" value="1.5"></mat-slider>
+
+    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+    </mat-menu>
+
+    <mat-toolbar>My App</mat-toolbar>
+    <mat-list role="list">
+            <mat-list-item role="listitem">Item 1</mat-list-item>
+            <mat-list-item role="listitem">Item 2</mat-list-item>
+            <mat-list-item role="listitem">Item 3</mat-list-item>
+          </mat-list>
+
+
+          <br/><br/>
+          <mat-selection-list #shoes>
+                <mat-list-option *ngFor="let shoe of typesOfShoes">
+                  {{shoe}}
+                </mat-list-option>
+              </mat-selection-list>
+              
+              <p>
+                Options selected: {{shoes.selectedOptions.selected.length}}
+              </p>
+
+              <mat-grid-list cols="2" rowHeight="2:1">
+                    <mat-grid-tile>1</mat-grid-tile>
+                    <mat-grid-tile>2</mat-grid-tile>
+                    <mat-grid-tile>3</mat-grid-tile>
+                    <mat-grid-tile>4</mat-grid-tile>
+                  </mat-grid-list>
+
+                  <br/>
+                  <br/>
+                  <br/>
+                  <mat-card>
+                        <mat-card-title>card title</mat-card-title>
+                        <mat-card-subtitle>subtitle</mat-card-subtitle>
+                        <img mat-card-lg-image><img>
+                  </mat-card>
+
+                  <button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>
+
+                  <br/>
+                  <br/>
+                  <br/>
+
+                  <mat-tab-group>
+                    <mat-tab label="Tab 1">Content 1</mat-tab>
+                    <mat-tab label="Tab 2">Content 2</mat-tab>
+                </mat-tab-group>
+
+                <br/>
+                <br/>
+                <br/>
+
+                <mat-button-toggle>Toggle me!</mat-button-toggle>
+
+                <br/>
+                <br/>
+                <br/>
+
+                <mat-chip-list>
+                    <mat-chip>One fish</mat-chip>
+                    <mat-chip>Two fish</mat-chip>
+                    <mat-chip color="primary" selected="true">Primary fish</mat-chip>
+                    <mat-chip color="accent" selected="true">Accent fish</mat-chip>
+                </mat-chip-list>
+
+                <br/>
+                <br/>
+                <br/>
+
+                <mat-icon>home</mat-icon>
+
+                <br/>
+                <br/>
+                <br/>
+                <mat-spinner style='font-size:12px;' ></mat-spinner>
+
+                <br/>
+                <br/>
+                <br/>
+                <span matTooltip="I have a tooltipI have a tooltip!">I have a tooltip</span>
+
+
+
+                <ol style='width:100%;' >
+                    <li>
+                        <mat-form-field>
+                        <input matInput [(ngModel)]="name" placeholder="What's your name?">
+                        </mat-form-field>
+                    </li>
+                    <li>
+                        <button mat-raised-button (click)="openDialog()">Pick one</button>
+                    </li>
+                    <li *ngIf="animal">
+                        You chose: <i>{{animal}}</i>
+                    </li>
+                </ol>
+
+
+                <br/>
+                <br/>
+                <br/>
+
+                <div class="example-container mat-elevation-z10" style='max-height:400px;overflow-y: scroll' >
+                        <mat-table #table [dataSource]="dataSource">
+                      
+                          <!--- Note that these columns can be defined in any order.
+                                The actual rendered columns are set as a property on the row definition" -->
+                      
+                          <!-- Position Column -->
+                          <ng-container matColumnDef="position">
+                            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+                          </ng-container>
+                      
+                          <!-- Name Column -->
+                          <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                          </ng-container>
+                      
+                          <!-- Weight Column -->
+                          <ng-container matColumnDef="weight">
+                            <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+                          </ng-container>
+                      
+                          <!-- Symbol Column -->
+                          <ng-container matColumnDef="symbol">
+                            <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+                          </ng-container>
+                      
+                          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                      </div>
+
+</div>

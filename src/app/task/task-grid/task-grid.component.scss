@@ -1,0 +1,48 @@
+// component css goes here
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+} 
+.mat-column-select {
+    overflow: initial;
+}
+
+mat-header-row {
+    position: sticky;
+    top: 0;
+    background: rgb( 63, 81, 181 );
+    z-index: 8484848;
+}
+
+mat-header-cell {
+    color:#DBE9F0;
+    font-size: 1.5em;
+}
+
+.mat-checkbox-inner-container {
+    background-color: green !important;
+}
+
+.mat-column-select {
+    flex: 0 0 60px;
+}
+
+.mat-column-symbol {
+    flex: 0 0 100px;
+    text-align: center;
+}
+
+.task-clickable-grid-icon {
+    cursor: pointer;
+}
+
+.dyn-grid-button {
+    margin: 0 auto;
+    vertical-align: middle;
+}
