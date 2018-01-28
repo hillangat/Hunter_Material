@@ -29,7 +29,7 @@
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <a mat-min-raised-button routerLink=".">{{element.name}}</a>
+                <a (click)='openDialog()' mat-min-raised-button routerLink=".">{{element.name}}</a>
             </mat-cell>
         </ng-container>
         <!-- Weight Column -->

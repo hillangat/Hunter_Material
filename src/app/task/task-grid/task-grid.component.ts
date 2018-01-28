@@ -1,9 +1,10 @@
 import { LoggerService } from '../../shared/logger/logger-service';
 import {Element} from '../../material-code/material-code/material-code.component';
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dialog-template.component';
 
 @Component({
     moduleId: module.id,
@@ -17,10 +18,22 @@ export class TaskGridComponent implements OnInit {
     public displayedColumns = ['select', 'position', 'name', 'weight', 'symbol'];
     public selection = new SelectionModel<Element>(true, []);
 
-    constructor( private logger: LoggerService ) {}
+    constructor( private logger: LoggerService, public dialog: MatDialog ) {}
 
     public ngOnInit() {
     }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogTemplateComponent, {
+      width: '250px',
+      data: { name: 'Sample Name', animal: 'Sample Animal' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        this.logger.log('The dialog was closed');
+        this.logger.log( result );
+    });
+  }
 
     /** Whether the number of selected elements matches the total number of rows. */
     public isAllSelected() {

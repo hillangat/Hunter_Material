@@ -20,9 +20,10 @@ export class MaterialCodeComponent {
     'Autumn',
   ];
 
-  typesOfShoes = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
-  animal: string;
-  name: string;
+  public typesOfShoes = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
+  public animal: string;
+  public name: string;
+  public types: any = [ DialogTemplateComponent ];
 
   public displayedColumns = ['position', 'name', 'weight', 'symbol'];
   public dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
