@@ -4,3 +4,12 @@ body{
     background-image: url("assets/images/home_ground.jpg");
     background-repeat: repeat;
 }
+
+.loadingWidget {
+    text-align: center !important;
+    margin: auto !important;
+}
+
+.error {
+    color: red;
+}

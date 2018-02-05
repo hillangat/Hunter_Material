@@ -7,4 +7,7 @@ import { CommonModule } from '@angular/common';
   ],
   declarations: []
 })
-export class MaterialCodeModule { }
+export class MaterialCodeModule {
+
+}
+

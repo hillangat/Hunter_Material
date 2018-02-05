@@ -4,6 +4,7 @@ import { TaskComponent } from './task/task.component';
 import { SecureRouteGuard } from './shared/route-guards.ts/secure-route-guard';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { MaterialCodeComponent } from './material-code/material-code/material-code.component';
+import { DynamicGridComponent } from './shared/dynamic-grid/dynamic-grid.component';
 
 export const appRoutes: Routes = [
     {
@@ -34,6 +35,12 @@ export const appRoutes: Routes = [
       path: 'material',
       data: { title: 'Material Code Samples' },
       component: MaterialCodeComponent,
+      canActivate: [ SecureRouteGuard ]
+    },
+    {
+      path: 'dyn',
+      data: { title: 'Dynamic Grid' },
+      component: DynamicGridComponent,
       canActivate: [ SecureRouteGuard ]
     },
     {

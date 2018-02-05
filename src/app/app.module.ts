@@ -1,6 +1,8 @@
+import { DynGridService } from './shared/dynamic-grid/services/dyn-grid.service/dyn-grid.service';
 import { LoggerService } from 'app/shared/logger/logger-service';
 import { AdminModule } from './admin/admin.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { DialogTemplateComponent } from './sample-codes/dialog-template/dialog-template.component';
 import { NgModule } from '@angular/core';
@@ -15,16 +17,21 @@ import { TaskModule } from 'app/task/task.module';
 import { SecureRouteGuard } from './shared/route-guards.ts/secure-route-guard';
 import { HomeModule } from 'app/home/home.module';
 import { MaterialCodeComponent } from './material-code/material-code/material-code.component';
+import { DynGridConfirmComponent } from 'app/shared/dynamic-grid/dyn-grid-confirm/dyn-grid-confirm.component';
+import { HunterProgressSpinnerComponent } from './shared/hunter-progress-spinner/hunter-progress-spinner.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     DialogTemplateComponent,
-    MaterialCodeComponent
+    MaterialCodeComponent,
+    DynGridConfirmComponent,
+    HunterProgressSpinnerComponent
   ],
   imports: [
     BrowserModule, /** BrowserModule must be the first import for material design to work */
+    HttpModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
     FormsModule,
@@ -33,9 +40,13 @@ import { MaterialCodeComponent } from './material-code/material-code/material-co
     AdminModule,
     RouterModule.forRoot( appRoutes )
   ],
-  exports: [
+  exports: [],
+  providers: [
+    ChildrenOutletContexts,
+    SecureRouteGuard,
+    LoggerService,
+    DynGridService
   ],
-  providers: [ ChildrenOutletContexts, SecureRouteGuard, LoggerService ],
   bootstrap: [AppComponent],
   entryComponents: [
     DialogTemplateComponent

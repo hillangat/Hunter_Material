@@ -6,7 +6,7 @@ import { ActivatedRouteSnapshot } from '@angular/router/src/router_state';
 
 export class SecureRouteGuard implements CanActivate {
 
-    public canActivate( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): boolean {
+    public canActivate( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): boolean | Observable<true> {
         return true;
     }
 

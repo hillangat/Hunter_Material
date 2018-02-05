@@ -32,7 +32,7 @@ export class MaterialCodeComponent {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogTemplateComponent, {
-      width: '250px',
+      width: '500px',
       data: { name: this.name, animal: this.animal }
     });
 

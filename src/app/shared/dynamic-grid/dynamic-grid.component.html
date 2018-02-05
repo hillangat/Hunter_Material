@@ -1,2 +1,29 @@
-<!--component html goes here -->
-<h1>Dynamic Grid</h1>
+
+<br/>
+<br/>
+<ng-container [ngSwitch]='gridLoadState.toString()'>
+    <div *ngSwitchCase="'LOADING'">
+            <br/>
+            <br/>
+            <mat-spinner [diameter]='20' >Loading data...</mat-spinner>
+    </div>
+    <div *ngSwitchCase="'ERROR'" class='error' >Error occurred while loading data...</div>
+    <ng-container *ngSwitchCase="'SUCCESS'" >
+      <input #filterValueInput type="text" [(ngModel)]="filterValue"  placeholder='Enter Filter Value' >
+      <br/>
+      {{ filterValue }}
+      <br/>
+      <div>
+          <h2>Loaded successfully!</h2>
+          <ul>
+                <li *ngFor='let datum of gridData.data; let i=index;' >
+                    {{ datum.taskId }}  :  {{ datum.taskName }}
+                </li>
+          </ul>
+          <br/>
+          <br/>
+          <button mat-raised-button (click)="refreshGrid(null)">Refresh Data</button>
+      </div>
+    </ng-container>
+    <div *ngSwitchDefault>Load state could not be determined: {{ gridLoadState }}</div>
+</ng-container>
