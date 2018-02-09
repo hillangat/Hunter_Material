@@ -1,6 +1,40 @@
 <!--component html goes here -->
-<div class='container' >
-    <mat-card>
-        <mat-card-content><h1>You are at Admin space :)</h1></mat-card-content>
-    </mat-card>
+<br/>
+<br/>
+<div>
+        <mat-tab-group class='mat-elevation-z5 eithCenter' >
+            <mat-tab label='Cache Refresh'>
+                    <mat-card class='matCard'>
+                        <mat-card-header>
+                            <mat-card-title>Select cache and click refresh button</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-selection-list #cacheOptions >
+                                <mat-list-option 
+                                    [selected]='c.selected'
+                                    [disabled]='c.refreshing'
+                                    *ngFor='let c of availCaches'
+                                    (click)='onSelCache(c)'
+                                    [value]='c.key'
+                                >
+                                    <table>
+                                        <tr>
+                                            <td style='width:  20px !important;'><mat-spinner *ngIf='c.refreshing' [diameter]='15' ></mat-spinner></td>
+                                            <td>{{c.name}}</td>
+                                        </tr>
+                                    </table>
+                                </mat-list-option>
+                            </mat-selection-list>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-raised-button (click)="refreshSelCaches()">Refresh Cache</button>
+                            <button mat-raised-button (click)="getAvailCaches()">Reload Records</button>
+                        </mat-card-actions>
+                    </mat-card>
+            </mat-tab>
+            <mat-tab label="Two">
+                <h1>Some more tab content</h1>
+                <p>...</p>
+            </mat-tab>
+        </mat-tab-group>
 </div>

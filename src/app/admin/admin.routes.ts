@@ -6,6 +6,7 @@ export const adminRoutes: Routes = [
       path: '',
       children: [
         {
+          data: { title: 'Hunter Admin' },
           path: 'admin',
           component: AdminComponent
         }

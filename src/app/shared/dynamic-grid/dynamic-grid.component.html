@@ -1,29 +1,48 @@
 
 <br/>
 <br/>
-<ng-container [ngSwitch]='gridLoadState.toString()'>
-    <div *ngSwitchCase="'LOADING'">
-            <br/>
-            <br/>
-            <mat-spinner [diameter]='20' >Loading data...</mat-spinner>
-    </div>
-    <div *ngSwitchCase="'ERROR'" class='error' >Error occurred while loading data...</div>
-    <ng-container *ngSwitchCase="'SUCCESS'" >
-      <input #filterValueInput type="text" [(ngModel)]="filterValue"  placeholder='Enter Filter Value' >
-      <br/>
-      {{ filterValue }}
-      <br/>
-      <div>
-          <h2>Loaded successfully!</h2>
-          <ul>
-                <li *ngFor='let datum of gridData.data; let i=index;' >
-                    {{ datum.taskId }}  :  {{ datum.taskName }}
-                </li>
-          </ul>
-          <br/>
-          <br/>
-          <button mat-raised-button (click)="refreshGrid(null)">Refresh Data</button>
-      </div>
+<div style='width:80%;margin-left:10%;margin-bottom:50px;' >
+    <ng-container [ngSwitch]='gridLoadState.toString()'>
+        <div *ngSwitchCase="'LOADING'">
+                <br/>
+                <br/>
+                <div style='width:40px;margin: 0 auto !important; text-align: center;' >
+                    <mat-spinner [diameter]='20' >Loading data...</mat-spinner>
+                </div>
+        </div>
+        <div *ngSwitchCase="'ERROR'" class='error' >Error occurred while loading data...<br/>
+            <button mat-raised-button (click)="refreshGrid(null)">Try again</button>
+        </div>
+        <ng-container *ngSwitchCase="'SUCCESS'" >
+        <div class='example-container mat-elevation-z5' >
+            <mat-table #matDyncGridTable [dataSource]='dataSource' >
+                <ng-container *ngFor='let header of gridData.headers' matColumnDef='{{header.headerId}}' [style.width]="40" >
+                    <mat-header-cell fxFlex="60px" *matHeaderCellDef> {{header.displayName}} </mat-header-cell>
+                    <mat-cell fxFlex="60px" *matCellDef='let cell'>
+                        <ng-container  [ngSwitch]='header.actionCellType' >
+                            <span *ngSwitchCase="'text'"> {{cell[header.headerId]}} </span>
+                            <a style='width:100%;text-align:center;' href='#' *ngSwitchCase="'link'" (click)='openDialog()' mat-min-raised-button routerLink=".">{{cell[header.headerId]}}</a>
+                            <ng-container *ngSwitchCase="'button'">
+                                    <button *ngIf='header.actionColIconName != null' mat-icon-button color='primary'><mat-icon>{{header.actionColIconName}}</mat-icon></button>
+                                    <ng-container *ngIf='header.actionColIconName == null' mat-raised-button >{{header.displayName}}</ng-container>
+                            </ng-container>
+                        </ng-container >
+                        <span *ngSwitchDefault >{{cell[header.headerId]}}</span>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row class='mat-elevation-z2' *matHeaderRowDef='displayedColumns'></mat-header-row>
+                <mat-row *matRowDef='let row; columns: displayedColumns;'></mat-row>
+            </mat-table>    
+            <mat-paginator 
+                [pageSize]='dynGridProps.defaDynGridDataReq.pageSize'
+                [length]='gridData.total'
+                [pageSizeOptions]='dynGridProps.pageSizes'
+                (page)='pageEvent = onPageChange ( $event )'
+                #dynGridPaginator
+                *ngIf='dynGridProps.pageable' >
+            </mat-paginator>
+        </div>
+        </ng-container>
+        <div *ngSwitchDefault>Load state could not be determined: {{ gridLoadState }}</div>
     </ng-container>
-    <div *ngSwitchDefault>Load state could not be determined: {{ gridLoadState }}</div>
-</ng-container>
+</div>

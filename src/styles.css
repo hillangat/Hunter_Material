@@ -13,3 +13,8 @@ body{
 .error {
     color: red;
 }
+
+.eithCenter {
+    width: 80%;
+    margin-left:10%;
+}

@@ -61,13 +61,16 @@ export class DynGridService {
     props.filterable = true;
     props.gridDataLoadUrl = 'http://localhost:8080/Hunter/restful/tasks/read/all';
     props.pageable = true;
-    props.pageNumber = 0;
+    props.pageSizes = [ 10, 25, 50, 100, 200 ];
     props.pageSize = 10;
+    props.pageNo = 1;
     props.refreshable = true;
     props.sortable = true;
 
     props.defaDynGridDataReq = new DynGridDataReq();
     props.defaDynGridDataReq.reference = 'TASK_GRID';
+    props.defaDynGridDataReq.pageNo = props.pageNo;
+    props.defaDynGridDataReq.pageSize = props.pageSize;
     props.defaDynGridDataReq.filterBy = [
       { fieldName: 'taskId', userInput: '100', dir: 'asc', operation: 'lt' } as GridFieldUserInput,
       { fieldName: 'taskName', userInput: filterValue, dir: 'asc', operation: 'contains' } as GridFieldUserInput
@@ -75,8 +78,6 @@ export class DynGridService {
     props.defaDynGridDataReq.orderBy = [
       { fieldName: 'taskId', userInput: undefined, dir: 'asc', operation: undefined } as GridFieldUserInput
     ];
-    props.defaDynGridDataReq.pageSize = 10;
-    props.defaDynGridDataReq.pageNo = 0;
     return props;
   }
 

@@ -6,6 +6,8 @@ import { JsonProperty, JsonObject, Any } from 'json2typescript';
 export class HunterServerResponse {
     @JsonProperty( 'status',  String )
     public status: string;
+    @JsonProperty( 'total',  Number )
+    public total: number;
     @JsonProperty( 'message',  String )
     public message: string;
     @JsonProperty( 'data',  [Any] )

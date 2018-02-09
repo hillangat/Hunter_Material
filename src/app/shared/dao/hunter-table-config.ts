@@ -16,6 +16,8 @@ export class HunterTableConfig {
     public show: boolean;
     @JsonProperty('checkBox', Boolean)
     public checkBox: boolean;
+    @JsonProperty('actionCellType', String)
+    public actionCellType: string;
     @JsonProperty('bootstrapIconName', String)
     public bootstrapIconName: string;
     @JsonProperty('dataType', String)
