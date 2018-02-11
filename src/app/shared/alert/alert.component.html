@@ -1,0 +1,30 @@
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-2 col-md-offset-10 alertServiceBoby' *ngIf='alerts.length > 0' >
+            <table style='width:100%;border-collapse: collapse' >
+                <tr *ngFor='let alert of alerts; let i=index;'>
+                    <td style='margin:0px;' >
+                        <div [class]="getClassByAlertType(alert)" >
+                            <table>
+                                <tr>
+                                    <td style='padding-left:15px;' >
+                                        <mat-icon>
+                                            <ng-container [ngSwitch]='alert.type' >
+                                                <ng-container *ngSwitchCase="'SUCCESS'">check</ng-container>
+                                                <ng-container *ngSwitchCase="'ERROR'">error_outline</ng-container>
+                                                <ng-container *ngSwitchCase="'INFO'">info_outline</ng-container>
+                                                <ng-container *ngSwitchCase="'WARNING'">warning</ng-container>
+                                            </ng-container>
+                                        </mat-icon>
+                                    </td>
+                                    <td><span>{{alert.message}}</span></td>
+                                    <td><button (click)='removeAlert(i)' mat-icon-button ><mat-icon>clear</mat-icon></button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>        
+            </table>
+        </div>        
+    </div>
+</div>

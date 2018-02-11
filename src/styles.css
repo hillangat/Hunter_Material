@@ -18,3 +18,34 @@ body{
     width: 80%;
     margin-left:10%;
 }
+
+.cardContainer {
+    width:80%;
+    margin-left:10%;
+    margin-bottom:50px;
+    min-height:300px;
+    margin-top: 10px;
+    padding:10px;
+}
+
+.cardContent {
+    min-height: 100px;
+    padding: 10px;
+    display: inline-block;
+    width: auto;
+}
+
+.splitFormFields {
+    display: block;
+    float: left;
+    width: 40%;
+    box-sizing: border-box;
+}
+
+.cardContent div.splitFormFields:first-child {
+    padding-right: 10px;
+}
+.cardContent div.splitFormFields:nth-child(2) {
+    float:right;
+    margin-left: 10px;
+}

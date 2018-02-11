@@ -6,5 +6,9 @@ export class SelectValue {
     public value: string;
     @JsonProperty('text', String)
     public text: string;
+    constructor( value: string, text: string ) {
+        this.value = value;
+        this.text = text;
+    }
 }
 

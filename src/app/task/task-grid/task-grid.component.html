@@ -1,53 +1,7 @@
 <!--component html goes here -->
 <br/>
-<div class="example-container mat-elevation-z5" style='width:80%;margin-left:10%;'>
-    <mat-table #table [dataSource]="dataSource">
-        
-        <ng-container matColumnDef="select">
-            <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox
-                    (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()">
-                </mat-checkbox>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">
-                <mat-checkbox
-                    (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)">
-                </mat-checkbox>
-            </mat-cell>
-        </ng-container>
-
-
-        <ng-container matColumnDef="position">
-            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
-        </ng-container>
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-                <a (click)='openDialog()' mat-min-raised-button routerLink=".">{{element.name}}</a>
-            </mat-cell>
-        </ng-container>
-        <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-            <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
-        </ng-container>
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol">
-            <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-                <button class='dyn-grid-button' mat-icon-button (click)='showCell(element.symbol)' >
-                    <i class="material-icons task-clickable-grid-icon">play_arrow</i>
-                </button>
-            </mat-cell>
-        </ng-container>
-        <mat-header-row class='mat-elevation-z2' *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-    <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [length]='20'></mat-paginator>
-</div>
+<app-dynamic-grid
+    (onClickActionCell)='onClickActionCell($event)'
+    (onClickNewRecButton)='onClickNewRecButton()'
+    [dynGridProps]='dynGridProps'
+></app-dynamic-grid>

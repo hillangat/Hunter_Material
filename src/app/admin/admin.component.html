@@ -8,24 +8,32 @@
                         <mat-card-header>
                             <mat-card-title>Select cache and click refresh button</mat-card-title>
                         </mat-card-header>
-                        <mat-card-content>
-                            <mat-selection-list #cacheOptions >
-                                <mat-list-option 
-                                    [selected]='c.selected'
-                                    [disabled]='c.refreshing'
-                                    *ngFor='let c of availCaches'
-                                    (click)='onSelCache(c)'
-                                    [value]='c.key'
-                                >
-                                    <table>
-                                        <tr>
-                                            <td style='width:  20px !important;'><mat-spinner *ngIf='c.refreshing' [diameter]='15' ></mat-spinner></td>
-                                            <td>{{c.name}}</td>
-                                        </tr>
-                                    </table>
-                                </mat-list-option>
-                            </mat-selection-list>
-                        </mat-card-content>
+                        <ng-container *ngIf="gridState === 'SUCCESS'" >
+                            <mat-card-content>
+                                    <mat-selection-list #cacheOptions >
+                                        <mat-list-option 
+                                            [selected]='c.selected'
+                                            [disabled]='c.refreshing'
+                                            *ngFor='let c of availCaches'
+                                            (click)='onSelCache(c)'
+                                            [value]='c.key'
+                                        >
+                                            <table>
+                                                <tr>
+                                                    <td style='width:  20px !important;'><mat-spinner *ngIf='c.refreshing' [diameter]='15' ></mat-spinner></td>
+                                                    <td>{{c.name}}</td>
+                                                </tr>
+                                            </table>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </mat-card-content>
+                        </ng-container>
+                        <ng-container *ngIf="gridState === 'LOADING'" >
+                            <app-prog-spinner [marginTop]='0' [message]="'Loading Cache Records. Please wait...'" [diameter]='40' ></app-prog-spinner>
+                        </ng-container>
+                        <ng-container *ngIf="gridState === 'ERROR_OCCURRED'" >
+                            <div style='text-align:center;color:red;' >Error occurred while loading cache records.</div>
+                        </ng-container>
                         <mat-card-actions>
                             <button mat-raised-button (click)="refreshSelCaches()">Refresh Cache</button>
                             <button mat-raised-button (click)="getAvailCaches()">Reload Records</button>

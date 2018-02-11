@@ -5,6 +5,12 @@ import { MatTableDataSource, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dialog-template.component';
+import { TaskService } from '../shared/services/task.service';
+import { DynGridProperties } from '../../shared/dynamic-grid/shared/dyn-grid-properties';
+import { DynGridService } from '../../shared/dynamic-grid/services/dyn-grid.service/dyn-grid.service';
+import { ConfirmGridActionComponent } from '../../shared/confirm-grid-action/confirm-grid-action.component';
+import { CellActionBean } from '../../shared/beans/cell-action-bean';
+import { Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -14,66 +20,96 @@ import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dial
 })
 export class TaskGridComponent implements OnInit {
 
-    public dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
-    public displayedColumns = ['select', 'position', 'name', 'weight', 'symbol'];
-    public selection = new SelectionModel<Element>(true, []);
+    private dynGridProps: DynGridProperties;
+    private readTasksURL: string;
 
-    constructor( private logger: LoggerService, public dialog: MatDialog ) {}
+    constructor(
+        private taskService: TaskService,
+        private dynGridService: DynGridService,
+        private logger: LoggerService,
+        private dialog: MatDialog,
+        private router: Router
+    ) {}
 
     public ngOnInit() {
+        this.getTaskURL();
     }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogTemplateComponent, {
-      width: '250px',
-      data: { name: 'Sample Name', animal: 'Sample Animal' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-        this.logger.log('The dialog was closed');
-        this.logger.log( result );
-    });
-  }
-
-    /** Whether the number of selected elements matches the total number of rows. */
-    public isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
+    public getTaskURL() {
+        this.readTasksURL = this.taskService.getReadTasksURL();
     }
 
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    public masterToggle() {
-        this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
+    public onClickActionCell( cellAction: CellActionBean ) {
+        this.logger.log( JSON.stringify(cellAction) );
+        switch ( cellAction.actionHeader.headerId  ) {
+            case 'taskLifeStatus' : ;
+                break;
+            case 'clone' :
+                this.setCloneDialogInfo( cellAction );
+                this.openDialog( cellAction );
+                break;
+            case 'process' :
+                this.setProcessDialogInfo( cellAction );
+                this.openDialog( cellAction );
+                break;
+            case 'delete' :
+                this.setDeleteDialogInfo( cellAction );
+                this.openDialog( cellAction );
+                break;
+            case 'open' : ;
+                this.router.navigateByUrl( '/task/details/' + cellAction.cellRow.taskId );
+                break;
+            default : return;
+        }
     }
 
-    public showCell( cell: any ) {
-        this.logger.log( JSON.stringify( cell ) );
+    public onClickNewRecButton() {
+        this.router.navigateByUrl('/task/create');
     }
 
+    public openDialog( cellAction: CellActionBean ): boolean {
+        const dialogRef = this.dialog.open(ConfirmGridActionComponent, {
+          width: '600px',
+          data: cellAction
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            this.handleConfirmAction( cellAction );
+        });
+        return false;
+    }
+
+    public handleConfirmAction( cellAction: CellActionBean ) {
+        this.logger.log( JSON.stringify(cellAction) );
+    }
+
+
+    public setDeleteDialogInfo( cellAction: CellActionBean ) {
+        cellAction['message'] = 'The selected task will be deleted. Are you sure?';
+        cellAction['notIconName'] = 'do_not_disturb';
+        cellAction['yesIconName'] = 'delete';
+        cellAction['title'] = 'Delete Task';
+        cellAction['titleIcon'] = 'delete';
+        cellAction['yesButtonText'] = 'Delete';
+        cellAction['noButtonText'] = 'Close';
+    }
+
+    public setProcessDialogInfo( cellAction: CellActionBean ) {
+        cellAction['message'] = 'The selected task will be processed. Are you sure?';
+        cellAction['notIconName'] = 'do_not_disturb';
+        cellAction['yesIconName'] = 'play_circle_outline';
+        cellAction['title'] = 'Process Task';
+        cellAction['titleIcon'] = 'play_circle_outline';
+        cellAction['yesButtonText'] = 'Process';
+        cellAction['noButtonText'] = 'Close';
+    }
+
+    public setCloneDialogInfo( cellAction: CellActionBean ) {
+        cellAction['message'] = 'The selected task will be cloned. Are you sure?';
+        cellAction['notIconName'] = 'do_not_disturb';
+        cellAction['yesIconName'] = 'content_copy';
+        cellAction['title'] = 'Process Task';
+        cellAction['titleIcon'] = 'content_copy';
+        cellAction['yesButtonText'] = 'Clone';
+        cellAction['noButtonText'] = 'Close';
+    }
 }
-
-const ELEMENT_DATA: Element[] = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-    {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-    {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-    {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-    {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-    {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-    {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-    {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-    {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-    {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-    {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-  ];

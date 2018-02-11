@@ -1,5 +1,5 @@
 
-export const messageTypes = [
+export const MessageTypes = [
     'Text', 'Email', 'Social', 'Voice Mail', 'Audio'
 ]
 

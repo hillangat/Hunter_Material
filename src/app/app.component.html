@@ -45,12 +45,12 @@
                 <button mat-button (click)="closeOpenSideName()"><i class="material-icons">&#xE8FE;</i></button>
                 <span>Hunter UI</span>
                 <button mat-button routerLink='/task/grid'>Tasks</button>
-                <button mat-button routerLink='/dyn'>Grid</button>
                 <button mat-button routerLink='/admin'>Admin</button>
                 <!-- This fills the remaining space of the current row -->
                 <span class="example-fill-remaining-space"></span>
                 <span>Right Aligned Text</span>
         </mat-toolbar>
+        <app-alert></app-alert>
         <router-outlet></router-outlet>
       </mat-sidenav-content>
 

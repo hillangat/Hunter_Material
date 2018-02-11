@@ -1,0 +1,112 @@
+<br/>
+<br/>
+<div class='cardContainer' >
+    <mat-card class='mat-elevation-z5'>
+        <app-card-title-header [title]="'Create New Task'" [iconName]="'add'" ></app-card-title-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <form class='cardContent' [formGroup]='createTaskFormGroup' >
+                <div class='splitFormFields'>
+                    <mat-form-field>
+                        <mat-select formControlName='clientId' placeholder='Select Task Client' >
+                            <mat-option *ngFor='let client of clientsSelVals' [value]='client.value'>
+                                {{ client.text }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <mat-select formControlName='taskType' placeholder='Select Task Type' >
+                            <mat-option *ngFor='let taskType of taskTypes' [value]='taskType.value'>
+                                {{ taskType.text }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <mat-select formControlName='taskApprover' placeholder='Select Task Approver' >
+                            <mat-option *ngFor='let approver of approvers' [value]='approver.value'>
+                                {{ approver.text }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <input formControlName='taskDateLine' matInput [matDatepicker]="taskDateLine" placeholder="Task Date Line">
+                        <mat-datepicker-toggle matSuffix [for]="taskDateLine"></mat-datepicker-toggle>
+                        <mat-datepicker #taskDateLine></mat-datepicker>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <mat-select (change)='onChangeMessageType($event)' formControlName='tskMsgType' placeholder='Select Task Message Type' >
+                            <mat-option *ngFor='let type of messageTypes' [value]='type.value'>
+                                {{ type.text }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <mat-select formControlName='gateWayClient' placeholder='Select Gateway Client' >
+                            <mat-option *ngFor='let client of gateWayClients' [value]='client.value'>
+                                {{ client.text }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br/>
+                    <section>
+                        <mat-checkbox formControlName='taskApproved' >Is Task Approved ?</mat-checkbox>
+                    </section>
+                    <br/>
+                    <section>
+                        <mat-checkbox formControlName='recurrentTask' >Is Task Recurrent ?</mat-checkbox>
+                    </section>
+                </div>
+                <div class='splitFormFields'>
+                    <mat-form-field>
+                        <input formControlName='tskAgrmntLoc' matInput placeholder='Task Agreement Location'>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <input formControlName='taskName' matInput placeholder='Task Name'>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <textarea 
+                            formControlName='description'
+                            matInput
+                            placeholder='Task Description'
+                            matTextareaAutosize
+                            matAutosizeMinRows='2'
+                            matAutosizeMaxRows='10'
+                        ></textarea>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <textarea 
+                            formControlName='taskObjective'
+                            matInput
+                            placeholder='Task Objective'
+                            matTextareaAutosize
+                            matAutosizeMinRows='2'
+                            matAutosizeMaxRows='10'
+                        ></textarea>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <input formControlName='desiredReceiverCount' type='number' matInput placeholder='Desired Receiver Count'>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field>
+                        <input formControlName='taskBudget' type='number' matInput placeholder='Task Budget'>
+                    </mat-form-field>
+                </div>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button (click)='createTask()'>Create Task</button>
+            <button mat-raised-button (click)='clearForm()'>Clear</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+Task group : {{ createTaskFormGroup?.value | json }}

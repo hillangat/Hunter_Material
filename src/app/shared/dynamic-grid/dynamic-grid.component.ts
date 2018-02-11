@@ -12,6 +12,8 @@ import { LoggerService } from '../logger/logger-service';
 import { MatTableDataSource, PageEvent, MatPaginator, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dialog-template.component';
+import { CellActionBean } from '../beans/cell-action-bean';
+import { AlertService } from 'app/shared/services/alert.service';
 
 @Component({
     moduleId: module.id,
@@ -28,6 +30,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     @Output('onDelRow') private onDelRow: EventEmitter<any> = new EventEmitter<any>();
     @Output('onErrorLoading') private onErrorLoading: EventEmitter<any> = new EventEmitter<any>();
     @Output('onSuccessLoading') private onSuccessLoading: EventEmitter<any> = new EventEmitter<any>();
+    @Output('onClickActionCell') private onClickActionCell: EventEmitter<CellActionBean> = new EventEmitter<CellActionBean>();
 
     @ViewChild(MatPaginator) dynGridPaginator: MatPaginator;
 
@@ -40,7 +43,13 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     private gridLoadState: DynGridLoadStatesEnum = DynGridLoadStatesEnum.LOADING;
     private gridData: HunterServerResponse;
     private pageEvent: PageEvent;
-    public constructor( private logger: LoggerService, private dynGridService: DynGridService, private dialog: MatDialog ) { }
+
+    public constructor(
+        private logger: LoggerService,
+        private dynGridService: DynGridService,
+        private dialog: MatDialog,
+        private alertService: AlertService
+    ) {}
 
     public ngOnInit(): void {
         this.logger.log( 'Initializing grid data: ' + JSON.stringify( this.dynGridProps ) );
@@ -49,17 +58,20 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     }
 
     public fetchData(): void {
+        this.alertService.info( 'Loading dynamic grid data. Please wait...', false );
         this.gridLoadState = DynGridLoadStatesEnum.LOADING;
         this.dynGridService
             .getGridData( this.dynGridProps.gridDataLoadUrl, this.dynGridProps.defaDynGridDataReq )
             .subscribe(
                 ( serverResp: HunterServerResponse ) => {
+                    this.alertService.success( 'Successfully loaded dynamic grid data', false );
                     this.gridData = serverResp;
                     this.processServerResp( serverResp );
                     this.gridLoadState = DynGridLoadStatesEnum.SUCCESS;
                     this.onSuccessLoading.emit();
                 },
                 ( error: any ) => {
+                    this.alertService.error( 'Failed to load dynamic grid data!', false );
                     this.gridLoadState = DynGridLoadStatesEnum.ERROR;
                     this.onErrorLoading.emit();
                 }
@@ -108,7 +120,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         return pageEvent;
     }
 
-    openDialog(): boolean {
+    public openDialog(): boolean {
         const dialogRef = this.dialog.open(DialogTemplateComponent, {
           width: '250px',
           data: { name: 'Sample Name', animal: 'Sample Animal' }
@@ -118,6 +130,17 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
             this.logger.log( result );
         });
         return false;
+    }
+
+    public onClickGridActionCell( cellRow: any, actionHeader: HunterTableConfig ): void {
+        const cellActionBean: CellActionBean = new CellActionBean();
+        cellActionBean.cellRow = cellRow;
+        cellActionBean.actionHeader = actionHeader;
+        this.onClickActionCell.emit( cellActionBean );
+    }
+
+    public addNewRecord(): void {
+        this.onClickNewRecButton.emit();
     }
 
 

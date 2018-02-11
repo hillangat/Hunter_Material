@@ -1,0 +1,50 @@
+.alertServiceBoby{
+    z-index: 1999;
+    position:fixed;
+    top:15;
+    right:0;
+    text-align: right;
+    padding:10px 20px 10px 20px;
+    margin:5px;
+    min-width: 50px;
+}
+
+.alert{
+    min-width: 100px !important;
+    position:relative;
+    text-align: left;
+    display: inline-block;
+}
+
+.alertInfo {
+    color: #31708F;
+    background-color: #D9EDF7;
+    border-color: #BCE8F1;
+}
+
+.alertDanger {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+}
+
+.alertSuccess {
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alertWarning {
+    background-color: rgb(246, 185, 193) !important;
+    color: rgb(2, 2, 2);
+}
+
+.alert button {
+    float:right;
+    border:0px;
+}
+
+.alert span {
+    vertical-align: center !important;
+    margin-top: 40%;
+}

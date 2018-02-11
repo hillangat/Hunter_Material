@@ -63,12 +63,15 @@ import {
     MatPaginatorModule
   ],
   exports: [
+    CommonModule,
     MatCheckboxModule,
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    MatFormFieldModule,
     MatSliderModule,
     MatMenuModule,
     MatToolbarModule,
@@ -82,7 +85,6 @@ import {
     MatIconModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatInputModule,
     MatTableModule,
     MatTooltipModule,
     MatButtonModule,

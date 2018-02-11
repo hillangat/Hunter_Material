@@ -1,2 +1,27 @@
 <!--component html goes here -->
-<h1>Task Details Component</h1>
+<br/>
+<br/>
+<div>
+        <mat-tab-group class='mat-elevation-z5 eithCenter' >
+            <mat-tab label='Task Fields'>
+                    <mat-card class='matCard'>
+                        <mat-card-header>
+                            <mat-card-title>Select cache and click refresh button</mat-card-title>
+                        </mat-card-header>
+                        <ng-container >
+                            <mat-card-content>
+                                Content goes here!!
+                            </mat-card-content>
+                        </ng-container>
+                        <mat-card-actions>
+                            <button mat-raised-button >Refresh Cache</button>
+                            <button mat-raised-button >Reload Records</button>
+                        </mat-card-actions>
+                    </mat-card>
+            </mat-tab>
+            <mat-tab label="Two">
+                <h1>Some more tab content</h1>
+                <p>...</p>
+            </mat-tab>
+        </mat-tab-group>
+</div>

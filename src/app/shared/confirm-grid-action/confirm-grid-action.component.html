@@ -1,0 +1,15 @@
+<div>
+    <table>
+        <tr>
+            <td><mat-icon>{{cellAction.yesIconName}}</mat-icon></td>
+            <td style='font-size: 1.4em;' >{{cellAction.title}}</td>
+        </tr>
+    </table>
+    <mat-divider></mat-divider>
+    <p style='min-height: 50px;padding-top: 15px;font-size:1.2em;'>{{cellAction.message}}</p>
+    <mat-divider></mat-divider>
+    <div style='text-align:right;margin-top:15px;' >
+        <button (click)="closeDialog('YES')" mat-raised-button ><mat-icon>{{cellAction.yesIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.yesButtonText}}</button>
+        <button (click)="closeDialog('YES')" mat-raised-button ><mat-icon>{{cellAction.notIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.noButtonText}}</button>
+    </div>
+</div>
