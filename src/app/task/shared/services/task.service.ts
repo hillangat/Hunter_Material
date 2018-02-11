@@ -14,6 +14,7 @@ import { TaskFieldsModel } from '../../../shared/beans/task-field-model';
 
 import 'rxjs/add/operator/map';
 import { MessageTypeEnum } from '../../../shared/enums/message-type.enum';
+import { AlertService } from 'app/shared/services/alert.service';
 
 @Injectable()
 
@@ -33,12 +34,12 @@ export class TaskService {
   private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   private getAllTasksURL = this.getTasksURL + '/all';
 
-  constructor( private http: Http, private logger: LoggerService ) {}
+  constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
 
   public getAllTasks(): Observable<HunterServerResponse> {
     return  this.http
                 .get( this.getAllTasksURL )
-                .map( (response: Response) => HunterUtil.alert( response ) as HunterServerResponse );
+                .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse );
   }
 
   public getClientTasks( clientId: number ) {
@@ -52,7 +53,7 @@ export class TaskService {
 
     return this.http.post(this.getTasksURL + clientId, body, { headers: headers })
       .map((response) => {
-        const result = HunterUtil.alert( response );
+        const result = HunterUtil.alert( response, this.alertService );
         return result;
       }).subscribe(response => {
         this.logger.log( response );
@@ -63,7 +64,7 @@ export class TaskService {
     return (
       this.http
           .get( this.getAvailTaskGroups + taskId )
-          .map( (response: Response) => HunterUtil.alert( response ) as HunterServerResponse)
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse)
     );
   }
 
@@ -71,7 +72,7 @@ export class TaskService {
     return (
       this.http
           .post( this.createOrUpdateTaskFieldsURL, JSON.stringify( fieldsModel ) )
-          .map( (response: Response) => HunterUtil.alert( response ) as ServerStatusResponse)
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
     );
   }
 
@@ -79,7 +80,7 @@ export class TaskService {
     return (
       this.http
           .get( this.taskHistoryURL + taskId )
-          .map( (response: Response) => HunterUtil.alert( response ) as HunterServerResponse)
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse)
     );
   }
 
@@ -87,7 +88,7 @@ export class TaskService {
     return (
       this.http
           .get( this.loadTaskForTaskURL + taskId )
-          .map( ( response: Response ) => HunterUtil.alert( response ) as HunterServerResponse )
+          .map( ( response: Response ) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
     );
   }
 
@@ -95,7 +96,7 @@ export class TaskService {
     return (
       this.http
           .get( this.furnishTaskURL + taskId )
-          .map( ( response: Response ) => HunterUtil.alert( response ) as HunterServerResponse )
+          .map( ( response: Response ) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
     );
   }
 
@@ -107,11 +108,11 @@ export class TaskService {
     );
   }
 
-  public deleteTask( taskId: number ): Observable<ServerStatusResponse> {
-    return (
+  public deleteTask( taskId: number ): Observable<HunterServerResponse> {
+    return(
       this.http
           .post( this.deleteTaskURL, JSON.stringify({ taskId: taskId }) )
-          .map( ( resp: Response) => resp.json() as ServerStatusResponse )
+          .map( (response: Response) => HunterUtil.alert( response , this.alertService ) )
     );
   }
 
@@ -127,7 +128,7 @@ export class TaskService {
     return (
       this.http
           .get( HunterConstants.TASK_APPROVERS_SEL_URL )
-          .map( ( resp: Response) => HunterUtil.getDataOrAlert(resp) as SelectValue[] )
+          .map( ( resp: Response) => HunterUtil.getDataOrAlert(resp, this.alertService ) as SelectValue[] )
     );
   }
 

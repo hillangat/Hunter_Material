@@ -6,11 +6,8 @@ import { HunterServerResponse } from '../beans/ServerResponse';
 import { ServerStatusesEnum } from '../beans/server-status-response';
 export class HunterUtil {
 
-    private static logger: LoggerService;
-    private static alertService: AlertService
-
     public static handleError( error: any, message ): Observable<any>  {
-        this.logger.error( 'Error occurred while ' + message + ' ' + JSON.stringify( error ) );
+        // HunterUtil.logger.error( 'Error occurred while ' + message + ' ' + JSON.stringify( error ) );
         return Observable.throw( error );
     }
 
@@ -28,24 +25,24 @@ export class HunterUtil {
         return stsResp;
     }
 
-    public static alert( response: Response ) {
+    public static alert( response: Response, alertService: AlertService ): HunterServerResponse {
         const serverRep: HunterServerResponse = response.json() as HunterServerResponse;
         if ( serverRep.message != null ) {
             switch ( serverRep.status ) {
                 case ServerStatusesEnum.Success :
-                    this.alertService.success( serverRep.message );
+                    alertService.success( serverRep.message );
                     break;
                 case ServerStatusesEnum.Failed :
-                    this.alertService.error( serverRep.message );
+                    alertService.error( serverRep.message );
                     break;
                 default: break;
             }
         }
-        return response.json();
+        return serverRep;
     }
 
-    public static getDataOrAlert( response: Response ): any[] {
-        const serverRep: HunterServerResponse = this.alert( response ) as HunterServerResponse;
+    public static getDataOrAlert( response: Response, alertService: AlertService ): any[] {
+        const serverRep: HunterServerResponse = this.alert( response, alertService ) as HunterServerResponse;
         return serverRep.status === ServerStatusesEnum.Success ? serverRep.data : [];
     }
 
@@ -68,7 +65,5 @@ export class HunterUtil {
         const formatedDate    = year + '-' + month + '-' + date_ + ' ' + hour + ':' + minute + ':' + secs;
         return formatedDate;
       }
-
-    public constructor( private logger: LoggerService, private alertService: AlertService ) { }
 
 }

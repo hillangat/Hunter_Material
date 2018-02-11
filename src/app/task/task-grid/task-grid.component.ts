@@ -1,6 +1,7 @@
+import { DynamicGridComponent } from './../../shared/dynamic-grid/dynamic-grid.component';
 import { LoggerService } from '../../shared/logger/logger-service';
 import {Element} from '../../material-code/material-code/material-code.component';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
@@ -11,6 +12,8 @@ import { DynGridService } from '../../shared/dynamic-grid/services/dyn-grid.serv
 import { ConfirmGridActionComponent } from '../../shared/confirm-grid-action/confirm-grid-action.component';
 import { CellActionBean } from '../../shared/beans/cell-action-bean';
 import { Router } from '@angular/router';
+import { HunterServerResponse } from '../../shared/beans/ServerResponse';
+import { ServerStatusesEnum } from '../../shared/beans/server-status-response';
 
 @Component({
     moduleId: module.id,
@@ -22,6 +25,8 @@ export class TaskGridComponent implements OnInit {
 
     private dynGridProps: DynGridProperties;
     private readTasksURL: string;
+
+    @ViewChild('taskGrid') private taskGrid: DynamicGridComponent;
 
     constructor(
         private taskService: TaskService,
@@ -43,6 +48,7 @@ export class TaskGridComponent implements OnInit {
         this.logger.log( JSON.stringify(cellAction) );
         switch ( cellAction.actionHeader.headerId  ) {
             case 'taskLifeStatus' : ;
+                // TODO Implement
                 break;
             case 'clone' :
                 this.setCloneDialogInfo( cellAction );
@@ -79,7 +85,39 @@ export class TaskGridComponent implements OnInit {
     }
 
     public handleConfirmAction( cellAction: CellActionBean ) {
-        this.logger.log( JSON.stringify(cellAction) );
+        const taskId: number = cellAction.cellRow['taskId'];
+        switch ( cellAction.actionHeader.headerId  ) {
+            case 'taskLifeStatus' : ;
+                // TODO Implement
+                break;
+            case 'clone' :
+                // TODO Implement
+                break;
+            case 'process' :
+                // TODO Implement
+                break;
+            case 'delete' :
+                if ( cellAction.dialogSelButton === 'YES' ) {
+                    this.taskService
+                        .deleteTask( taskId )
+                        .subscribe(
+                            ( response: HunterServerResponse ) => {
+                                if ( response.status === ServerStatusesEnum.Success ) {
+                                    this.taskGrid.refreshGrid();
+                                }
+                                this.logger.log( JSON.stringify( response ) );
+                            },
+                            (error: any) => {
+                                this.logger.error( JSON.stringify( error ) );
+                            }
+                        );
+                }
+                break;
+            case 'open' : ;
+                // TODO Implement
+                break;
+            default : return;
+        }
     }
 
 

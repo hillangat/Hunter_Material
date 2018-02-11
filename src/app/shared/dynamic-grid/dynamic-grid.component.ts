@@ -54,12 +54,12 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.logger.log( 'Initializing grid data: ' + JSON.stringify( this.dynGridProps ) );
         this.dynGridProps = this.dynGridService.getSampleDefGridDataProps( this.filterValue );
-        this.fetchData();
+        this.fetchData( true );
     }
 
-    public fetchData(): void {
+    public fetchData( initializing: boolean ): void {
         this.alertService.info( 'Loading dynamic grid data. Please wait...', false );
-        this.gridLoadState = DynGridLoadStatesEnum.LOADING;
+        this.updateGridState( DynGridLoadStatesEnum.LOADING, initializing );
         this.dynGridService
             .getGridData( this.dynGridProps.gridDataLoadUrl, this.dynGridProps.defaDynGridDataReq )
             .subscribe(
@@ -67,22 +67,28 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
                     this.alertService.success( 'Successfully loaded dynamic grid data', false );
                     this.gridData = serverResp;
                     this.processServerResp( serverResp );
-                    this.gridLoadState = DynGridLoadStatesEnum.SUCCESS;
+                    this.updateGridState( DynGridLoadStatesEnum.SUCCESS, initializing );
                     this.onSuccessLoading.emit();
                 },
                 ( error: any ) => {
                     this.alertService.error( 'Failed to load dynamic grid data!', false );
-                    this.gridLoadState = DynGridLoadStatesEnum.ERROR;
+                    this.updateGridState( DynGridLoadStatesEnum.ERROR, initializing );
                     this.onErrorLoading.emit();
                 }
             );
+    }
+
+    public updateGridState( toState: DynGridLoadStatesEnum, initializing: boolean ): void {
+        if ( initializing ) {
+            this.gridLoadState = toState;
+        }
     }
 
     public refreshGrid( dynGridProps?: DynGridProperties ): void {
         if ( dynGridProps ) {
             this.dynGridProps = dynGridProps;
         }
-        this.fetchData();
+        this.fetchData( false );
     }
 
     public ngOnDestroy(): void {}

@@ -1,6 +1,7 @@
 <!--component html goes here -->
 <br/>
 <app-dynamic-grid
+    #taskGrid
     (onClickActionCell)='onClickActionCell($event)'
     (onClickNewRecButton)='onClickNewRecButton()'
     [dynGridProps]='dynGridProps'
