@@ -28,6 +28,8 @@ export class DynGridProperties {
     private _refreshable = true;
     @JsonProperty( 'addable', Boolean )
     private _addable = true;
+    @JsonProperty( 'maxHeight', Number )
+    private _maxHeight = 400;
     @JsonProperty( 'addLabel', String )
     private _addLabel = 'Add New Record';
     @JsonProperty( 'defaDynGridDataReq', DynGridDataReq )
@@ -68,6 +70,9 @@ export class DynGridProperties {
 
     public get addable(): boolean { return this._addable; }
     public set addable( value: boolean ) { this._addable = value; }
+
+    public get maxHeight(): number { return this._maxHeight; }
+    public set maxHeight( value: number ) { this._maxHeight = value; }
 
     public get defaDynGridDataReq(): DynGridDataReq { return this._defaDynGridDataReq; }
     public set defaDynGridDataReq( value: DynGridDataReq ) { this._defaDynGridDataReq = value; }

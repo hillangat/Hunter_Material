@@ -16,7 +16,7 @@
             <div class='dynGridToolBar' >
                 <button (click)='addNewRecord()' mat-raised-button ><mat-icon>add</mat-icon>&nbsp;&nbsp;Add New Task</button>
             </div>                   
-            <mat-table #matDyncGridTable [dataSource]='dataSource' >
+            <mat-table #matDyncGridTable [dataSource]='dataSource' [style.max-height.px]='dynGridProps.maxHeight' >
                 <ng-container *ngFor='let header of gridData.headers' matColumnDef='{{header.headerId}}' [style.width]="40" >
                     <mat-header-cell fxFlex="60px" *matHeaderCellDef> {{header.displayName}} </mat-header-cell>
                     <mat-cell fxFlex="60px" *matCellDef='let cell'>

@@ -197,6 +197,7 @@ export class TaskService {
     props.pageSize = 10;
     props.pageNo = 1;
     props.refreshable = true;
+    props.maxHeight = 500;
     props.sortable = true;
     props.defaDynGridDataReq = new DynGridDataReq();
     props.defaDynGridDataReq.reference = 'TASK_GRID';

@@ -2,3 +2,17 @@
 .dynGridToolBar {
     padding: 10px 5px;
 }
+
+.mat-header-row {
+    position: sticky;
+    top: 0;
+    background: white;
+    background-color: white;
+    z-index: 9999999;
+}
+
+.mat-table {
+    overflow-y: scroll;
+}
+
+

@@ -40,9 +40,27 @@
                         </mat-card-actions>
                     </mat-card>
             </mat-tab>
-            <mat-tab label="Two">
-                <h1>Some more tab content</h1>
-                <p>...</p>
+            <mat-tab label='User Roles'>
+                    <mat-card class='matCard'>
+                            <mat-card-header>
+                                <mat-card-title>Manage User Roles</mat-card-title>
+                            </mat-card-header>
+                            <ng-container *ngIf="gridState === 'SUCCESS'" >
+                                <mat-card-content>
+                                        User role grid goes here!
+                                    </mat-card-content>
+                            </ng-container>
+                            <ng-container *ngIf="gridState === 'LOADING'" >
+                                <app-prog-spinner [marginTop]='0' [message]="'Loading users...'" [diameter]='40' ></app-prog-spinner>
+                            </ng-container>
+                            <ng-container *ngIf="gridState === 'ERROR_OCCURRED'" >
+                                <div style='text-align:center;color:red;' >Error occurred while loading users.</div>
+                            </ng-container>
+                            <mat-card-actions>
+                                <button mat-raised-button (click)="false;">Refresh Users</button>
+                                <button mat-raised-button (click)="false;">Reload Records</button>
+                            </mat-card-actions>
+                        </mat-card>
             </mat-tab>
         </mat-tab-group>
 </div>
