@@ -11,5 +11,6 @@ export class CellActionBean {
     public yetButtonText: string;
     public noButtonText: string;
     public cellRow: any;
+    public entryValues: any;
     public actionHeader: HunterTableConfig
 }

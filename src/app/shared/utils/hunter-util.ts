@@ -25,7 +25,7 @@ export class HunterUtil {
         return stsResp;
     }
 
-    public static alert( response: Response, alertService: AlertService ): HunterServerResponse {
+    public static alert( response: Response, alertService: AlertService ): any {
         const serverRep: HunterServerResponse = response.json() as HunterServerResponse;
         if ( serverRep.message != null ) {
             switch ( serverRep.status ) {

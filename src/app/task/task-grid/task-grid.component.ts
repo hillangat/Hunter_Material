@@ -1,3 +1,4 @@
+import { TaskStatusComponent } from './../task-status/task-status.component';
 import { DynamicGridComponent } from './../../shared/dynamic-grid/dynamic-grid.component';
 import { LoggerService } from '../../shared/logger/logger-service';
 import {Element} from '../../material-code/material-code/material-code.component';
@@ -13,7 +14,7 @@ import { ConfirmGridActionComponent } from '../../shared/confirm-grid-action/con
 import { CellActionBean } from '../../shared/beans/cell-action-bean';
 import { Router } from '@angular/router';
 import { HunterServerResponse } from '../../shared/beans/ServerResponse';
-import { ServerStatusesEnum } from '../../shared/beans/server-status-response';
+import { ServerStatusesEnum, ServerStatusResponse } from '../../shared/beans/server-status-response';
 
 @Component({
     moduleId: module.id,
@@ -37,6 +38,7 @@ export class TaskGridComponent implements OnInit {
     ) {}
 
     public ngOnInit() {
+        this.dynGridProps = this.taskService.getSampleDefGridDataProps();
         this.getTaskURL();
     }
 
@@ -48,7 +50,8 @@ export class TaskGridComponent implements OnInit {
         this.logger.log( JSON.stringify(cellAction) );
         switch ( cellAction.actionHeader.headerId  ) {
             case 'taskLifeStatus' : ;
-                // TODO Implement
+                this.setLifeStatusDialogInfo( cellAction );
+                this.showDialogForStatus( cellAction );
                 break;
             case 'clone' :
                 this.setCloneDialogInfo( cellAction );
@@ -73,6 +76,17 @@ export class TaskGridComponent implements OnInit {
         this.router.navigateByUrl('/task/create');
     }
 
+    public showDialogForStatus( cellAction: CellActionBean ) {
+        const dialogRef = this.dialog.open(TaskStatusComponent, {
+            width: '600px',
+            data: cellAction
+          });
+          dialogRef.afterClosed().subscribe(result => {
+              this.handleConfirmAction( cellAction );
+          });
+          return false;
+    }
+
     public openDialog( cellAction: CellActionBean ): boolean {
         const dialogRef = this.dialog.open(ConfirmGridActionComponent, {
           width: '600px',
@@ -84,34 +98,68 @@ export class TaskGridComponent implements OnInit {
         return false;
     }
 
+    public getNextLifeStatus( currStatus: string ) {
+        if ( currStatus === 'Draft' ) {
+            return 'Review';
+        } else if ( currStatus === 'Review' ) {
+            return 'Approved';
+        }
+    }
+
     public handleConfirmAction( cellAction: CellActionBean ) {
+        if ( cellAction.dialogSelButton !== 'YES' ) {
+            return;
+        }
         const taskId: number = cellAction.cellRow['taskId'];
         switch ( cellAction.actionHeader.headerId  ) {
             case 'taskLifeStatus' : ;
-                // TODO Implement
+                const toStatus: string = cellAction.entryValues;
+                this.taskService
+                    .updateTaskStatus( taskId, toStatus )
+                    .subscribe(
+                        ( response: ServerStatusResponse ) => {
+                            if ( response.status === ServerStatusesEnum.Success ) {
+                                this.taskGrid.refreshGrid();
+                            }
+                            this.logger.log( JSON.stringify( response ) );
+                        },
+                        (error: any) => {
+                            this.logger.error( JSON.stringify( error ) );
+                        }
+                    );
                 break;
             case 'clone' :
                 // TODO Implement
                 break;
             case 'process' :
-                // TODO Implement
+                this.taskService
+                    .processTask( taskId )
+                    .subscribe(
+                        ( response: ServerStatusResponse ) => {
+                            if ( response.status === ServerStatusesEnum.Success ) {
+                                this.taskGrid.refreshGrid();
+                            }
+                            this.logger.log( JSON.stringify( response ) );
+                        },
+                        (error: any) => {
+                            this.logger.error( JSON.stringify( error ) );
+                        }
+                    );
                 break;
             case 'delete' :
-                if ( cellAction.dialogSelButton === 'YES' ) {
-                    this.taskService
-                        .deleteTask( taskId )
-                        .subscribe(
-                            ( response: HunterServerResponse ) => {
-                                if ( response.status === ServerStatusesEnum.Success ) {
-                                    this.taskGrid.refreshGrid();
-                                }
-                                this.logger.log( JSON.stringify( response ) );
-                            },
-                            (error: any) => {
-                                this.logger.error( JSON.stringify( error ) );
+                this.taskService
+                    .deleteTask( taskId )
+                    .subscribe(
+                        ( response: HunterServerResponse ) => {
+                            if ( response.status === ServerStatusesEnum.Success ) {
+                                this.taskGrid.refreshGrid();
                             }
-                        );
-                }
+                            this.logger.log( JSON.stringify( response ) );
+                        },
+                        (error: any) => {
+                            this.logger.error( JSON.stringify( error ) );
+                        }
+                    );
                 break;
             case 'open' : ;
                 // TODO Implement
@@ -148,6 +196,16 @@ export class TaskGridComponent implements OnInit {
         cellAction['title'] = 'Process Task';
         cellAction['titleIcon'] = 'content_copy';
         cellAction['yesButtonText'] = 'Clone';
+        cellAction['noButtonText'] = 'Close';
+    }
+
+    public setLifeStatusDialogInfo( cellAction: CellActionBean ) {
+        cellAction['message'] = 'This action will change task status. Please select the right status button.';
+        cellAction['notIconName'] = 'do_not_disturb';
+        cellAction['yesIconName'] = 'done';
+        cellAction['title'] = 'Update Task Status';
+        cellAction['titleIcon'] = 'done';
+        cellAction['yesButtonText'] = 'Update Status';
         cellAction['noButtonText'] = 'Close';
     }
 }

@@ -43,6 +43,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     private gridLoadState: DynGridLoadStatesEnum = DynGridLoadStatesEnum.LOADING;
     private gridData: HunterServerResponse;
     private pageEvent: PageEvent;
+    private loadingData: boolean;
 
     public constructor(
         private logger: LoggerService,
@@ -53,18 +54,16 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.logger.log( 'Initializing grid data: ' + JSON.stringify( this.dynGridProps ) );
-        this.dynGridProps = this.dynGridService.getSampleDefGridDataProps( this.filterValue );
+        this.dynGridProps = this.dynGridProps ? this.dynGridProps : this.dynGridService.getSampleDefGridDataProps( this.filterValue );
         this.fetchData( true );
     }
 
     public fetchData( initializing: boolean ): void {
-        this.alertService.info( 'Loading dynamic grid data. Please wait...', false );
         this.updateGridState( DynGridLoadStatesEnum.LOADING, initializing );
         this.dynGridService
             .getGridData( this.dynGridProps.gridDataLoadUrl, this.dynGridProps.defaDynGridDataReq )
             .subscribe(
                 ( serverResp: HunterServerResponse ) => {
-                    this.alertService.success( 'Successfully loaded dynamic grid data', false );
                     this.gridData = serverResp;
                     this.processServerResp( serverResp );
                     this.updateGridState( DynGridLoadStatesEnum.SUCCESS, initializing );
@@ -82,6 +81,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         if ( initializing ) {
             this.gridLoadState = toState;
         }
+        this.loadingData = toState === DynGridLoadStatesEnum.LOADING;
     }
 
     public refreshGrid( dynGridProps?: DynGridProperties ): void {
@@ -122,7 +122,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         this.pageEvent = pageEvent;
         this.dynGridProps.defaDynGridDataReq.pageSize = this.pageEvent.pageSize;
         this.dynGridProps.defaDynGridDataReq.pageNo = this.pageEvent.pageIndex + 1;
-        this.fetchData();
+        this.fetchData( false );
         return pageEvent;
     }
 
@@ -139,10 +139,12 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     }
 
     public onClickGridActionCell( cellRow: any, actionHeader: HunterTableConfig ): void {
-        const cellActionBean: CellActionBean = new CellActionBean();
-        cellActionBean.cellRow = cellRow;
-        cellActionBean.actionHeader = actionHeader;
-        this.onClickActionCell.emit( cellActionBean );
+        if ( !this.loadingData ) {
+            const cellActionBean: CellActionBean = new CellActionBean();
+            cellActionBean.cellRow = cellRow;
+            cellActionBean.actionHeader = actionHeader;
+            this.onClickActionCell.emit( cellActionBean );
+        }
     }
 
     public addNewRecord(): void {

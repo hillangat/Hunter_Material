@@ -1,0 +1,26 @@
+<div>
+    <table>
+        <tr>
+            <td><mat-icon>{{cellAction.yesIconName}}</mat-icon></td>
+            <td style='font-size: 1.4em;' >{{cellAction.title}}</td>
+        </tr>
+    </table>
+    <mat-divider></mat-divider>
+    <p style='min-height: 50px;padding-top: 15px;font-size:1.2em;'>
+        This action will change task status.<br/> Please select the right status button.
+    </p>
+    <mat-radio-group (change)='selSelStatus($event)' >
+        <mat-radio-button [disabled]='isStatusUpdatable' [checked]='isDraftSel'  value='Draft'>Draft</mat-radio-button>
+        <mat-radio-button [disabled]='isStatusUpdatable' [checked]='isReviewSel' value='Review'>Review</mat-radio-button>
+        <mat-radio-button [disabled]='isStatusUpdatable' [checked]='isApprovedSel'  value='Approved'>Approved</mat-radio-button>
+        <mat-radio-button [disabled]='isStatusUpdatable' [checked]='isProcessedSel'  value='Approved' *ngIf='isProcessedSel' >Processed</mat-radio-button>
+    </mat-radio-group>
+    <br/>
+    <br/>
+    <br/>
+    <mat-divider></mat-divider>
+    <div style='text-align:right;margin-top:15px;' >
+        <button (click)="closeDialog('YES')" mat-raised-button [disabled]='isStatusUpdatable' ><mat-icon>{{cellAction.yesIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.yesButtonText}}</button>
+        <button (click)="closeDialog('NO')" mat-raised-button ><mat-icon>{{cellAction.notIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.noButtonText}}</button>
+    </div>
+</div>

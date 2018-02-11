@@ -9,16 +9,18 @@ import { taskRoutes } from './task.routes';
 import { RouterModule } from '@angular/router';
 import { TaskService } from './shared/services/task.service';
 import { CreateTaskComponent } from './create-task/create-task.component';
+import { TaskStatusComponent } from './task-status/task-status.component';
 
 
 @NgModule({
-  entryComponents: [],
+  entryComponents: [ TaskStatusComponent ],
   declarations: [
     TaskComponent,
     TaskDetailsComponent,
     TaskGridComponent,
     CreateTaskComponent,
-    CreateTaskComponent
+    CreateTaskComponent,
+    TaskStatusComponent
   ],
   imports: [
     CommonModule,  /** This must be the first import for material design to work */

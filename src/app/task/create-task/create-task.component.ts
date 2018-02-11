@@ -50,16 +50,16 @@ export class CreateTaskComponent implements OnInit {
             taskName: ['', Validators.required ],
             description: ['', Validators.maxLength( 100 ) ],
             taskObjective: ['', Validators.maxLength(100) ],
-            tskMsgType: ['Text', [] ],
-            gateWayClient: ['', [] ],
+            tskMsgType: ['Text', Validators.required ],
+            gateWayClient: [''],
             taskDateLine: [new Date(), Validators.required ],
-            taskApprover: ['', Validators.required ],
+            taskApprover: [''],
             taskType: ['', Validators.required ],
             clientId: ['', Validators.required ],
-            tskAgrmntLoc: ['', Validators.required ],
+            tskAgrmntLoc: [''],
             taskApproved: [false ],
             recurrentTask: [false ],
-            desiredReceiverCount: [0, Validators.required ],
+            desiredReceiverCount: [0],
             taskBudget: [0, Validators.required ],
             taskCost: [0],
             availableReceiverCount: [0],
@@ -88,7 +88,7 @@ export class CreateTaskComponent implements OnInit {
     }
 
     public clearForm(): void {
-        this.createform();
+        this.createTaskFormGroup.reset();
     }
 
     private loadClients(): void {

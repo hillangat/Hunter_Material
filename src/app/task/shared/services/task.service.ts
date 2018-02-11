@@ -15,6 +15,9 @@ import { TaskFieldsModel } from '../../../shared/beans/task-field-model';
 import 'rxjs/add/operator/map';
 import { MessageTypeEnum } from '../../../shared/enums/message-type.enum';
 import { AlertService } from 'app/shared/services/alert.service';
+import { DynGridProperties } from '../../../shared/dynamic-grid/shared/dyn-grid-properties';
+import { DynGridDataReq } from '../../../shared/beans/dyn-grid-data-req';
+import { GridFieldUserInput } from '../../../shared/dynamic-grid/shared/grid-field-user-input';
 
 @Injectable()
 
@@ -24,7 +27,9 @@ export class TaskService {
   private deleteTaskURL = this.taskBaseURL + 'action/task/destroy';
   private cloneTaskURL = this.taskBaseURL + 'action/task/clone';
   private updateTaskFieldsURL = this.taskBaseURL + 'action/updateFields';
+  private processTaskURL = this.taskBaseURL + 'action/processTask/';
   private createOrUpdateTaskFieldsURL = this.taskBaseURL + 'action/createOrUpdate';
+  private updateTaskStatusURL = this.taskBaseURL + '/action/task/changeStatus';
   private loadTaskForTaskURL = this.taskBaseURL + 'action/task/load/';
   private furnishTaskURL = this.taskBaseURL + 'action/task/furnish/';
   private taskHistoryURL = this.taskBaseURL + 'action/task/history/getForTask/';
@@ -72,6 +77,22 @@ export class TaskService {
     return (
       this.http
           .post( this.createOrUpdateTaskFieldsURL, JSON.stringify( fieldsModel ) )
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
+    );
+  }
+
+  public updateTaskStatus( taskId: number, toStatus: string ): Observable<ServerStatusResponse> {
+    return (
+      this.http
+          .post( this.updateTaskStatusURL, JSON.stringify( { toStatus: toStatus, taskId: taskId } ) )
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
+    );
+  }
+
+  public processTask( taskId: number): Observable<ServerStatusResponse> {
+    return (
+      this.http
+          .post( this.processTaskURL + taskId , undefined )
           .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
     );
   }
@@ -162,8 +183,29 @@ export class TaskService {
     return (
       this.http
           .get( HunterConstants.GATEWAY_CLIENTS_SEL_URL + messageType )
-          .map( ( resp: Response) => HunterUtil.getDataOrAlert(resp) as SelectValue[] )
+          .map( ( resp: Response) => HunterUtil.getDataOrAlert(resp, this.alertService) as SelectValue[] )
     );
   }
+
+  public getSampleDefGridDataProps(): DynGridProperties {
+    const props: DynGridProperties = new DynGridProperties();
+    props.addable =  true;
+    props.filterable = true;
+    props.gridDataLoadUrl = 'http://localhost:8080/Hunter/restful/tasks/read/all';
+    props.pageable = true;
+    props.pageSizes = [ 10, 25, 50, 100, 200 ];
+    props.pageSize = 10;
+    props.pageNo = 1;
+    props.refreshable = true;
+    props.sortable = true;
+    props.defaDynGridDataReq = new DynGridDataReq();
+    props.defaDynGridDataReq.reference = 'TASK_GRID';
+    props.defaDynGridDataReq.pageNo = props.pageNo;
+    props.defaDynGridDataReq.pageSize = props.pageSize;
+    props.defaDynGridDataReq.filterBy = undefined;
+    props.defaDynGridDataReq.orderBy = undefined;
+    return props;
+  }
+
 
 }

@@ -15,7 +15,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     private subscription: Subscription;
     private alerts: Alert[] = [];
-    private alertLifeTime = 5000;
+    private alertLifeTime = 10000;
 
     constructor(private alertService: AlertService) {}
 
