@@ -11,8 +11,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { DialogTemplateComponent } from './sample-codes/dialog-template/dialog-template.component';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-
 import { AppComponent } from './app.component';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { Routes, RouterModule, ChildrenOutletContexts } from '@angular/router';
@@ -23,6 +21,8 @@ import { HomeModule } from 'app/home/home.module';
 import { MaterialCodeComponent } from './material-code/material-code/material-code.component';
 import { DynGridConfirmComponent } from 'app/shared/dynamic-grid/dyn-grid-confirm/dyn-grid-confirm.component';
 import { ConfirmGridActionComponent } from './shared/confirm-grid-action/confirm-grid-action.component';
+import { OverlayComponent } from './shared/overlay/overlay.component';
+import { OverlayService } from './shared/overlay/shared/overlay.service';
 
 
 @NgModule({
@@ -32,7 +32,8 @@ import { ConfirmGridActionComponent } from './shared/confirm-grid-action/confirm
     MaterialCodeComponent,
     DynGridConfirmComponent,
     ConfirmGridActionComponent,
-    AlertComponent
+    AlertComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule, /** BrowserModule must be the first import for material design to work */
@@ -54,7 +55,8 @@ import { ConfirmGridActionComponent } from './shared/confirm-grid-action/confirm
     LoggerService,
     DynGridService,
     AlertService,
-    FormBuilder
+    FormBuilder,
+    OverlayService
   ],
   bootstrap: [AppComponent],
   entryComponents: [

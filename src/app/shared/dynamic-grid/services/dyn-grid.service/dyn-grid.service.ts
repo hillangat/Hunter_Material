@@ -71,13 +71,16 @@ export class DynGridService {
     props.defaDynGridDataReq.reference = 'TASK_GRID';
     props.defaDynGridDataReq.pageNo = props.pageNo;
     props.defaDynGridDataReq.pageSize = props.pageSize;
+
     props.defaDynGridDataReq.filterBy = [
       { fieldName: 'taskId', userInput: '100', dir: 'asc', operation: 'lt' } as GridFieldUserInput,
       { fieldName: 'taskName', userInput: filterValue, dir: 'asc', operation: 'contains' } as GridFieldUserInput
     ];
+
     props.defaDynGridDataReq.orderBy = [
       { fieldName: 'taskId', userInput: undefined, dir: 'asc', operation: undefined } as GridFieldUserInput
     ];
+
     return props;
   }
 

@@ -14,6 +14,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dialog-template.component';
 import { CellActionBean } from '../beans/cell-action-bean';
 import { AlertService } from 'app/shared/services/alert.service';
+import { OverlayService } from '../overlay/shared/overlay.service';
 
 @Component({
     moduleId: module.id,
@@ -49,7 +50,8 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         private logger: LoggerService,
         private dynGridService: DynGridService,
         private dialog: MatDialog,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private overLayService: OverlayService
     ) {}
 
     public ngOnInit(): void {
@@ -59,6 +61,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     }
 
     public fetchData( initializing: boolean ): void {
+        this.overLayService.openCloseOverlay( { wholeScreen: true, message: 'Loading data...' } );
         this.updateGridState( DynGridLoadStatesEnum.LOADING, initializing );
         this.dynGridService
             .getGridData( this.dynGridProps.gridDataLoadUrl, this.dynGridProps.defaDynGridDataReq )
@@ -68,6 +71,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
                     this.processServerResp( serverResp );
                     this.updateGridState( DynGridLoadStatesEnum.SUCCESS, initializing );
                     this.onSuccessLoading.emit();
+                    this.overLayService.removeOverlay();
                 },
                 ( error: any ) => {
                     this.alertService.error( 'Failed to load dynamic grid data!', false );

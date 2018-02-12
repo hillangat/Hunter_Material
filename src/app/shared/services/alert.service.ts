@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Subject } from 'rxjs/subject';
 
-import { Alert, AlertType } from '../beans/alert';
+import { Alert, AlertTypeEnum, AlertStatusEnum } from '../beans/alert';
 import { Observable } from 'RXJS';
 
 @Injectable()
@@ -30,24 +30,24 @@ export class AlertService {
     }
 
     success(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.SUCCESS, message, keepAfterRouteChange);
+        this.alert(AlertStatusEnum.SUCCESS, message, keepAfterRouteChange);
     }
 
     error(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.ERROR, message, keepAfterRouteChange);
+        this.alert(AlertStatusEnum.ERROR, message, keepAfterRouteChange);
     }
 
     info(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.INFO, message, keepAfterRouteChange);
+        this.alert(AlertStatusEnum.INFO, message, keepAfterRouteChange);
     }
 
     warn(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.WARNING, message, keepAfterRouteChange);
+        this.alert(AlertStatusEnum.WARNING, message, keepAfterRouteChange);
     }
 
-    alert(type: AlertType, message: string, keepAfterRouteChange = false) {
+    alert(status: AlertStatusEnum, message: string, keepAfterRouteChange = false) {
         this.keepAfterRouteChange = keepAfterRouteChange;
-        this.subject.next(<Alert>{ type: type, message: message });
+        this.subject.next(<Alert>{ status: status, message: message });
     }
 
 

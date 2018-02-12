@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { Alert, AlertType } from '../beans/alert';
+import { Alert, AlertTypeEnum, AlertStatusEnum } from '../beans/alert';
 import { AlertService } from '../services/alert.service';
 
 @Component({
@@ -44,17 +44,17 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     private getAlertTypClass( alert: Alert ): string {
         let clss = null;
-        switch (alert.type) {
-            case AlertType.ERROR:
+        switch (alert.status) {
+            case AlertStatusEnum.ERROR:
                 clss = 'alertDanger';
                 break;
-            case AlertType.INFO:
+            case AlertStatusEnum.INFO:
                 clss = 'alertInfo';
                 break;
-            case AlertType.SUCCESS:
+            case AlertStatusEnum.SUCCESS:
                 clss = 'alertSuccess';
                 break;
-            case AlertType.WARNING:
+            case AlertStatusEnum.WARNING:
                 clss = 'alertWarning';
                 break;
             default:
@@ -75,9 +75,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     private setAlertLifeTime(alerts: Alert[]) {
-        setTimeout(function () {
-            alerts.splice(0, 1);
-        }, this.alertLifeTime);
+        setTimeout( () => alerts.splice(0, 1), this.alertLifeTime);
     }
 
 
