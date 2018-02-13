@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { ServerStatusesEnum } from './../../shared/beans/server-status-response';
 import { Task } from './../../shared/beans/Task';
 import { LoggerService } from 'app/shared/logger/logger-service';
 import { SelectValue } from './../../shared/beans/SelectValue';
@@ -14,11 +16,11 @@ import { ServerStatusResponse } from '../../shared/beans/server-status-response'
 
 @Component({
     moduleId: module.id,
-    selector: 'app-create-task',
-    templateUrl: 'create-task.component.html',
-    styleUrls: ['create-task.component.scss']
+    selector: 'app-edit-task-fields',
+    templateUrl: 'edit-task-fields.component.html',
+    styleUrls: ['edit-task-fields.component.scss']
 })
-export class CreateTaskComponent implements OnInit {
+export class EditTaskFieldsComponent implements OnInit {
 
     public clientsSelVals: SelectValue[] = [];
     public taskTypes: SelectValue[] = [];
@@ -33,7 +35,8 @@ export class CreateTaskComponent implements OnInit {
         private clientService: ClientService,
         private alertService: AlertService,
         private formBuilder: FormBuilder,
-        private logger: LoggerService
+        private logger: LoggerService,
+        private router: Router
     ) {}
 
     public ngOnInit(): void {
@@ -52,7 +55,7 @@ export class CreateTaskComponent implements OnInit {
             taskObjective: ['', Validators.maxLength(100) ],
             tskMsgType: ['Text', Validators.required ],
             gateWayClient: [''],
-            taskDateLine: [new Date(), Validators.required ],
+            taskDateline: [new Date(), Validators.required ],
             taskApprover: [''],
             taskType: ['', Validators.required ],
             clientId: ['', Validators.required ],
@@ -79,6 +82,9 @@ export class CreateTaskComponent implements OnInit {
             .createOrUpdateTask( task )
             .subscribe(
                 ( resp: ServerStatusResponse ) => {
+                    if ( resp.status === ServerStatusesEnum.Success ) {
+                        this.router.navigate( [ '/task/details/' + 1 ] );
+                    }
                     this.logger.log( JSON.stringify( resp ) );
                 },
                 ( error: any ) => {
@@ -171,10 +177,10 @@ export class CreateTaskComponent implements OnInit {
 
     private sanitizeForm(): any {
         const value: any = Object.assign({}, this.createTaskFormGroup.value);
-        const dateLine: Date = value.taskDateLine;
+        const dateLine: Date = value.taskDateline;
         if ( dateLine ) {
             const date: Date = new Date( dateLine );
-            value.taskDateLine = HunterUtil.getFormatedDate( date );
+            value.taskDateline = HunterUtil.getFormatedDate( date );
         }
         this.logger.log( JSON.stringify( value ) );
         return value;

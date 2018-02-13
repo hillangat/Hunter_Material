@@ -8,8 +8,10 @@ import { SharedModule } from '../shared/shared.module';
 import { taskRoutes } from './task.routes';
 import { RouterModule } from '@angular/router';
 import { TaskService } from './shared/services/task.service';
-import { CreateTaskComponent } from './create-task/create-task.component';
 import { TaskStatusComponent } from './task-status/task-status.component';
+import { EditTaskFieldsComponent } from './edit-task-fields/edit-task-fields.component';
+import { ViewTaskFieldsComponent } from './view-task-fields/view-task-fields.component';
+import { CloneTaskComponent } from './clone-task/clone-task.component';
 
 
 @NgModule({
@@ -18,9 +20,10 @@ import { TaskStatusComponent } from './task-status/task-status.component';
     TaskComponent,
     TaskDetailsComponent,
     TaskGridComponent,
-    CreateTaskComponent,
-    CreateTaskComponent,
-    TaskStatusComponent
+    EditTaskFieldsComponent,
+    TaskStatusComponent,
+    ViewTaskFieldsComponent,
+    CloneTaskComponent
   ],
   imports: [
     CommonModule,  /** This must be the first import for material design to work */

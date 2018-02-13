@@ -54,8 +54,7 @@ export class TaskGridComponent implements OnInit {
                 this.showDialogForStatus( cellAction );
                 break;
             case 'clone' :
-                this.setCloneDialogInfo( cellAction );
-                this.openDialog( cellAction );
+                this.router.navigate( ['./clone/' + cellAction.cellRow['taskId']] );
                 break;
             case 'process' :
                 this.setProcessDialogInfo( cellAction );
@@ -186,16 +185,6 @@ export class TaskGridComponent implements OnInit {
         cellAction['title'] = 'Process Task';
         cellAction['titleIcon'] = 'play_circle_outline';
         cellAction['yesButtonText'] = 'Process';
-        cellAction['noButtonText'] = 'Close';
-    }
-
-    public setCloneDialogInfo( cellAction: CellActionBean ) {
-        cellAction['message'] = 'The selected task will be cloned. Are you sure?';
-        cellAction['notIconName'] = 'do_not_disturb';
-        cellAction['yesIconName'] = 'content_copy';
-        cellAction['title'] = 'Process Task';
-        cellAction['titleIcon'] = 'content_copy';
-        cellAction['yesButtonText'] = 'Clone';
         cellAction['noButtonText'] = 'Close';
     }
 

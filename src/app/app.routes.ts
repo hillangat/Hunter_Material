@@ -27,7 +27,7 @@ export const appRoutes: Routes = [
     },
     {
       path: 'client',
-      loadChildren: './client/client.module#AdminModule',
+      loadChildren: './client/client.module#ClientModule',
       data: { title: 'Hunter Client', name: 'Client' },
       canActivate: [ SecureRouteGuard ]
     },

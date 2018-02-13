@@ -41,3 +41,8 @@ Any	            any
 [Boolean]	    boolean[]
 [User]	        User[]
 [Any]	        any[]
+
+## Clean npm cache
+npm cache clean --force
+npm install
+npm install --save-dev @angular/cli@latest

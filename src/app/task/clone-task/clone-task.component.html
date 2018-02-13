@@ -1,0 +1,47 @@
+<mat-card class='matCard eithCenter standardMarginTop'>
+    <mat-card-header>
+        <mat-card-title>
+            <table>
+                <tr>
+                    <td><mat-icon>content_copy</mat-icon></td>
+                    <td style='font-size: 1.4em;' >Clone Task</td>
+                </tr>
+            </table>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <ng-container *ngIf="state.toString() === 'SUCCESS'" >
+        <mat-card-content>
+            <p style='padding-top: 15px;font-size:1.2em;'>
+                    This action will create a copy of the selected task. Are you sure?
+            </p>
+            <form *ngIf='cloneTaskGroup' class='cardContent' [formGroup]='cloneTaskGroup' >
+                <mat-form-field>
+                    <mat-select required formControlName='newOwner' placeholder='Select New Client' >
+                        <mat-option *ngFor='let client of clientsSelVals' [value]='client.value'>
+                            {{ client.text }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br/>
+                <mat-form-field>
+                    <input required formControlName='taskName' matInput placeholder='Task Name'>
+                </mat-form-field>
+                <br/>
+                <mat-form-field>
+                    <input required formControlName='taskDescription' matInput placeholder='Task Description'>
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+    </ng-container>
+    <ng-container *ngIf="state.toString() === 'LOADING'" >
+        <app-prog-spinner [marginTop]='0' [message]="'Loading Cache Records. Please wait...'" [diameter]='40' ></app-prog-spinner>
+    </ng-container>
+    <ng-container *ngIf="state.toString() === 'ERROR_OCCURRED'" >
+        <div style='text-align:center;color:red;' >Error occurred while loading cache records.</div>
+    </ng-container>
+    <mat-card-actions>
+        <button mat-raised-button (click)="cloneTask()"><mat-icon>content_copy</mat-icon>Clone Task</button>
+        <button mat-raised-button (click)="goBack()"><mat-icon>keyboard_backspace</mat-icon>Go Back</button>
+    </mat-card-actions>
+</mat-card>

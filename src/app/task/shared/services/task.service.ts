@@ -1,3 +1,4 @@
+import { Task } from './../../../shared/beans/Task';
 import { HunterUtil } from './../../../shared/utils/hunter-util';
 import { HunterConstants } from 'app/shared/constants/HunterConstants';
 import { TaskTypeEnum } from './../../../shared/enums/task-type.enum';
@@ -38,13 +39,28 @@ export class TaskService {
   private currAccessToke = 'YWRtaW46OTk5OTk5';
   private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   private getAllTasksURL = this.getTasksURL + '/all';
+  private getOneTasksURL = this.getTasksURL + '/';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
 
   public getAllTasks(): Observable<HunterServerResponse> {
-    return  this.http
-                .get( this.getAllTasksURL )
-                .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse );
+    return (
+      this.http
+          .get( this.getAllTasksURL )
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
+    );
+  }
+
+  public getTaskById( taskId: number ): Observable<Task> {
+    return (
+      this.http
+          .get( this.taskBaseURL + 'getTask/byId/' + taskId )
+          .map( (response: Response) => {
+            const data: any[] = HunterUtil.getDataOrAlert( response, this.alertService );
+            const task: Task = ( data ? data[0] : null ) as Task;
+            return task;
+          })
+    );
   }
 
   public getClientTasks( clientId: number ) {

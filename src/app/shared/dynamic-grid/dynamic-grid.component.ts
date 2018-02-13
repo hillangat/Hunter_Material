@@ -61,7 +61,6 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     }
 
     public fetchData( initializing: boolean ): void {
-        this.overLayService.openCloseOverlay( { wholeScreen: true, message: 'Loading data...' } );
         this.updateGridState( DynGridLoadStatesEnum.LOADING, initializing );
         this.dynGridService
             .getGridData( this.dynGridProps.gridDataLoadUrl, this.dynGridProps.defaDynGridDataReq )
@@ -71,7 +70,6 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
                     this.processServerResp( serverResp );
                     this.updateGridState( DynGridLoadStatesEnum.SUCCESS, initializing );
                     this.onSuccessLoading.emit();
-                    this.overLayService.removeOverlay();
                 },
                 ( error: any ) => {
                     this.alertService.error( 'Failed to load dynamic grid data!', false );

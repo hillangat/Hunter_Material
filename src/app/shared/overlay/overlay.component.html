@@ -1,6 +1,6 @@
 <div id='overlay' [style.display]="overlayIsOn ? 'block':'none'">
     <div class='hunterOverlayProgressBArDiv overlayImageContainer' >
-        <mat-spinner [diameter]='40' ></mat-spinner><br/>
+        <mat-spinner [color]='primary' [diameter]='40' ></mat-spinner><br/>
     </div>
     <div *ngIf='message' class='hunterOverlayProgressBArDiv overlayMsgContainer' >
         {{ message }}
