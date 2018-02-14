@@ -1,3 +1,6 @@
+import { TaskGroupsComponent } from './task-groups/task-groups.component';
+import { TaskMessageComponent } from './task-message/task-message.component';
+import { TaskHistoryComponent } from './task-history/task-history.component';
 import { ClientService } from './../shared/services/client.service';
 import { TaskGridComponent } from './task-grid/task-grid.component';
 import { CommonModule } from '@angular/common';
@@ -12,6 +15,7 @@ import { TaskStatusComponent } from './task-status/task-status.component';
 import { EditTaskFieldsComponent } from './edit-task-fields/edit-task-fields.component';
 import { ViewTaskFieldsComponent } from './view-task-fields/view-task-fields.component';
 import { CloneTaskComponent } from './clone-task/clone-task.component';
+import { TaskRegionsComponent } from './task-regions/task-regions.component';
 
 
 @NgModule({
@@ -23,7 +27,11 @@ import { CloneTaskComponent } from './clone-task/clone-task.component';
     EditTaskFieldsComponent,
     TaskStatusComponent,
     ViewTaskFieldsComponent,
-    CloneTaskComponent
+    CloneTaskComponent,
+    TaskHistoryComponent,
+    TaskMessageComponent,
+    TaskGroupsComponent,
+    TaskRegionsComponent
   ],
   imports: [
     CommonModule,  /** This must be the first import for material design to work */

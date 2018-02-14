@@ -12,6 +12,8 @@ import { Task } from '../../shared/beans/Task';
 import { TaskCloneModel } from '../../shared/beans/clone-task-model';
 import { TaskService } from '../shared/services/task.service';
 import { ServerStatusResponse } from '../../shared/beans/server-status-response';
+import { HunterServerResponse } from '../../shared/beans/ServerResponse';
+import { LoggerService } from 'app/shared/logger/logger-service';
 
 @Component({
     moduleId: module.id,
@@ -35,7 +37,8 @@ export class CloneTaskComponent implements OnInit {
         private formBuilder: FormBuilder,
         private taskService: TaskService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private logger: LoggerService
     ) {
         const _id: string = activatedRoute.snapshot.paramMap.get( 'taskId' );
         this.taskId = _id != null ? Number( _id) : 0;
@@ -94,17 +97,15 @@ export class CloneTaskComponent implements OnInit {
             this.taskService
                 .cloneTask(cloneTask)
                 .subscribe(
-                    ( resp: ServerStatusResponse ) => {
+                    ( resp: HunterServerResponse ) => {
                         if ( resp.status + '' === 'Success' ) {
-                            this.alertService.success( resp.message );
-                            this.router.navigate( ['./task/details/' + this.task.taskId ] );
+                            this.router.navigate( ['./task/details/' + resp.data[0].taskId ] );
                         } else {
-                            this.alertService.error( resp.message );
+                            this.logger.error( resp.message );
                         }
-                        // this.hideModal();
                     },
                     ( error: any ) => {
-                        this.alertService.error( 'Application error occurred' );
+                        this.logger.error( 'Application error occurred' );
                     }
                 );
         } else {

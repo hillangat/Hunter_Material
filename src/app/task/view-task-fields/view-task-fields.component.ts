@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Task } from '../../shared/beans/Task';
+import { TaskService } from '../shared/services/task.service';
+import { TaskDetailsComponent } from '../task-details/task-details.component';
 
 @Component({
     moduleId: module.id,
@@ -7,5 +10,14 @@ import { Component } from '@angular/core';
     styleUrls: ['view-task-fields.component.scss']
 })
 export class ViewTaskFieldsComponent {
+
+    @Input( 'task' ) private task: Task;
+    @Input( 'taskDetail' ) private taskDetail: TaskDetailsComponent;
+
+    constructor() {}
+
+    public reloadTask() {
+        this.taskDetail.reloadTask();
+    }
 
 }

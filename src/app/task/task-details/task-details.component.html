@@ -2,26 +2,29 @@
 <br/>
 <br/>
 <div>
+    <ng-container *ngIf="state.toString() === 'LOADING'" >
+        <app-prog-spinner [marginTop]='0' [message]="'Loading Cache Records. Please wait...'" [diameter]='40' ></app-prog-spinner>
+    </ng-container>
+    <ng-container *ngIf="state.toString() === 'ERROR_OCCURRED'" >
+        <div style='text-align:center;color:red;' >Error occurred while loading task data</div>
+    </ng-container>
+    <ng-container *ngIf="state.toString() === 'SUCCESS'" > 
         <mat-tab-group class='mat-elevation-z5 eithCenter' >
             <mat-tab label='Task Fields'>
-                    <mat-card class='matCard'>
-                        <mat-card-header>
-                            <mat-card-title>Select cache and click refresh button</mat-card-title>
-                        </mat-card-header>
-                        <ng-container >
-                            <mat-card-content>
-                                Content goes here!!
-                            </mat-card-content>
-                        </ng-container>
-                        <mat-card-actions>
-                            <button mat-raised-button >Refresh Cache</button>
-                            <button mat-raised-button >Reload Records</button>
-                        </mat-card-actions>
-                    </mat-card>
+                <app-view-task-fields [task]='task' [taskDetail]='this' ></app-view-task-fields>
             </mat-tab>
-            <mat-tab label="Two">
-                <h1>Some more tab content</h1>
-                <p>...</p>
+            <mat-tab label='Task Message'>
+                <app-task-message></app-task-message>
+            </mat-tab>
+            <mat-tab label='Task Groups'>
+                <app-task-groups></app-task-groups>
+            </mat-tab>
+            <mat-tab label='Task Regions'>
+                <app-task-regions></app-task-regions>
+            </mat-tab>
+            <mat-tab label='Task History'>
+                <app-task-history></app-task-history>
             </mat-tab>
         </mat-tab-group>
+    </ng-container>
 </div>

@@ -1,1 +1,91 @@
-<!--component html goes here -->
+<mat-card class='matCard'>
+    <mat-card-header>
+        <mat-card-title>Task Fields</mat-card-title>
+    </mat-card-header>
+    <ng-container >
+        <mat-card-content>
+            <div class='viewTaskFieldsContainer' >
+                <div>
+                    <div>
+                        <div>Name:</div>
+                        <div>{{task.taskName}}</div>
+                    </div>
+                    <div>
+                        <div>Description:</div>
+                        <div>{{task.taskDesc}}</div>
+                    </div>
+                    <div>
+                        <div>Status:</div>
+                        <div>{{task.taskLifeStatus}}</div>
+                    </div>
+                    <div>
+                        <div>Progress:</div>
+                        <div>{{task.taskDeliveryStatus}}</div>
+                    </div>
+                    <div>
+                        <div>Objective:</div>
+                        <div>{{task.taskObjective}}</div>
+                    </div>
+                    <div>
+                        <div>Agreement Location:</div>
+                        <div>{{task.tskAgrmntLoc}}</div>
+                    </div>
+                    <div>
+                        <div>Budget:</div>
+                        <div>{{task.taskBudget}}</div>
+                    </div>
+                    <div>
+                        <div>Cost:</div>
+                        <div>{{task.taskCost}}</div>
+                    </div>
+                    <div>
+                        <div>Recurrent?:</div>
+                        <div><mat-checkbox disabled [checked]="task.recurrentTask === 'true'" ></mat-checkbox></div>
+                    </div>
+                </div>
+                <div>                    
+                    <div>
+                        <div>Approved ?:</div>
+                        <div><mat-checkbox disabled [checked]="task.taskApproved === 'true'" ></mat-checkbox></div>
+                    </div>
+                    <div>
+                        <div>Approver:</div>
+                        <div>{{task.taskApprover}}</div>
+                    </div>
+                    <div>
+                        <div>Gateway Client</div>
+                        <div>{{task.gateWayClient}}</div>
+                    </div>
+                    <div>
+                        <div>Dateline:</div>
+                        <div>{{task.taskDateline}}</div>
+                    </div>
+                    <div>
+                        <div>Processed By:</div>
+                        <div>{{task.processedBy}}</div>
+                    </div>
+                    <div>
+                        <div>Processed On:</div>
+                        <div>{{task.processedOn}}</div>
+                    </div>
+                    <div>
+                        <div>Desired Receiver Count:</div>
+                        <div>{{task.desiredReceiverCount}}</div>
+                    </div>
+                    <div>
+                        <div>Available Receiver Count:</div>
+                        <div>{{task.availableReceiverCount}}</div>
+                    </div>
+                    <div>
+                        <div>Confirmed Count:</div>
+                        <div>{{task.confirmedReceiverCount}}</div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+    </ng-container>
+    <mat-card-actions>
+        <button mat-raised-button ><mat-icon>mode_edit</mat-icon>&nbsp;&nbsp;Edit Task</button>
+        <button mat-raised-button (click)='reloadTask()' ><mat-icon>refresh</mat-icon>&nbsp;&nbsp;Reload Task</button>
+    </mat-card-actions>
+</mat-card>

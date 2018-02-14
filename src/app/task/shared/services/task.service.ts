@@ -1,5 +1,4 @@
 import { Task } from './../../../shared/beans/Task';
-import { HunterUtil } from './../../../shared/utils/hunter-util';
 import { HunterConstants } from 'app/shared/constants/HunterConstants';
 import { TaskTypeEnum } from './../../../shared/enums/task-type.enum';
 import { SelectValue } from './../../../shared/beans/SelectValue';
@@ -19,6 +18,7 @@ import { AlertService } from 'app/shared/services/alert.service';
 import { DynGridProperties } from '../../../shared/dynamic-grid/shared/dyn-grid-properties';
 import { DynGridDataReq } from '../../../shared/beans/dyn-grid-data-req';
 import { GridFieldUserInput } from '../../../shared/dynamic-grid/shared/grid-field-user-input';
+import { HunterUtil } from 'app/shared/utils/hunter-util';
 
 @Injectable()
 
@@ -137,11 +137,11 @@ export class TaskService {
     );
   }
 
-  public cloneTask( cloneTask: TaskCloneModel ): Observable<ServerStatusResponse> {
+  public cloneTask( cloneTask: TaskCloneModel ): Observable<HunterServerResponse> {
     return (
       this.http
           .post( this.cloneTaskURL, JSON.stringify(cloneTask) )
-          .map( ( resp: Response) => resp.json() as ServerStatusResponse )
+          .map( ( resp: Response) => HunterUtil.alert( resp, this.alertService ) as HunterServerResponse )
     );
   }
 
