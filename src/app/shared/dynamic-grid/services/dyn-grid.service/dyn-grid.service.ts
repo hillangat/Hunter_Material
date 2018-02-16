@@ -57,7 +57,6 @@ export class DynGridService {
   public getSampleDefGridDataProps( filterValue: string ): DynGridProperties {
 
     const props: DynGridProperties = new DynGridProperties();
-    props.addable =  true;
     props.filterable = true;
     props.gridDataLoadUrl = 'http://localhost:8080/Hunter/restful/tasks/read/all';
     props.pageable = true;

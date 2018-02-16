@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HunterUtil } from '../../shared/utils/hunter-util';
 import { TaskFieldsModel } from '../../shared/beans/task-field-model';
 import { ServerStatusResponse } from '../../shared/beans/server-status-response';
+import { HunterServerResponse } from '../../shared/beans/ServerResponse';
 
 @Component({
     moduleId: module.id,
@@ -81,9 +82,10 @@ export class EditTaskFieldsComponent implements OnInit {
         this.taskService
             .createOrUpdateTask( task )
             .subscribe(
-                ( resp: ServerStatusResponse ) => {
+                ( resp: HunterServerResponse ) => {
                     if ( resp.status === ServerStatusesEnum.Success ) {
-                        this.router.navigate( [ '/task/details/' + 1 ] );
+                        const taskId: number = resp.data[0].taskId;
+                        this.router.navigate( [ '/task/details/' + taskId ] );
                     }
                     this.logger.log( JSON.stringify( resp ) );
                 },

@@ -15,6 +15,7 @@ import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dial
 import { CellActionBean } from '../beans/cell-action-bean';
 import { AlertService } from 'app/shared/services/alert.service';
 import { OverlayService } from '../overlay/shared/overlay.service';
+import { DynGridBarAction } from './shared/dyn-grid-bar-action';
 
 @Component({
     moduleId: module.id,
@@ -25,8 +26,9 @@ import { OverlayService } from '../overlay/shared/overlay.service';
 export class DynamicGridComponent implements OnInit, OnDestroy {
 
     @Input( 'dynGridProps' ) private dynGridProps: DynGridProperties;
+    @Input( 'percentWidth' ) private percentWidth: number;
 
-    @Output('onClickNewRecButton') private onClickNewRecButton: EventEmitter<void> = new EventEmitter<void>();
+    @Output('onClickGridBarAction') private onClickGridBarAction: EventEmitter<DynGridBarAction> = new EventEmitter<DynGridBarAction>();
     @Output('onRefresh') private onRefresh: EventEmitter<void> = new EventEmitter<void>();
     @Output('onDelRow') private onDelRow: EventEmitter<any> = new EventEmitter<any>();
     @Output('onErrorLoading') private onErrorLoading: EventEmitter<any> = new EventEmitter<any>();
@@ -149,8 +151,8 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         }
     }
 
-    public addNewRecord(): void {
-        this.onClickNewRecButton.emit();
+    public gridBarActionClicked( dynGridBarAction: DynGridBarAction ): void {
+        this.onClickGridBarAction.emit( dynGridBarAction );
     }
 
 

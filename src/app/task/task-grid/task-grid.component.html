@@ -3,6 +3,7 @@
 <app-dynamic-grid
     #taskGrid
     (onClickActionCell)='onClickActionCell($event)'
-    (onClickNewRecButton)='onClickNewRecButton()'
+    (onClickGridBarAction)='onClickGridBarAction($event)'
     [dynGridProps]='dynGridProps'
+    [percentWidth]='80'
 ></app-dynamic-grid>

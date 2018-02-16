@@ -1,5 +1,6 @@
 import { JsonObject, JsonProperty } from 'json2typescript/src/json2typescript/json-convert-decorators';
 import { DynGridDataReq } from '../../beans/dyn-grid-data-req';
+import { DynGridBarAction } from './dyn-grid-bar-action';
 
 @JsonObject
 export class DynGridProperties {
@@ -26,14 +27,14 @@ export class DynGridProperties {
     private _pageSizes = [5, 10, 20, 50];
     @JsonProperty( 'refreshable', Boolean )
     private _refreshable = true;
-    @JsonProperty( 'addable', Boolean )
-    private _addable = true;
     @JsonProperty( 'maxHeight', Number )
     private _maxHeight = 400;
     @JsonProperty( 'addLabel', String )
     private _addLabel = 'Add New Record';
     @JsonProperty( 'defaDynGridDataReq', DynGridDataReq )
     private _defaDynGridDataReq: DynGridDataReq;
+    @JsonProperty( 'dynGridBarActions', [DynGridBarAction] )
+    private _dynGridBarActions: DynGridBarAction[] = [];
 
     public get gridDataLoadUrl(): string { return this._gridDataLoadUrl; }
     public set gridDataLoadUrl( value: string ) { this._gridDataLoadUrl = value; }
@@ -68,11 +69,11 @@ export class DynGridProperties {
     public get refreshable(): boolean { return this._refreshable; }
     public set refreshable( value: boolean ) { this._refreshable = value; }
 
-    public get addable(): boolean { return this._addable; }
-    public set addable( value: boolean ) { this._addable = value; }
-
     public get maxHeight(): number { return this._maxHeight; }
     public set maxHeight( value: number ) { this._maxHeight = value; }
+
+    public get dynGridBarActions(): DynGridBarAction[] { return this._dynGridBarActions; }
+    public set dynGridBarActions( value: DynGridBarAction[] ) { this._dynGridBarActions = value; }
 
     public get defaDynGridDataReq(): DynGridDataReq { return this._defaDynGridDataReq; }
     public set defaDynGridDataReq( value: DynGridDataReq ) { this._defaDynGridDataReq = value; }

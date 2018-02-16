@@ -1,5 +1,5 @@
+import { TaskSocialMessageComponent } from './task-social-message/task-social-message.component';
 import { TaskGroupsComponent } from './task-groups/task-groups.component';
-import { TaskMessageComponent } from './task-message/task-message.component';
 import { TaskHistoryComponent } from './task-history/task-history.component';
 import { ClientService } from './../shared/services/client.service';
 import { TaskGridComponent } from './task-grid/task-grid.component';
@@ -16,6 +16,8 @@ import { EditTaskFieldsComponent } from './edit-task-fields/edit-task-fields.com
 import { ViewTaskFieldsComponent } from './view-task-fields/view-task-fields.component';
 import { CloneTaskComponent } from './clone-task/clone-task.component';
 import { TaskRegionsComponent } from './task-regions/task-regions.component';
+import { TaskTextMessageComponent } from './task-text-message/task-text-message.component';
+import { TaskEmailMessageComponent } from './task-email-message/task-email-message.component';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import { TaskRegionsComponent } from './task-regions/task-regions.component';
     ViewTaskFieldsComponent,
     CloneTaskComponent,
     TaskHistoryComponent,
-    TaskMessageComponent,
+    TaskTextMessageComponent,
+    TaskSocialMessageComponent,
+    TaskEmailMessageComponent,
     TaskGroupsComponent,
     TaskRegionsComponent
   ],

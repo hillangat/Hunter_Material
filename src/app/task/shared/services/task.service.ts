@@ -1,3 +1,5 @@
+import { DynGridBarAction } from './../../../shared/dynamic-grid/shared/dyn-grid-bar-action';
+import { HunterServerResponse } from './../../../shared/beans/ServerResponse';
 import { Task } from './../../../shared/beans/Task';
 import { HunterConstants } from 'app/shared/constants/HunterConstants';
 import { TaskTypeEnum } from './../../../shared/enums/task-type.enum';
@@ -8,7 +10,6 @@ import { Injectable, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { LoggerService } from '../../../shared/logger/logger-service';
 import { TaskCloneModel } from '../../../shared/beans/clone-task-model';
-import { HunterServerResponse } from '../../../shared/beans/ServerResponse';
 import { TaskFieldsModel } from '../../../shared/beans/task-field-model';
 
 
@@ -24,22 +25,23 @@ import { HunterUtil } from 'app/shared/utils/hunter-util';
 
 export class TaskService {
 
-  private taskBaseURL = 'http://localhost:8080/Hunter/task/';
-  private deleteTaskURL = this.taskBaseURL + 'action/task/destroy';
-  private cloneTaskURL = this.taskBaseURL + 'action/task/clone';
-  private updateTaskFieldsURL = this.taskBaseURL + 'action/updateFields';
-  private processTaskURL = this.taskBaseURL + 'action/processTask/';
-  private createOrUpdateTaskFieldsURL = this.taskBaseURL + 'action/createOrUpdate';
-  private updateTaskStatusURL = this.taskBaseURL + '/action/task/changeStatus';
-  private loadTaskForTaskURL = this.taskBaseURL + 'action/task/load/';
-  private furnishTaskURL = this.taskBaseURL + 'action/task/furnish/';
-  private taskHistoryURL = this.taskBaseURL + 'action/task/history/getForTask/';
-  private getAvailTaskGroups = this.taskBaseURL + 'action/task/availGroups/';
-  private addGrpToTask = this.taskBaseURL + 'action/tskGrp/create';
-  private currAccessToke = 'YWRtaW46OTk5OTk5';
-  private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
-  private getAllTasksURL = this.getTasksURL + '/all';
-  private getOneTasksURL = this.getTasksURL + '/';
+  public readonly taskBaseURL = 'http://localhost:8080/Hunter/task/';
+  public readonly deleteTaskURL = this.taskBaseURL + 'action/task/destroy';
+  public readonly cloneTaskURL = this.taskBaseURL + 'action/task/clone';
+  public readonly updateTaskFieldsURL = this.taskBaseURL + 'action/updateFields';
+  public readonly processTaskURL = this.taskBaseURL + 'action/processTask/';
+  public readonly createOrUpdateTaskFieldsURL = this.taskBaseURL + 'action/createOrUpdate';
+  public readonly updateTaskStatusURL = this.taskBaseURL + '/action/task/changeStatus';
+  public readonly loadTaskForTaskURL = this.taskBaseURL + 'action/task/load/';
+  public readonly furnishTaskURL = this.taskBaseURL + 'action/task/furnish/';
+  public readonly taskHistoryURL = this.taskBaseURL + 'action/task/history/getForTask/';
+  public readonly getAvailTaskGroups = this.taskBaseURL + 'action/task/availGroups/';
+  public readonly addGrpToTask = this.taskBaseURL + 'action/tskGrp/create';
+  public readonly currAccessToke = 'YWRtaW46OTk5OTk5';
+  public readonly getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
+  public readonly getAllTasksURL = this.getTasksURL + '/all';
+  public readonly getOneTasksURL = this.getTasksURL + '/';
+  public readonly getTaskGroupsURL  = this.taskBaseURL + '/action/task/history/getForTask/';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
 
@@ -89,11 +91,11 @@ export class TaskService {
     );
   }
 
-  public createOrUpdateTask( fieldsModel: TaskFieldsModel ): Observable<ServerStatusResponse> {
+  public createOrUpdateTask( fieldsModel: TaskFieldsModel ): Observable<HunterServerResponse> {
     return (
       this.http
           .post( this.createOrUpdateTaskFieldsURL, JSON.stringify( fieldsModel ) )
-          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse)
     );
   }
 
@@ -173,6 +175,10 @@ export class TaskService {
     return this.loadTaskForTaskURL;
   }
 
+  public getTaskHistoryURL( taskId: number ) {
+    return this.getTaskGroupsURL + taskId;
+  }
+
   public getTaskTypes(): Observable<SelectValue[]> {
     const taskTypes: SelectValue[] = [];
     taskTypes.push( new SelectValue( TaskTypeEnum.POLITICAL, TaskTypeEnum.POLITICAL ) );
@@ -203,25 +209,38 @@ export class TaskService {
     );
   }
 
-  public getSampleDefGridDataProps(): DynGridProperties {
+  public getGenericGridDataProps( url: string, reference: string, dynGridBarActions: DynGridBarAction[] ): DynGridProperties {
     const props: DynGridProperties = new DynGridProperties();
-    props.addable =  true;
     props.filterable = true;
-    props.gridDataLoadUrl = 'http://localhost:8080/Hunter/restful/tasks/read/all';
+    props.gridDataLoadUrl = url;
     props.pageable = true;
     props.pageSizes = [ 10, 25, 50, 100, 200 ];
     props.pageSize = 10;
     props.pageNo = 1;
+    props.dynGridBarActions = dynGridBarActions;
     props.refreshable = true;
     props.maxHeight = 500;
     props.sortable = true;
     props.defaDynGridDataReq = new DynGridDataReq();
-    props.defaDynGridDataReq.reference = 'TASK_GRID';
+    props.defaDynGridDataReq.reference = reference;
     props.defaDynGridDataReq.pageNo = props.pageNo;
     props.defaDynGridDataReq.pageSize = props.pageSize;
     props.defaDynGridDataReq.filterBy = undefined;
     props.defaDynGridDataReq.orderBy = undefined;
     return props;
+  }
+
+  public getTaskGridDynGridBarActions(): DynGridBarAction[] {
+    const barActions: DynGridBarAction[] = [];
+    const createTask: DynGridBarAction = new DynGridBarAction();
+    createTask.text = 'Create Task';
+    createTask.displayType = HunterConstants.DISPLAY_TYP_BUTTON;
+    createTask.icon = 'add';
+    createTask.index = 1;
+    createTask.key = 'createTask';
+    barActions.push( createTask );
+    barActions.sort( (a: DynGridBarAction, b: DynGridBarAction) => (a.index - b.index) );
+    return barActions;
   }
 
 

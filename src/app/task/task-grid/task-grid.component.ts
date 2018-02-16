@@ -1,3 +1,4 @@
+import { DynGridBarAction } from './../../shared/dynamic-grid/shared/dyn-grid-bar-action';
 import { TaskStatusComponent } from './../task-status/task-status.component';
 import { DynamicGridComponent } from './../../shared/dynamic-grid/dynamic-grid.component';
 import { LoggerService } from '../../shared/logger/logger-service';
@@ -38,7 +39,8 @@ export class TaskGridComponent implements OnInit {
     ) {}
 
     public ngOnInit() {
-        this.dynGridProps = this.taskService.getSampleDefGridDataProps();
+        const url: string = this.taskService.getTasksURL + '/all';
+        this.dynGridProps = this.taskService.getGenericGridDataProps( url, 'TASK_GRID', this.taskService.getTaskGridDynGridBarActions() );
         this.getTaskURL();
     }
 
@@ -71,8 +73,12 @@ export class TaskGridComponent implements OnInit {
         }
     }
 
-    public onClickNewRecButton() {
-        this.router.navigateByUrl('/task/create');
+    public onClickGridBarAction( dynGridBarAction: DynGridBarAction ) {
+        if ( dynGridBarAction.key === 'createTask' ) {
+            this.router.navigateByUrl('/task/create');
+        } else {
+            this.logger.error( 'Grid bar action not supported >> ' + dynGridBarAction.key );
+        }
     }
 
     public showDialogForStatus( cellAction: CellActionBean ) {

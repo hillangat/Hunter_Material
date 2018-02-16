@@ -22,6 +22,10 @@ export class CacheRefresh {
     public refreshing: boolean;
     @JsonProperty( 'selected', Boolean )
     public selected: boolean;
+    @JsonProperty( 'disabled', Boolean )
+    public disabled: boolean;
+    @JsonProperty( 'retired', Boolean )
+    public retired: boolean;
     @JsonProperty( 'key', CacheRefresh )
     public key: CacheKeysEnum;
 }
