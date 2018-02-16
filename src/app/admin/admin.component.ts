@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit {
                     this.availCaches.forEach( (a: CacheRefresh) => a.selected = false );
                 },
                 ( error: any ) => {
-                    this.alertService.success( 'An error occurred while trying to refresh cache' );
+                    this.alertService.error( 'An error occurred while trying to refresh cache' );
                     this.setRefreshing( selected, false );
                     this.logger.log( 'Error!!' + JSON.stringify( error ) );
                 }
@@ -93,7 +93,9 @@ export class AdminComponent implements OnInit {
                     this.gridState = States.SUCCESS;
                 } ,
                 ( error: any ) => {
-                    this.alertService.error('Error occurred loading available cache refreshes: ' + JSON.stringify( JSON.stringify(error) ))
+                    const message = 'Error occurred loading available cache refreshes: ';
+                    this.alertService.error( message );
+                    this.logger.log( message + JSON.stringify( JSON.stringify(error) ) );
                     this.gridState = States.ERROR_OCCURRED;
                 }
             );
