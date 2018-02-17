@@ -9,7 +9,7 @@
         <div style='text-align:center;color:red;' >Error occurred while loading task data</div>
     </ng-container>
     <ng-container *ngIf="state.toString() === 'SUCCESS'" > 
-        <mat-tab-group class='mat-elevation-z5 eithCenter' >
+        <mat-tab-group [selectedIndex]='selectedIndex' class='mat-elevation-z5 eithCenter' >
             <mat-tab label='Task Fields'>
                 <app-view-task-fields [task]='task' [taskDetail]='this' ></app-view-task-fields>
             </mat-tab>
@@ -17,7 +17,7 @@
                 <app-task-message></app-task-message>
             </mat-tab>
             <mat-tab label='Task Groups'>
-                <app-task-groups></app-task-groups>
+                <app-task-groups [taskId]='taskId' ></app-task-groups>
             </mat-tab>
             <mat-tab label='Task Regions'>
                 <app-task-regions></app-task-regions>

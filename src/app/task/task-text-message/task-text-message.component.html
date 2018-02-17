@@ -2,13 +2,44 @@
     <mat-card-header>
         <mat-card-title>Select cache and click refresh button</mat-card-title>
     </mat-card-header>
-    <ng-container >
-        <mat-card-content>
-            <h1>Task Message Works!!</h1>
-        </mat-card-content>
-    </ng-container>
+    <mat-card-content>
+        <div class='cardContent' style='width:80%;margin-left:5%;' >
+            <div class='splitFormFields'>
+                <mat-form-field class='stretchedMatFormField'>
+                    <textarea
+                        matInput
+                        placeholder='Enter Text Message'
+                        rows='10'
+                        cols='50'
+                    ></textarea>
+                </mat-form-field>
+            </div>
+            <div class='splitFormFields'>
+                <div>
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                This is the expansion title
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+                                Some deferred content
+                            </ng-template>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                Another content!!
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+                                Some deferred content
+                            </ng-template>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button >Refresh Cache</button>
-        <button mat-raised-button >Reload Records</button>
+        <button mat-raised-button ><mat-icon>done</mat-icon>&nbsp;&nbsp;Save Text Message</button>
+        <button mat-raised-button ><mat-icon>delete</mat-icon>&nbsp;&nbsp;Discard Changes</button>
     </mat-card-actions>
 </mat-card>

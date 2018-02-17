@@ -67,7 +67,7 @@ export class TaskGridComponent implements OnInit {
                 this.openDialog( cellAction );
                 break;
             case 'open' : ;
-                this.router.navigateByUrl( '/task/details/' + cellAction.cellRow.taskId );
+                this.router.navigateByUrl( '/task/details/' + cellAction.cellRow.taskId +  '/fields' );
                 break;
             default : return;
         }

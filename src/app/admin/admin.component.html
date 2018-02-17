@@ -35,8 +35,8 @@
                             <div style='text-align:center;color:red;' >Error occurred while loading cache records.</div>
                         </ng-container>
                         <mat-card-actions>
-                            <button mat-raised-button (click)="refreshSelCaches()">Refresh Cache</button>
-                            <button mat-raised-button (click)="getAvailCaches()">Reload Records</button>
+                            <button mat-raised-button (click)='refreshSelCaches()'><mat-icon>replay</mat-icon>&nbsp;&nbsp;Refresh Cache</button>
+                            <button mat-raised-button (click)='getAvailCaches()'><mat-icon>file_download</mat-icon>&nbsp;&nbsp;Reload Records</button>
                         </mat-card-actions>
                     </mat-card>
             </mat-tab>

@@ -10,7 +10,7 @@ export const taskRoutes: Routes = [
       path: '',
       children: [
         {
-          path: 'details/:taskId',
+          path: 'details/:taskId/:activeTab',
           component: TaskDetailsComponent
         },
         {

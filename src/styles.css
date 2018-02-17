@@ -53,3 +53,7 @@ body{
 .standardMarginTop {
     margin-top: 50px;
 }
+
+mat-expansion-panel-header {
+    min-height: 48px;
+}

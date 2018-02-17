@@ -6,7 +6,7 @@ import { TaskTypeEnum } from './../../../shared/enums/task-type.enum';
 import { SelectValue } from './../../../shared/beans/SelectValue';
 import { ServerStatusResponse } from './../../../shared/beans/server-status-response';
 import { Observable } from 'RXJS';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, group } from '@angular/core';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { LoggerService } from '../../../shared/logger/logger-service';
 import { TaskCloneModel } from '../../../shared/beans/clone-task-model';
@@ -41,7 +41,9 @@ export class TaskService {
   public readonly getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   public readonly getAllTasksURL = this.getTasksURL + '/all';
   public readonly getOneTasksURL = this.getTasksURL + '/';
-  public readonly getTaskGroupsURL  = this.taskBaseURL + '/action/task/history/getForTask/';
+  public readonly getHistoryURL  = this.taskBaseURL + 'action/task/history/getForTask/';
+  public readonly getGroupsURL  = this.taskBaseURL + 'action/task/groups/';
+  public readonly removeGroupFromTaskURL  = this.taskBaseURL + '/action/tskGrp/destroy';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
 
@@ -155,6 +157,14 @@ export class TaskService {
     );
   }
 
+  public removeGroupFromTask( taskId: number, groupId: number ): Observable<HunterServerResponse> {
+    return(
+      this.http
+          .post( this.removeGroupFromTaskURL, JSON.stringify({ taskId: taskId, groupId: groupId }) )
+          .map( (response: Response) => HunterUtil.alert( response , this.alertService ) )
+    );
+  }
+
   public addGroupToTask( taskId: number, groupIds: number[] ): Observable<ServerStatusResponse> {
     return (
       this.http
@@ -175,8 +185,12 @@ export class TaskService {
     return this.loadTaskForTaskURL;
   }
 
+  public getReadTaskGroupsURL( taskId: number ): string {
+    return this.getGroupsURL + taskId;
+  }
+
   public getTaskHistoryURL( taskId: number ) {
-    return this.getTaskGroupsURL + taskId;
+    return this.getHistoryURL + taskId;
   }
 
   public getTaskTypes(): Observable<SelectValue[]> {
