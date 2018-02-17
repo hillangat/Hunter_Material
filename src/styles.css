@@ -14,6 +14,10 @@ body{
     color: red;
 }
 
+.success {
+    color: green;
+}
+
 .eithCenter {
     width: 80%;
     margin-left:10%;
@@ -56,4 +60,28 @@ body{
 
 mat-expansion-panel-header {
     min-height: 48px;
+}
+
+.splitFormFieldView {
+    display: block;
+    width: 100%;
+}
+
+.splitFormFieldView > div {
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid #ECF0F0;
+}
+
+.splitFormFieldView > div > div {
+    float:left;
+    line-height: 3em;
+}
+
+.splitFormFieldView > div > div:first-child {
+    width:40%;
+}
+
+.splitFormFieldView > div > div:nth-child(2) {
+    width:60%;
 }

@@ -1,45 +1,126 @@
 <mat-card class='matCard'>
     <mat-card-header>
-        <mat-card-title>Select cache and click refresh button</mat-card-title>
+        <mat-card-title>Enter Information For Tesxt Message</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <div class='cardContent' style='width:80%;margin-left:5%;' >
+        <form [formGroup]='textMsgFormGroup' class='cardContent' style='width:80%;margin-left:5%;' >
             <div class='splitFormFields'>
                 <mat-form-field class='stretchedMatFormField'>
                     <textarea
                         matInput
                         placeholder='Enter Text Message'
-                        rows='10'
+                        rows='5'
                         cols='50'
+                        formControlName='text'
+                        maxlength='1200'
                     ></textarea>
                 </mat-form-field>
+                <div>
+                    <table [ngClass]="getTextCount() > 256 || getTextCount() < 1 ? 'error': 'success'" >
+                        <tr>
+                            <td>Text Word Count :</td>
+                            <td >{{ getTextCount() }}</td>
+                            <td><mat-icon>
+                                <ng-container *ngIf='getTextCount() > 256' >
+                                    warning
+                                </ng-container>
+                                <ng-container *ngIf='getTextCount() < 256 && getTextCount() > 1' >
+                                    done
+                                </ng-container>
+                                <ng-container *ngIf='getTextCount() < 1' >
+                                    clear
+                                </ng-container>
+                            </mat-icon></td>
+                        </tr>
+                    </table>
+                </div>
+                <br/>
+                <mat-form-field class='disclaimer' class='stretchedMatFormField' >
+                    <textarea
+                        matInput
+                        placeholder='Enter Disclaimer'
+                        rows='5'
+                        cols='50'
+                        formControlName='disclaimer'
+                    ></textarea>
+                </mat-form-field>
+                <br/>
+                <mat-form-field>
+                    <mat-select formControlName='provider' placeholder='Select Service Provider' >
+                        <mat-option *ngFor='let provider of providers' [value]='provider.value'>
+                            {{ provider.text }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br/>
+                <mat-form-field>
+                    <mat-select formControlName='msgLifeStatus' placeholder='Select Life Status' >
+                        <mat-option *ngFor='let status of taskLifeStatuses' [value]='status.value'>
+                            {{ status.text }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br/>
+                <mat-form-field>
+                    <input formControlName='fromPhone' matInput placeholder='From Phone Number:'>
+                </mat-form-field>
+                <br/>
+                <section>
+                    <mat-checkbox formControlName='pageable' >Text Pageable ?</mat-checkbox>
+                </section>
             </div>
             <div class='splitFormFields'>
-                <div>
-                    <mat-accordion>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                This is the expansion title
-                            </mat-expansion-panel-header>
-                            <ng-template matExpansionPanelContent>
-                                Some deferred content
-                            </ng-template>
-                        </mat-expansion-panel>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                Another content!!
-                            </mat-expansion-panel-header>
-                            <ng-template matExpansionPanelContent>
-                                Some deferred content
-                            </ng-template>
-                        </mat-expansion-panel>
-                    </mat-accordion>
+                <div class='splitFormFieldView' >
+                    <div>
+                        <div>Life status:</div>
+                        <div>{{ task?.taskMessage?.msgLifeStatus }}</div>
+                    </div>
+                    <div>
+                        <div>Delivery status:</div>
+                        <div>{{ task?.taskMessage?.msgDeliveryStatus }}</div>
+                    </div>
+                    <div>
+                        <div>Send Date:</div>
+                        <div>{{ task?.taskMessage?.msgSendDate }}</div>
+                    </div>
+                    <div>
+                        <div>Task Type:</div>
+                        <div>{{ task?.taskMessage?.msgTaskType }}</div>
+                    </div>
+                    <div>
+                        <div>Desired Receiver count:</div>
+                        <div>{{ task?.taskMessage?.desiredReceivers }}</div>
+                    </div>
+                    <div>
+                        <div>Actual Receiver Count:</div>
+                        <div>{{ task?.taskMessage?.actualReceivers }}</div>
+                    </div>
+                    <div>
+                        <div>Confirmed Receiver Count:</div>
+                        <div>{{ task?.taskMessage?.confirmedReceivers }}</div>
+                    </div>
+                    <div>
+                        <div>Created On:</div>
+                        <div>{{ task?.taskMessage?.cretDate }}</div>
+                    </div>
+                    <div>
+                        <div>Created By:</div>
+                        <div>{{ task?.taskMessage?.lastUpdate }}</div>
+                    </div>
+                    <div>
+                        <div>Updated On:</div>
+                        <div>{{ task?.taskMessage?.createdBy }}</div>
+                    </div>
+                    <div>
+                        <div>Updated By:</div>
+                        <div>{{ task?.taskMessage?.lastUpdatedBy }}</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button ><mat-icon>done</mat-icon>&nbsp;&nbsp;Save Text Message</button>
-        <button mat-raised-button ><mat-icon>delete</mat-icon>&nbsp;&nbsp;Discard Changes</button>
+        <button (click)='createTaskMessage()' mat-raised-button ><mat-icon>done</mat-icon>&nbsp;&nbsp;Save Text Message</button>
+        <button (click)='resetTheForm()' mat-raised-button ><mat-icon>delete</mat-icon>&nbsp;&nbsp;Discard Changes</button>
     </mat-card-actions>
 </mat-card>

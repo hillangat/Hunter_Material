@@ -1,33 +1,33 @@
-.viewTaskFieldsContainer {
+.ViewFieldsContainer {
     display: inline-block;
     width: 80%;
     left: 0px;
 }
-.viewTaskFieldsContainer div {
+.ViewFieldsContainer div {
     width: 50%;
     float: left;
     box-sizing: border-box;
 }
 
-.viewTaskFieldsContainer > div > div {
+.ViewFieldsContainer > div > div {
     display: inline-block;
     width: 100%;
     border-bottom: 1px solid #F2F2F2;
 }
 
 
-.viewTaskFieldsContainer div > div > div {
+.ViewFieldsContainer div > div > div {
     width:50%;
     float: left;
     box-sizing: border-box;
     line-height: 3em;
 }
 
-.viewTaskFieldsContainer div > div > div:nth-child(1) {
+.ViewFieldsContainer div > div > div:nth-child(1) {
     width:40%;
     font-weight: bold;
 }
 
-.viewTaskFieldsContainer div > div > div:nth-child(2) {
+.ViewFieldsContainer div > div > div:nth-child(2) {
     width:60%;
 }

@@ -14,7 +14,7 @@
                 <app-view-task-fields [task]='task' [taskDetail]='this' ></app-view-task-fields>
             </mat-tab>
             <mat-tab label='Task Message'>
-                <app-task-message></app-task-message>
+                <app-text-message [task]='task' ></app-text-message>
             </mat-tab>
             <mat-tab label='Task Groups'>
                 <app-task-groups [taskId]='taskId' ></app-task-groups>

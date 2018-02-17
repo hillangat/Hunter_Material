@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     moduleId: module.id,
@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
     styleUrls: ['task-email-message.component.scss']
 })
 export class TaskEmailMessageComponent {
+
+    @Input('taskId') private taskId: number;
 
 }

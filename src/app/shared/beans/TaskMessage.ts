@@ -30,6 +30,10 @@ export class TaskMessage {
         public cssObject: string;
         public replyTo: string;
         public priority: string;
+        public fromPhone: string;
+        public disclaimer: string;
+        public pageable: string;
+        public toPhone: string;
         public emailTemplateName: string;
         public messageAttachments: string;
         public messageAttachmentMetadata: MessageAttachmentMetadata[]

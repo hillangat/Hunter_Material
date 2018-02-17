@@ -85,7 +85,7 @@ export class EditTaskFieldsComponent implements OnInit {
                 ( resp: HunterServerResponse ) => {
                     if ( resp.status === ServerStatusesEnum.Success ) {
                         const taskId: number = resp.data[0].taskId;
-                        this.router.navigate( [ '/task/details/' + taskId ] );
+                        this.router.navigate( [ '/task/details/' + taskId + '/fields' ] );
                     }
                     this.logger.log( JSON.stringify( resp ) );
                 },

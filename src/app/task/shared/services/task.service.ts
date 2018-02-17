@@ -1,3 +1,4 @@
+import { Observable } from 'Rxjs';
 import { DynGridBarAction } from './../../../shared/dynamic-grid/shared/dyn-grid-bar-action';
 import { HunterServerResponse } from './../../../shared/beans/ServerResponse';
 import { Task } from './../../../shared/beans/Task';
@@ -43,9 +44,31 @@ export class TaskService {
   public readonly getOneTasksURL = this.getTasksURL + '/';
   public readonly getHistoryURL  = this.taskBaseURL + 'action/task/history/getForTask/';
   public readonly getGroupsURL  = this.taskBaseURL + 'action/task/groups/';
-  public readonly removeGroupFromTaskURL  = this.taskBaseURL + '/action/tskGrp/destroy';
+  public readonly removeGroupFromTaskURL  = this.taskBaseURL + 'action/tskGrp/destroy';
+  public readonly getServiceProvidersSelValsURL  = this.taskBaseURL + 'action/providers/selVals/';
+  public readonly createTaskMessageURL = 'message/action/tskMsg/create/';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
+
+  public createTaskMessage( taskId: number, message: any ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .post( HunterConstants.HUNTER_BASE_URL + this.createTaskMessageURL + taskId, JSON.stringify(message) )
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
+          .catch( (error: any) => {
+            this.alertService.error( 'Application error occurred while creating message' )
+            return Observable.throw( error );
+          })
+    );
+  }
+
+  public getServiceProvidersSelVals( taskId: number ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .get( this.getServiceProvidersSelValsURL + taskId )
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
+    );
+  }
 
   public getAllTasks(): Observable<HunterServerResponse> {
     return (
@@ -115,6 +138,15 @@ export class TaskService {
           .post( this.processTaskURL + taskId , undefined )
           .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
     );
+  }
+
+  public getTaskLifeStatuses (): Observable<SelectValue[]> {
+    const lifeStatuses: SelectValue[] = [];
+    lifeStatuses.push ( new SelectValue( 'Draft', 'Draft' ) );
+    lifeStatuses.push ( new SelectValue( 'Review', 'Review' ) );
+    lifeStatuses.push ( new SelectValue( 'Approved', 'Approved' ) );
+    lifeStatuses.push ( new SelectValue( 'Processed', 'Processed' ) );
+    return Observable.of( lifeStatuses );
   }
 
   public getTaskHistoryForTaskId( taskId: number ): Observable<HunterServerResponse> {

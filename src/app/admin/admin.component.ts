@@ -1,3 +1,4 @@
+import { HunterUtil } from './../shared/utils/hunter-util';
 import { SelectionModel } from '@angular/cdk/collections';
 import { LoggerService } from 'app/shared/logger/logger-service';
 import { CacheRefresh, CacheKeysEnum } from './shared/beans/cache-refresh';
@@ -30,6 +31,10 @@ export class AdminComponent implements OnInit {
 
     public refreshSelCaches() {
         const selected: CacheRefresh[] = this.availCaches.filter( (a: CacheRefresh) => a.selected );
+        if ( !HunterUtil.isNotEmpty( selected ) ) {
+            this.alertService.warn( 'Please select at least on cache to refresh', false );
+            return;
+        }
         this.setRefreshing( selected, true );
         this.adminService
             .refreshCaches( selected )
