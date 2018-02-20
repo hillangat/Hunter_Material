@@ -247,7 +247,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         const operation: OperationEnum = value['operation'] as OperationEnum;
 
         this.currFilterHeader.isCurrFilter = true;
-        this.clearFilter();
+        this.clearFilter( false );
 
         if ( !HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy ) ) {
             this.dynGridProps.defaDynGridDataReq.filterBy = [];
@@ -279,11 +279,28 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         this.fetchData( false );
     }
 
-    public clearFilter() {
+    public clearFilter( remove: boolean ) {
+        if ( remove ) {
+            this.removeCurrFilterFromProps();
+        }
         this.showFilter = false;
         this.currFilterHeader = undefined;
         this.filterFormGroup.reset();
         this.filterFormGroup.markAsUntouched();
+    }
+
+    public removeCurrFilterFromProps() {
+        this.setIsCurrFilter( false, this.currFilterHeader.headerId, this.currFilterHeader );
+        const indices: number[] = [];
+        this.dynGridProps.defaDynGridDataReq.filterBy.forEach( (f: GridFieldUserInput, i: number) => {
+            if ( f.fieldName === this.currFilterHeader.headerId ) {
+                indices.push( i );
+            }
+        });
+        if ( HunterUtil.isNotEmpty( indices ) ) {
+            indices.sort( (a: number, b: number) => a - b );
+            indices.forEach( (i: number) => this.dynGridProps.defaDynGridDataReq.filterBy.slice( i, 1 ) );
+        }
     }
 
     private setIsCurrFilter( isCurrFilter: boolean, headerId: string, header: HunterTableConfig ): void {
