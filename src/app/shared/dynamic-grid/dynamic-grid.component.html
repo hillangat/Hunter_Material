@@ -73,7 +73,7 @@
     [style.left.px]='filterX'
     [style.top.px]='filterY + 20'
     class='dynFilter mat-elevation-z5'>
-    <button (click)='showFilter = !showFilter' mat-icon-button matTooltip='Clear and close filter' ><mat-icon>clear</mat-icon></button>
+    <button (click)='cancelFilter()' mat-icon-button matTooltip='Clear and close filter' ><mat-icon>clear</mat-icon></button>
     <div class='dynFilterContent' >
             <div class='filterTitle' >Filtering by <b>{{currFilterHeader?.displayName}}</b></div>
             <form [formGroup]='filterFormGroup' class="example-form">
@@ -91,7 +91,7 @@
             <table>
                 <tr>
                     <td><button mat-raised-button (click)='operateFilter()' [disabled]='!filterFormGroup.valid' >Filter</button></td>
-                    <td><button mat-raised-button (click)='clearFilter(true)' >Cancel</button></td>
+                    <td><button mat-raised-button (click)='cancelFilter()' >Cancel</button></td>
                 </tr>
             </table>
     </div>

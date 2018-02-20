@@ -295,6 +295,11 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         this.filterFormGroup.markAsUntouched();
     }
 
+    public cancelFilter() {
+        this.setIsCurrFilter( false, this.currFilterHeader.headerId, this.currFilterHeader );
+        this.clearFilter( true );
+    }
+
     public removeCurrFilterFromProps() {
         const proceed: boolean = this.currFilterHeader != null && HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy );
         if ( proceed ) {
