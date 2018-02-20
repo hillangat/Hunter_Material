@@ -19,7 +19,6 @@ import { TaskModule } from 'app/task/task.module';
 import { SecureRouteGuard } from './shared/route-guards.ts/secure-route-guard';
 import { HomeModule } from 'app/home/home.module';
 import { MaterialCodeComponent } from './material-code/material-code/material-code.component';
-import { DynGridConfirmComponent } from 'app/shared/dynamic-grid/dyn-grid-confirm/dyn-grid-confirm.component';
 import { ConfirmGridActionComponent } from './shared/confirm-grid-action/confirm-grid-action.component';
 import { OverlayComponent } from './shared/overlay/overlay.component';
 import { OverlayService } from './shared/overlay/shared/overlay.service';
@@ -30,7 +29,6 @@ import { OverlayService } from './shared/overlay/shared/overlay.service';
     AppComponent,
     DialogTemplateComponent,
     MaterialCodeComponent,
-    DynGridConfirmComponent,
     ConfirmGridActionComponent,
     AlertComponent,
     OverlayComponent
@@ -61,7 +59,6 @@ import { OverlayService } from './shared/overlay/shared/overlay.service';
   bootstrap: [AppComponent],
   entryComponents: [
     DialogTemplateComponent,
-    DynGridConfirmComponent,
     ConfirmGridActionComponent
   ],
 })
