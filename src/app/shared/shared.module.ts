@@ -9,6 +9,7 @@ import { DynamicGridComponent } from 'app/shared/dynamic-grid/dynamic-grid.compo
 import { CardTitleHeaderComponent } from 'app/shared/card-title-header/card-title-header.component';
 import { OverlayService } from 'app/shared/overlay/shared/overlay.service';
 import { OverlayComponent } from './overlay/overlay.component';
+import { ClickOutsideDirective } from './directives/click-outside-directive';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { OverlayComponent } from './overlay/overlay.component';
     ProgSpinnerComponent,
     PageNotFoundComponent,
     DynamicGridComponent,
-    CardTitleHeaderComponent
+    CardTitleHeaderComponent,
+    ClickOutsideDirective
   ],
   exports: [
     ProgSpinnerComponent,
@@ -30,7 +32,8 @@ import { OverlayComponent } from './overlay/overlay.component';
     AngularMaterialModule,
     DynamicGridComponent,
     CardTitleHeaderComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ClickOutsideDirective
   ],
   providers: [ ]
 })

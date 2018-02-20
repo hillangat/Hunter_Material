@@ -21,6 +21,10 @@ export class OverlayService {
         this.openCloseOverlay( { wholeScreen: false, message: undefined } );
     }
 
+    public openOverlay( wholseScreen: boolean, message: string ) {
+        this.openCloseOverlay( { wholeScreen: wholseScreen, message: message } );
+    }
+
     public getService(): Observable<any> {
         return this.subject.asObservable();
     }

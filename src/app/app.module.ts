@@ -63,7 +63,7 @@ import { OverlayService } from './shared/overlay/shared/overlay.service';
     DialogTemplateComponent,
     DynGridConfirmComponent,
     ConfirmGridActionComponent
-  ]
+  ],
 })
 export class AppModule {
   public static routes: Routes = appRoutes;

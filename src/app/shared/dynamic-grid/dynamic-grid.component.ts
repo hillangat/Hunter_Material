@@ -1,4 +1,4 @@
-import { HunterUtil } from 'app/shared/utils/hunter-util';
+import { HunterUtil } from './../utils/hunter-util';
 import { GridFieldUserInput } from './shared/grid-field-user-input';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { HunterTableConfig } from './../beans/hunter-table-configs';
@@ -78,8 +78,11 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         this.createFilterForm();
     }
 
-    public fetchData( initializing: boolean ): void {
+    public fetchData( initializing: boolean, showOverlay?: boolean ): void {
         this.updateGridState( DynGridLoadStatesEnum.LOADING, initializing );
+        if ( showOverlay ) {
+            this.overLayService.openOverlay( true, 'Loading data' );
+        }
         this.dynGridService
             .getGridData( this.dynGridProps.gridDataLoadUrl, this.dynGridProps.defaDynGridDataReq )
             .subscribe(
@@ -88,11 +91,17 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
                     this.processServerResp( serverResp );
                     this.updateGridState( DynGridLoadStatesEnum.SUCCESS, initializing );
                     this.onSuccessLoading.emit();
+                    if ( showOverlay ) {
+                        this.overLayService.removeOverlay();
+                    }
                 },
                 ( error: any ) => {
                     this.alertService.error( 'Failed to load dynamic grid data!', false );
                     this.updateGridState( DynGridLoadStatesEnum.ERROR, initializing );
                     this.onErrorLoading.emit();
+                    if ( showOverlay ) {
+                        this.overLayService.removeOverlay();
+                    }
                 }
             );
     }
@@ -221,19 +230,16 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
             this.filterY = event.y;
             this.showFilter = header === this.currFilterHeader;
             this.setIsCurrFilter( true, header.headerId, header );
-            const hasFilterBy: boolean = HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy );
-            if ( !hasFilterBy ) {
-                this.dynGridProps.defaDynGridDataReq.filterBy = [];
-            }
-            const filterInput: GridFieldUserInput = new GridFieldUserInput();
-            filterInput.fieldName = header.headerId;
-            this.dynGridProps.defaDynGridDataReq.filterBy.push( filterInput );
         } else {
             this.setIsCurrFilter( false, header.headerId, header );
-            if ( HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy ) ) {
-                let filtered: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.filterBy;
-                filtered = filtered.filter( (f: GridFieldUserInput ) => f.fieldName !== header.headerId );
-                this.dynGridProps.defaDynGridDataReq.filterBy = HunterUtil.isNotEmpty( filtered ) ? filtered : [];
+            if ( this.showFilter ) {
+                this.clearFilter( true );
+            } else {
+                if ( HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy ) ) {
+                    let filtered: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.filterBy;
+                    filtered = filtered.filter( (f: GridFieldUserInput ) => f.fieldName !== header.headerId );
+                    this.dynGridProps.defaDynGridDataReq.filterBy = HunterUtil.isNotEmpty( filtered ) ? filtered : [];
+                }
             }
         }
         this.fetchData( false );
@@ -290,16 +296,21 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     }
 
     public removeCurrFilterFromProps() {
-        this.setIsCurrFilter( false, this.currFilterHeader.headerId, this.currFilterHeader );
-        const indices: number[] = [];
-        this.dynGridProps.defaDynGridDataReq.filterBy.forEach( (f: GridFieldUserInput, i: number) => {
-            if ( f.fieldName === this.currFilterHeader.headerId ) {
-                indices.push( i );
+        const proceed: boolean = this.currFilterHeader != null && HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy );
+        if ( proceed ) {
+            this.setIsCurrFilter( false, this.currFilterHeader.headerId, this.currFilterHeader );
+            const indices: number[] = [];
+            if ( HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy ) ) {
+                this.dynGridProps.defaDynGridDataReq.filterBy.forEach( (f: GridFieldUserInput, i: number) => {
+                    if ( f.fieldName === this.currFilterHeader.headerId ) {
+                        indices.push( i );
+                    }
+                });
+                if ( HunterUtil.isNotEmpty( indices ) ) {
+                    indices.sort( (a: number, b: number) => a - b );
+                    indices.forEach( (i: number) => this.dynGridProps.defaDynGridDataReq.filterBy.slice( i, 1 ) );
+                }
             }
-        });
-        if ( HunterUtil.isNotEmpty( indices ) ) {
-            indices.sort( (a: number, b: number) => a - b );
-            indices.forEach( (i: number) => this.dynGridProps.defaDynGridDataReq.filterBy.slice( i, 1 ) );
         }
     }
 

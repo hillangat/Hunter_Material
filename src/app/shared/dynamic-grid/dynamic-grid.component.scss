@@ -3,6 +3,11 @@
     padding: 10px 5px;
 }
 
+.dynGridToolBar button.refreshGridIcon {
+    float: right !important;
+    margin-right: 5px;
+}
+
 .mat-header-row {
     position: sticky;
     top: 0;

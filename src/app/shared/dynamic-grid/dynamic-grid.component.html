@@ -16,7 +16,8 @@
                     <a *ngIf="action.displayType === 'LINK'" (click)='gridBarActionClicked(action); false;' mat-raised-button ><mat-icon>{{ action.icon }}</mat-icon>&nbsp;&nbsp;{{ action.text }}</a>
                     <button *ngIf="action.displayType === 'MAT_FAB'" (click)='gridBarActionClicked(action)' mat-mini-fab ><mat-icon>{{ action.icon }}</mat-icon></button>
                 </ng-container>
-            </div>                   
+                <button class='refreshGridIcon' (click)='fetchData(false, true)' mat-icon-button matTooltip='Refresh data' ><mat-icon>autorenew</mat-icon></button>
+            </div>
             <mat-table #matDyncGridTable [dataSource]='dataSource' [style.max-height.px]='dynGridProps.maxHeight' >
                 <ng-container *ngFor='let header of gridData.headers' matColumnDef='{{header.headerId}}' [style.width]="40" >
                     <mat-header-cell *matHeaderCellDef>
@@ -71,7 +72,7 @@
     [style.display]="!showFilter ? 'none' : undefined" 
     [style.left.px]='filterX'
     [style.top.px]='filterY + 20'
-    class='dynFilter mat-elevation-z5' >
+    class='dynFilter mat-elevation-z5'>
     <button (click)='showFilter = !showFilter' mat-icon-button matTooltip='Clear and close filter' ><mat-icon>clear</mat-icon></button>
     <div class='dynFilterContent' >
             <div class='filterTitle' >Filtering by <b>{{currFilterHeader?.displayName}}</b></div>
