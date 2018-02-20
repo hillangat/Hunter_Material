@@ -19,8 +19,27 @@
             </div>                   
             <mat-table #matDyncGridTable [dataSource]='dataSource' [style.max-height.px]='dynGridProps.maxHeight' >
                 <ng-container *ngFor='let header of gridData.headers' matColumnDef='{{header.headerId}}' [style.width]="40" >
-                    <mat-header-cell fxFlex="60px" *matHeaderCellDef> {{header.displayName}} </mat-header-cell>
-                    <mat-cell fxFlex="60px" *matCellDef='let cell'>
+                    <mat-header-cell *matHeaderCellDef>
+                        <div>
+                            <ng-container *ngIf='!header.sortable' >{{header.displayName}}</ng-container>
+                            <table *ngIf='header.sortable' matSort (matSortChange)='sortInputChanged($event)' >
+                                <tr>
+                                    <td mat-sort-header='{{header.headerId}}' >{{header.displayName}}</td>
+                                    <td matTooltip="{{ !header.isCurrFilter ? 'Click to filter' : 'Clear Filter' }}" *ngIf=' header.sortable'>
+                                        <mat-icon (click)='openFilter(header, $event)' class='dynFilterIcon' >
+                                            <ng-container *ngIf='!header.isCurrFilter' >
+                                                filter_list
+                                            </ng-container>
+                                            <ng-container *ngIf='header.isCurrFilter' >
+                                                donut_large
+                                            </ng-container>
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef='let cell'>
                         <ng-container  [ngSwitch]='header.actionCellType' >
                             <span *ngSwitchCase="'text'"> {{cell[header.headerId]}} </span>
                             <a style='width:100%;text-align:center;' href='#' *ngSwitchCase="'link'" (click)='onClickGridActionCell(cell, header);false;' mat-min-raised-button routerLink=".">{{cell[header.headerId]}}</a>
@@ -48,3 +67,35 @@
         <div *ngSwitchDefault>Load state could not be determined: {{ gridLoadState }}</div>
     </ng-container>
 </div>
+<div 
+    [style.display]="!showFilter ? 'none' : undefined" 
+    [style.left.px]='filterX'
+    [style.top.px]='filterY + 20'
+    class='dynFilter mat-elevation-z5' >
+    <button (click)='showFilter = !showFilter' mat-icon-button matTooltip='Clear and close filter' ><mat-icon>clear</mat-icon></button>
+    <div class='dynFilterContent' >
+            <div class='filterTitle' >Filtering by <b>{{currFilterHeader?.displayName}}</b></div>
+            <form [formGroup]='filterFormGroup' class="example-form">
+                <mat-form-field>
+                    <mat-select formControlName='operation' placeholder='Select Criteria' >
+                        <mat-option *ngFor='let operation of filterOperations' [value]='operation.value'>
+                            {{ operation.text }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <input formControlName='userInput' matInput placeholder='Enter filter text'>
+                </mat-form-field>
+            </form>
+            <table>
+                <tr>
+                    <td><button mat-raised-button (click)='operateFilter()' [disabled]='!filterFormGroup.valid' >Filter</button></td>
+                    <td><button mat-raised-button (click)='clearFilter()' >Cancel</button></td>
+                </tr>
+            </table>
+    </div>
+</div>
+
+<br/>
+<br/>
+{{ dynGridProps.defaDynGridDataReq.filterBy | json }}

@@ -1,6 +1,4 @@
-import { Observable } from 'Rxjs';
 import { DynGridBarAction } from './../../../shared/dynamic-grid/shared/dyn-grid-bar-action';
-import { HunterServerResponse } from './../../../shared/beans/ServerResponse';
 import { Task } from './../../../shared/beans/Task';
 import { HunterConstants } from 'app/shared/constants/HunterConstants';
 import { TaskTypeEnum } from './../../../shared/enums/task-type.enum';
@@ -21,6 +19,8 @@ import { DynGridProperties } from '../../../shared/dynamic-grid/shared/dyn-grid-
 import { DynGridDataReq } from '../../../shared/beans/dyn-grid-data-req';
 import { GridFieldUserInput } from '../../../shared/dynamic-grid/shared/grid-field-user-input';
 import { HunterUtil } from 'app/shared/utils/hunter-util';
+import { TaskMessage } from '../../../shared/beans/TaskMessage';
+import { HunterServerResponse } from '../../../shared/beans/ServerResponse';
 
 @Injectable()
 
@@ -47,8 +47,21 @@ export class TaskService {
   public readonly removeGroupFromTaskURL  = this.taskBaseURL + 'action/tskGrp/destroy';
   public readonly getServiceProvidersSelValsURL  = this.taskBaseURL + 'action/providers/selVals/';
   public readonly createTaskMessageURL = 'message/action/tskMsg/create/';
+  public readonly getAngularMessageURL = 'message/action/tskMsg/getAngularMsg/';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
+
+  public getMessageForTask( taskId: number ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .get( HunterConstants.HUNTER_BASE_URL + this.getAngularMessageURL + taskId )
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
+          .catch( (error: any) => {
+            this.alertService.error( 'Application error occurred while creating message' )
+            return Observable.throw( error );
+          })
+    );
+  }
 
   public createTaskMessage( taskId: number, message: any ): Observable<HunterServerResponse> {
     return (

@@ -28,7 +28,8 @@ import {
   MatNativeDateModule,
   MatInputModule,
   MatOptionModule,
-  MatSelectModule
+  MatSelectModule,
+  MatSortModule
 } from '@angular/material';
 
 @NgModule({
@@ -60,7 +61,8 @@ import {
     MatButtonModule,
     MatSidenavModule,
     MatExpansionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   ],
   exports: [
     CommonModule,
@@ -90,7 +92,8 @@ import {
     MatButtonModule,
     MatSidenavModule,
     MatExpansionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   ],
   declarations: [],
   providers: [

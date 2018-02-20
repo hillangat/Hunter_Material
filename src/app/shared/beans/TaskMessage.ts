@@ -7,6 +7,7 @@ export class TaskMessage {
         public msgSendDate: number;
         public msgTaskType: string;
         public msgText: string;
+        public text: string;
         public desiredReceivers: number;
         public actualReceivers: number;
         public confirmedReceivers: number;

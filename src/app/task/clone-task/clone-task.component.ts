@@ -99,7 +99,7 @@ export class CloneTaskComponent implements OnInit {
                 .subscribe(
                     ( resp: HunterServerResponse ) => {
                         if ( resp.status + '' === 'Success' ) {
-                            this.router.navigate( ['./task/details/' + resp.data[0].taskId ] );
+                            this.router.navigate( ['./task/details/' + resp.data[0].taskId + '/fields' ] );
                         } else {
                             this.logger.error( resp.message );
                         }

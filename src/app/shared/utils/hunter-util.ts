@@ -64,6 +64,14 @@ export class HunterUtil {
 
         const formatedDate    = year + '-' + month + '-' + date_ + ' ' + hour + ':' + minute + ':' + secs;
         return formatedDate;
-      }
+    }
+
+    public static notNullUndefined( value: any ): boolean {
+        return value !== null && value !== undefined;
+    }
+
+    public static strHasVal( strVal: string ): boolean {
+        return this.notNullUndefined(strVal) && strVal.trim().length > 0;
+    }
 
 }

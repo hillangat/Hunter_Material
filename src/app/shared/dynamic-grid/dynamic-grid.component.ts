@@ -1,21 +1,26 @@
+import { HunterUtil } from 'app/shared/utils/hunter-util';
+import { GridFieldUserInput } from './shared/grid-field-user-input';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { HunterTableConfig } from './../beans/hunter-table-configs';
-import { HunterUtil } from './../utils/hunter-util';
 import { DynGridLoadStatesEnum } from './enums/dyn-grid-load-states.enum';
-import { Component, OnDestroy, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import DynGridHelper from './shared/dyn-grid-helper';
 import { Input, Output, OnInit } from '@angular/core';
 import { DynGridProperties } from './shared/dyn-grid-properties';
 import { DynGridService } from './services/dyn-grid.service/dyn-grid.service';
 import { HunterServerResponse } from '../beans/ServerResponse';
 import { LoggerService } from '../logger/logger-service';
-import { MatTableDataSource, PageEvent, MatPaginator, MatDialog } from '@angular/material';
+import { MatTableDataSource, PageEvent, MatPaginator, MatDialog, Sort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dialog-template.component';
 import { CellActionBean } from '../beans/cell-action-bean';
 import { AlertService } from 'app/shared/services/alert.service';
 import { OverlayService } from '../overlay/shared/overlay.service';
 import { DynGridBarAction } from './shared/dyn-grid-bar-action';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SelectValue } from '../beans/SelectValue';
+import { filter } from 'RXJS/operators';
+import { OperationEnum } from './enums/operation.enum';
 
 @Component({
     moduleId: module.id,
@@ -37,7 +42,14 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
 
     @ViewChild(MatPaginator) dynGridPaginator: MatPaginator;
 
+    public currFilterHeader: HunterTableConfig;
     public filterValue = '';
+    public filterX: number;
+    public filterY: number;
+    public showFilter = false;
+    public filterWidth = 300;
+    public filterFormGroup: FormGroup;
+    public filterOperations: SelectValue[];
 
     public dataSource: MatTableDataSource<any> = new MatTableDataSource<any>( [] );
     public displayedColumns: string[] = [];
@@ -53,13 +65,17 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         private dynGridService: DynGridService,
         private dialog: MatDialog,
         private alertService: AlertService,
-        private overLayService: OverlayService
+        private overLayService: OverlayService,
+        private elRef: ElementRef,
+        private formBuilder: FormBuilder
     ) {}
 
     public ngOnInit(): void {
         this.logger.log( 'Initializing grid data: ' + JSON.stringify( this.dynGridProps ) );
         this.dynGridProps = this.dynGridProps ? this.dynGridProps : this.dynGridService.getSampleDefGridDataProps( this.filterValue );
         this.fetchData( true );
+        this.createFilterOperations();
+        this.createFilterForm();
     }
 
     public fetchData( initializing: boolean ): void {
@@ -153,6 +169,180 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
 
     public gridBarActionClicked( dynGridBarAction: DynGridBarAction ): void {
         this.onClickGridBarAction.emit( dynGridBarAction );
+    }
+
+    public sortInputChanged( sort: Sort ) {
+        let orderyBy: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.orderBy;
+        orderyBy = HunterUtil.isNotEmpty( orderyBy ) ? orderyBy : [];
+        if ( HunterUtil.isNotEmpty( orderyBy ) ) {
+            if ( !HunterUtil.strHasVal( sort.direction )) {
+                this.removeOrderBy( sort.active );
+                this.fetchData( false );
+                return;
+            }
+            this.logger.log( 'Before modifying >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+            const existing: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.orderBy;
+            let filtered: GridFieldUserInput[] = JSON.parse(JSON.stringify(existing));
+            filtered = filtered.filter( (o: GridFieldUserInput ) => o.fieldName === sort.active );
+            if ( HunterUtil.isNotEmpty( filtered ) ) {
+                filtered.forEach( (o: GridFieldUserInput ) => {
+                    const direction: any = this.getDirection( sort );
+                    o.dir = direction;
+                });
+                existing.forEach( (o: GridFieldUserInput ) => {
+                    if ( o.fieldName === sort.active ) {
+                        o.dir = this.getDirection( sort );
+                    }
+                });
+                this.logger.log( 'After modifying >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+            } else {
+                this.addOrderBy( this.getDirection( sort ), sort.active );
+            }
+        } else {
+            const direction: any = this.getDirection( sort );
+            this.dynGridProps.defaDynGridDataReq.orderBy = [];
+            this.logger.log( 'After adding >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+            if ( direction !== undefined ) {
+                const oBy: GridFieldUserInput = new GridFieldUserInput();
+                oBy.dir = direction;
+                oBy.fieldName = sort.active;
+                this.dynGridProps.defaDynGridDataReq.orderBy.push( oBy );
+            }
+            this.logger.log( 'After adding >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+        }
+        this.logger.log( 'Fetching data with order by: ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+        this.fetchData( false );
+    }
+
+    public openFilter( header: HunterTableConfig, event: MouseEvent ): void {
+        if ( !header.isCurrFilter ) {
+            this.currFilterHeader = this.currFilterHeader === header ? undefined : header;
+            this.filterX = event.x - ( this.filterWidth / 2 );
+            this.filterY = event.y;
+            this.showFilter = header === this.currFilterHeader;
+            this.setIsCurrFilter( true, header.headerId, header );
+            const hasFilterBy: boolean = HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy );
+            if ( !hasFilterBy ) {
+                this.dynGridProps.defaDynGridDataReq.filterBy = [];
+            }
+            const filterInput: GridFieldUserInput = new GridFieldUserInput();
+            filterInput.fieldName = header.headerId;
+            this.dynGridProps.defaDynGridDataReq.filterBy.push( filterInput );
+        } else {
+            this.setIsCurrFilter( false, header.headerId, header );
+            if ( HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy ) ) {
+                let filtered: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.filterBy;
+                filtered = filtered.filter( (f: GridFieldUserInput ) => f.fieldName !== header.headerId );
+                this.dynGridProps.defaDynGridDataReq.filterBy = HunterUtil.isNotEmpty( filtered ) ? filtered : [];
+            }
+        }
+        this.fetchData( false );
+    }
+
+    public operateFilter(): void {
+
+        const value: any = this.filterFormGroup.value;
+        const fieldName: string = this.currFilterHeader.headerId;
+        const userInput: string = value['userInput'];
+        const operation: OperationEnum = value['operation'] as OperationEnum;
+
+        this.currFilterHeader.isCurrFilter = true;
+        this.clearFilter();
+
+        if ( !HunterUtil.isNotEmpty( this.dynGridProps.defaDynGridDataReq.filterBy ) ) {
+            this.dynGridProps.defaDynGridDataReq.filterBy = [];
+        }
+
+        const filterBy: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.filterBy;
+        const existing = filterBy.filter( (f: GridFieldUserInput ) => f.fieldName === fieldName );
+
+        const filterInput: GridFieldUserInput = new GridFieldUserInput();
+        filterInput.fieldName = fieldName;
+        filterInput.operation = operation;
+        filterInput.userInput = userInput;
+
+        if ( HunterUtil.isNotEmpty( existing ) ) {
+            this.logger.log( 'Before Modifying filter >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.filterBy ) );
+            filterBy.forEach( (f: GridFieldUserInput ) => {
+                if ( f.fieldName === fieldName ) {
+                    f.fieldName = filterInput.fieldName;
+                    f.operation = filterInput.operation;
+                    f.userInput = filterInput.userInput;
+                }
+            });
+            this.logger.log( 'After Modifying filter >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.filterBy ) );
+        } else {
+            this.logger.log( 'Before adding filter >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.filterBy ) );
+            this.dynGridProps.defaDynGridDataReq.filterBy.push( filterInput );
+            this.logger.log( 'After adding filter >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.filterBy ) );
+        }
+        this.fetchData( false );
+    }
+
+    public clearFilter() {
+        this.showFilter = false;
+        this.currFilterHeader = undefined;
+        this.filterFormGroup.reset();
+        this.filterFormGroup.markAsUntouched();
+    }
+
+    private setIsCurrFilter( isCurrFilter: boolean, headerId: string, header: HunterTableConfig ): void {
+        this.gridData.headers.forEach( (h: HunterTableConfig ) => {
+            if ( h.headerId === headerId ) {
+                h.isCurrFilter = isCurrFilter;
+                header.isCurrFilter = isCurrFilter;
+            }
+        });
+    }
+
+    private createFilterOperations(): void {
+        const operations: SelectValue[] = [
+            { text: 'Is equal to', value: OperationEnum.EQUALS },
+            { text: 'Is not equal to', value: OperationEnum.NOTEQUALS },
+            { text: 'Contains', value: OperationEnum.CONTAINS },
+            { text: 'Does not contain', value: OperationEnum.NOTCONTAINS },
+            { text: 'Begins with', value: OperationEnum.BEGINS },
+            { text: 'Ends with', value: OperationEnum.ENDS },
+            { text: 'Is null', value: OperationEnum.ISNOTNULL },
+            { text: 'Is not ull', value: OperationEnum.ISNOTNULL },
+            { text: 'Is empty', value: OperationEnum.EMPTY },
+            { text: 'Is not empty', value: OperationEnum.ISNOTEMPTY }
+        ];
+        this.filterOperations = operations;
+    }
+
+    private createFilterForm(): void {
+        this.filterFormGroup = this.formBuilder.group({
+            userInput: [ undefined, Validators.required ],
+            operation: [ undefined, Validators.required ]
+        });
+    }
+
+    private addOrderBy( direction: 'asc' | 'desc' | undefined, fieldName: string ): void {
+        this.logger.log( 'Before adding >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.orderBy ) );
+        const oBy: GridFieldUserInput = new GridFieldUserInput();
+        oBy.dir = direction;
+        oBy.fieldName = fieldName;
+        this.dynGridProps.defaDynGridDataReq.orderBy.push( oBy );
+        this.logger.log( 'After adding >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.orderBy ) );
+    }
+
+    private removeOrderBy( fieldName: string ): void {
+        this.logger.log( 'Before removing >>>>> ' + JSON.stringify( this.dynGridProps.defaDynGridDataReq.orderBy ) );
+        const orderyBy: GridFieldUserInput[] = this.dynGridProps.defaDynGridDataReq.orderBy;
+        this.dynGridProps.defaDynGridDataReq.orderBy = orderyBy.filter( (o: GridFieldUserInput ) => o.fieldName !== fieldName );
+        this.logger.log( 'After removing >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+    }
+
+    private getDirection( sort: Sort ): 'asc' | 'desc' | undefined {
+        switch (sort.direction) {
+            case 'asc':
+                return 'asc'
+            case 'desc':
+                return 'desc'
+            default:
+                return undefined;
+        }
     }
 
 

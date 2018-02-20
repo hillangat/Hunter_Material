@@ -4,9 +4,9 @@ import { JsonProperty, JsonObject } from 'json2typescript';
 @JsonObject
 export class DynGridDataReq {
     @JsonProperty( 'filterBy', [GridFieldUserInput] )
-    public filterBy: GridFieldUserInput[];
+    public filterBy: GridFieldUserInput[] = [];
     @JsonProperty( 'orderBy', [GridFieldUserInput] )
-    public orderBy: GridFieldUserInput[];
+    public orderBy: GridFieldUserInput[] = [];
     @JsonProperty( 'pageNo', Number )
     public pageNo: number;
     @JsonProperty( 'pageSize', Number )

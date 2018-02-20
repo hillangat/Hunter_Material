@@ -1,3 +1,5 @@
+import { HunterUtil } from 'app/shared/utils/hunter-util';
+import { TaskMessage } from './../../shared/beans/TaskMessage';
 import { AlertService } from './../../shared/services/alert.service';
 import { Task } from './../../shared/beans/Task';
 import { SelectValue } from './../../shared/beans/SelectValue';
@@ -7,7 +9,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TaskService } from '../shared/services/task.service';
 import { FormGroup } from '@angular/forms/src/model';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TaskMessage } from '../../shared/beans/TaskMessage';
 
 @Component({
     moduleId: module.id,
@@ -34,13 +35,20 @@ export class TaskTextMessageComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
-        this.createFormGroup();
-        this.loadProvidersSelVals();
-        this.loadLifeStatuses();
+        this.getMessageForTask();
     }
 
     public getTextCount(): number {
-        return this.textMsgFormGroup.controls['text'].value.length;
+        const exist: boolean = (
+            this.textMsgFormGroup &&
+            this.textMsgFormGroup.controls &&
+            this.textMsgFormGroup.controls['text'] &&
+            this.textMsgFormGroup.controls['text'].value
+        );
+        if ( exist ) {
+            return this.textMsgFormGroup.controls['text'].value.length;
+        }
+        return 0;
     }
 
     private createFormGroup(): void {
@@ -126,6 +134,36 @@ export class TaskTextMessageComponent implements OnInit {
 
     private resetTheForm() {
         this.textMsgFormGroup.reset();
+    }
+
+    private getMessageForTask(): void {
+        this.taskService
+            .getMessageForTask( this.task.taskId )
+            .subscribe(
+                ( resp: HunterServerResponse ) => {
+                    if ( HunterUtil.isNotEmpty( resp.data ) ) {
+                        const taskMessage: TaskMessage = resp.data[0] as TaskMessage;
+                        this.task.taskMessage = taskMessage;
+                        this.furnishTask();
+                    } else {
+                        this.alertService.warn( 'No message found', false );
+                        this.furnishTask();
+                    }
+                },
+                ( error: any ) => {
+                    this.logger.error( 'Error occurred while loading message for task!' );
+                },
+                () => {
+                    this.furnishTask();
+                }
+            );
+
+    }
+
+    private furnishTask() {
+        this.createFormGroup();
+        this.loadProvidersSelVals();
+        this.loadLifeStatuses();
     }
 
 

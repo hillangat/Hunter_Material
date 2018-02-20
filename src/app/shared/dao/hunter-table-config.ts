@@ -30,4 +30,6 @@ export class HunterTableConfig {
     public actionColIconName: string;
     @JsonProperty('width', String)
     public width: string;
+
+    public currFilter = false;
 }

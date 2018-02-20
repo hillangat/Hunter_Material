@@ -15,4 +15,51 @@
     overflow-y: scroll;
 }
 
+.dynGridFilter {
+    width: inherit;
+}
 
+.dynFilterIcon {
+    cursor: pointer;
+    width: 0.8em;
+    height: 0.8em;
+}
+
+.dynFilter {
+    z-index: 99999;
+    position: fixed;
+    width:300px;
+    background-color: white;
+    color:black;
+    padding: 10px;
+}
+
+.dynFilter button:first-child {
+    float: right !important;
+    cursor: pointer;
+}
+
+.dynFilterContent {
+    width: 100%;
+    min-height: 200px;
+    margin: 10px 0px;
+    padding-top: 15px;
+}
+
+.dynFilterContent .filterTitle {
+    margin-bottom: 15px;
+    width: 100% !important;
+    text-align: center;
+    border-bottom: 1px solid #D7D7D7;
+    padding-bottom: 10px;
+}
+
+.dynFilterContent form {
+    margin: 0 auto !important;
+    text-align: left;
+    padding-left: 20%;
+}
+
+.dynFilterContent table {
+    float: right !important;
+}

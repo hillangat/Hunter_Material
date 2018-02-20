@@ -27,5 +27,7 @@ export class HunterTableConfig {
     @JsonProperty( 'actionColIconName', String )
     public actionColIconName: string;
     @JsonProperty( 'width', String )
-    public width: string
+    public width: string;
+
+    public isCurrFilter: boolean;
 }
