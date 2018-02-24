@@ -10,6 +10,7 @@ import { CardTitleHeaderComponent } from 'app/shared/card-title-header/card-titl
 import { OverlayService } from 'app/shared/overlay/shared/overlay.service';
 import { OverlayComponent } from './overlay/overlay.component';
 import { ClickOutsideDirective } from './directives/click-outside-directive';
+import { DynGridSelectorComponent } from './dyn-grid-selector/dyn-grid-selector.component';
 
 @NgModule({
   imports: [
@@ -23,8 +24,9 @@ import { ClickOutsideDirective } from './directives/click-outside-directive';
     PageNotFoundComponent,
     DynamicGridComponent,
     CardTitleHeaderComponent,
-    ClickOutsideDirective
-  ],
+    ClickOutsideDirective,
+    DynGridSelectorComponent
+],
   exports: [
     ProgSpinnerComponent,
     PageNotFoundComponent,

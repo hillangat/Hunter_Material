@@ -22,6 +22,7 @@ import { MaterialCodeComponent } from './material-code/material-code/material-co
 import { ConfirmGridActionComponent } from './shared/confirm-grid-action/confirm-grid-action.component';
 import { OverlayComponent } from './shared/overlay/overlay.component';
 import { OverlayService } from './shared/overlay/shared/overlay.service';
+import { DynGridSelectorComponent } from './shared/dyn-grid-selector/dyn-grid-selector.component';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { OverlayService } from './shared/overlay/shared/overlay.service';
   bootstrap: [AppComponent],
   entryComponents: [
     DialogTemplateComponent,
-    ConfirmGridActionComponent
+    ConfirmGridActionComponent,
+    DynGridSelectorComponent
   ],
 })
 export class AppModule {

@@ -20,41 +20,59 @@
             </div>
             <mat-table #matDyncGridTable [dataSource]='dataSource' [style.max-height.px]='dynGridProps.maxHeight' >
                 <ng-container *ngFor='let header of gridData.headers' matColumnDef='{{header.headerId}}' [style.width]="40" >
-                    <mat-header-cell *matHeaderCellDef>
-                        <div>
-                            <ng-container *ngIf='!header.sortable' >{{header.displayName}}</ng-container>
-                            <table *ngIf='header.sortable' matSort (matSortChange)='sortInputChanged($event)' >
-                                <tr>
-                                    <td mat-sort-header='{{header.headerId}}' >{{header.displayName}}</td>
-                                    <td matTooltip="{{ !header.isCurrFilter ? 'Click to filter' : 'Clear Filter' }}" *ngIf=' header.sortable'>
-                                        <mat-icon (click)='openFilter(header, $event)' class='dynFilterIcon' >
-                                            <ng-container *ngIf='!header.isCurrFilter' >
-                                                filter_list
-                                            </ng-container>
-                                            <ng-container *ngIf='header.isCurrFilter' >
-                                                donut_large
-                                            </ng-container>
-                                        </mat-icon>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </mat-header-cell>
-                    <mat-cell *matCellDef='let cell'>
-                        <ng-container  [ngSwitch]='header.actionCellType' >
-                            <span *ngSwitchCase="'text'"> {{cell[header.headerId]}} </span>
-                            <a style='width:100%;text-align:center;' href='#' *ngSwitchCase="'link'" (click)='onClickGridActionCell(cell, header);false;' mat-min-raised-button routerLink=".">{{cell[header.headerId]}}</a>
-                            <ng-container *ngSwitchCase="'button'">
-                                <button (click)='onClickGridActionCell(cell, header)' *ngIf='header.actionColIconName != null' mat-icon-button color='primary'><mat-icon>{{header.actionColIconName}}</mat-icon></button>
-                                <ng-container *ngIf='header.actionColIconName == null' mat-raised-button >{{header.displayName}}</ng-container>
-                            </ng-container>
-                        </ng-container >
-                        <span *ngSwitchDefault >{{cell[header.headerId]}}</span>
-                    </mat-cell>
+                    <ng-container  *ngIf='header.checkBox'  matColumnDef='select'>
+                        <mat-header-cell *matHeaderCellDef >
+                            <mat-checkbox style='font-size: 10px;' (change)='$event ? masterToggle() : null'
+                                [checked]='selection.hasValue() && isAllSelected()'
+                                [indeterminate]='selection.hasValue() && !isAllSelected()' >
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef='let row' >
+                            <mat-checkbox
+                                style='font-size: 10px;'
+                                (click)='$event.stopPropagation()'
+                                (change)='$event ? selection.toggle(row) : null'
+                                [checked]='selection.isSelected(row)' >
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container  *ngIf='!header.checkBox'>
+                        <ng-container matColumnDef='header.headerId' >
+                            <mat-header-cell *matHeaderCellDef >
+                                <ng-container *ngIf='!header.sortable' >{{header.displayName}}</ng-container>
+                                <table *ngIf='header.sortable' matSort (matSortChange)='sortInputChanged($event)' >
+                                    <tr>
+                                        <td mat-sort-header='{{header.headerId}}' >{{header.displayName}}</td>
+                                        <td matTooltip="{{ !header.isCurrFilter ? 'Click to filter' : 'Clear Filter' }}" *ngIf=' header.sortable'>
+                                            <mat-icon (click)='openFilter(header, $event)' class='dynFilterIcon' >
+                                                <ng-container *ngIf='!header.isCurrFilter' >
+                                                    filter_list
+                                                </ng-container>
+                                                <ng-container *ngIf='header.isCurrFilter' >
+                                                    donut_large
+                                                </ng-container>
+                                            </mat-icon>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let cell" >
+                                <ng-container  [ngSwitch]='header.actionCellType' >
+                                    <span *ngSwitchCase="'text'"> {{cell[header.headerId]}} </span>
+                                    <a style='width:100%;text-align:center;' href='#' *ngSwitchCase="'link'" (click)='onClickGridActionCell(cell, header);false;' mat-min-raised-button routerLink=".">{{cell[header.headerId]}}</a>
+                                    <ng-container *ngSwitchCase="'button'">
+                                        <button (click)='onClickGridActionCell(cell, header)' *ngIf='header.actionColIconName != null' mat-icon-button color='primary'><mat-icon>{{header.actionColIconName}}</mat-icon></button>
+                                        <ng-container *ngIf='header.actionColIconName == null' mat-raised-button >{{header.displayName}}</ng-container>
+                                    </ng-container>
+                                </ng-container >
+                                <span *ngSwitchDefault >{{cell[header.headerId]}}</span>
+                            </mat-cell>
+                        </ng-container>
+                    </ng-container>
                 </ng-container>
                 <mat-header-row class='mat-elevation-z2' *matHeaderRowDef='displayedColumns'></mat-header-row>
-                <mat-row *matRowDef='let row; columns: displayedColumns;'></mat-row>
-            </mat-table>    
+                <mat-row *matRowDef='let row; columns: displayedColumns;' (click)='selection.toggle(row)' ></mat-row>
+            </mat-table>
             <mat-paginator
                 [pageSize]='dynGridProps.defaDynGridDataReq.pageSize'
                 [length]='gridData.total'

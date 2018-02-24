@@ -1,0 +1,21 @@
+<div class='dynGridSelHeader' >
+    <div>{{cellAction.title}}</div>
+    <div>
+        <button mat-icon-button>
+            <mat-icon (click)="closeDialog('NO')" matTooltip='Discard Selections and Close' >clear</mat-icon>
+        </button>
+    </div>
+</div>
+<app-dynamic-grid
+    #taskGrid
+    (onSelectionChange)='onSelectionChange($event)'
+    [dynGridProps]='dynGridProps'
+    [percentWidth]='96'
+></app-dynamic-grid>
+<div class='dynGridSelFooter' >
+
+</div>
+<div class='dynGridSelFooter' >
+    <button (click)="closeDialog('YES')" mat-raised-button ><mat-icon>{{cellAction.yesIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.yesButtonText}}</button>
+    <button (click)="closeDialog('NO')" mat-raised-button ><mat-icon>{{cellAction.notIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.noButtonText}}</button>
+</div>

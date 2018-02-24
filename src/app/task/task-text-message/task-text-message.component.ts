@@ -57,10 +57,10 @@ export class TaskTextMessageComponent implements OnInit {
             disclaimer: [ this.task && this.task.taskMessage ? this.task.taskMessage.disclaimer : '', Validators.required ],
             fromPhone: [ this.task && this.task.taskMessage ? this.task.taskMessage.fromPhone : undefined, Validators.required],
             msgLifeStatus: [ this.task && this.task.taskMessage ? this.task.taskMessage.msgLifeStatus : 'Draft', Validators.required ],
-            pageable: [ this.task && this.task.taskMessage ? this.task.taskMessage.pageable : false, Validators.required ],
+            pageable: [ this.task && this.task.taskMessage ? this.task.taskMessage.pageable : false ],
             taskId: this.task.taskId,
             msgTaskType: this.task.tskMsgType,
-            provider: [ this.task && this.task.taskMessage ? this.task.taskMessage.provider : undefined, Validators.required ]
+            provider: [ this.getProviderId(), Validators.required ]
         });
     }
 
@@ -85,6 +85,7 @@ export class TaskTextMessageComponent implements OnInit {
                 ( resp: HunterServerResponse ) => {
                     const data: SelectValue[] = resp.data as SelectValue[];
                     this.providers = data;
+                    this.textMsgFormGroup.controls['provider'].setValue( this.getProviderId() );
                     this.logger.log( 'provider select values : ' + JSON.stringify( resp.data ) );
                 },
                 ( error: any ) => {
@@ -144,10 +145,9 @@ export class TaskTextMessageComponent implements OnInit {
                     if ( HunterUtil.isNotEmpty( resp.data ) ) {
                         const taskMessage: TaskMessage = resp.data[0] as TaskMessage;
                         this.task.taskMessage = taskMessage;
-                        this.furnishTask();
                     } else {
+                        alert( this.task.taskMessage.provider );
                         this.alertService.warn( 'No message found', false );
-                        this.furnishTask();
                     }
                 },
                 ( error: any ) => {
@@ -158,6 +158,12 @@ export class TaskTextMessageComponent implements OnInit {
                 }
             );
 
+    }
+
+    private getProviderId() {
+        const present: boolean = HunterUtil.notNullUndefined( this.task.taskMessage ) &&
+            HunterUtil.notNullUndefined( this.task.taskMessage.provider );
+        return present ? this.task.taskMessage.provider.providerId : undefined;
     }
 
     private furnishTask() {

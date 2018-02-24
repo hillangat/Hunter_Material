@@ -68,3 +68,12 @@
 .dynFilterContent table {
     float: right !important;
 }
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+  
+.mat-column-select {
+    overflow: visible;
+}

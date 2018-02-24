@@ -8,7 +8,7 @@ export class CellActionBean {
     public titleIcon: string;
     public yesIconName: string;
     public notIconName: string;
-    public yetButtonText: string;
+    public yesButtonText: string;
     public noButtonText: string;
     public cellRow: any;
     public entryValues: any;

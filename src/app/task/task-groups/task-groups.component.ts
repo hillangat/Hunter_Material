@@ -1,3 +1,4 @@
+import { HunterUtil } from './../../shared/utils/hunter-util';
 import { DynamicGridComponent } from './../../shared/dynamic-grid/dynamic-grid.component';
 import { ServerStatusesEnum } from './../../shared/beans/server-status-response';
 import { HunterServerResponse } from './../../shared/beans/ServerResponse';
@@ -11,6 +12,9 @@ import { Router } from '@angular/router';
 import { DynGridProperties } from '../../shared/dynamic-grid/shared/dyn-grid-properties';
 import { HunterConstants } from '../../shared/constants/HunterConstants';
 import { MatDialog } from '@angular/material';
+import { DynGridSelectorComponent } from '../../shared/dyn-grid-selector/dyn-grid-selector.component';
+import { Task } from '../../shared/beans/Task';
+import { AlertService } from 'app/shared/services/alert.service';
 
 @Component({
     moduleId: module.id,
@@ -32,6 +36,7 @@ export class TaskGroupsComponent implements OnInit {
         private router: Router,
         private taskService: TaskService,
         private dialog: MatDialog,
+        private alertService: AlertService
     ) { }
 
     public ngOnInit(): void {
@@ -89,8 +94,26 @@ export class TaskGroupsComponent implements OnInit {
     }
 
     public onClickGridBarAction( dynGridBarAction: DynGridBarAction ) {
-        if ( dynGridBarAction.key === 'createTask' ) {
-            this.router.navigateByUrl('/task/create');
+        if ( dynGridBarAction.key === 'addTaskGroup' ) {
+            const cellAction: CellActionBean = new CellActionBean();
+            cellAction.title = 'Add Receiver Groups to Selected Task';
+            cellAction.yesButtonText = 'Add Selected Groups';
+            cellAction.noButtonText = 'Cancel';
+            cellAction.message = 'This action will change task status. Please select the right status button.';
+            cellAction.notIconName = 'do_not_disturb';
+            cellAction.yesIconName = 'add';
+            cellAction.titleIcon = 'add';
+            const dialogRef = this.dialog.open(DynGridSelectorComponent, {
+                width: '1200px',
+                data: cellAction
+              });
+              dialogRef.afterClosed().subscribe( ( actionBean: CellActionBean) => {
+                  if ( actionBean && actionBean.dialogSelButton === 'YES' && HunterUtil.isNotEmpty( actionBean.entryValues ) ) {
+                      const taskrows: Task[] = actionBean.entryValues as Task[];
+                      const taskIds: number[] = taskrows.map( (task: Task) => task.taskId );
+                      this.alertService.info( 'Adding selected groups to task: ' + JSON.stringify( taskIds ) );
+                  }
+              });
         } else {
             this.logger.error( 'Grid bar action not supported >> ' + dynGridBarAction.key );
         }

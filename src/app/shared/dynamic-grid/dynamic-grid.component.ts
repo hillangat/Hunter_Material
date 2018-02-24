@@ -1,3 +1,4 @@
+import { Observable } from 'Rxjs';
 import { HunterUtil } from './../utils/hunter-util';
 import { GridFieldUserInput } from './shared/grid-field-user-input';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
@@ -39,6 +40,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     @Output('onErrorLoading') private onErrorLoading: EventEmitter<any> = new EventEmitter<any>();
     @Output('onSuccessLoading') private onSuccessLoading: EventEmitter<any> = new EventEmitter<any>();
     @Output('onClickActionCell') private onClickActionCell: EventEmitter<CellActionBean> = new EventEmitter<CellActionBean>();
+    @Output('onSelectionChange') private onSelectionChange: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild(MatPaginator) dynGridPaginator: MatPaginator;
 
@@ -59,6 +61,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
     private gridData: HunterServerResponse;
     private pageEvent: PageEvent;
     private loadingData: boolean;
+    private onSelChanged: Observable<any>;
 
     public constructor(
         private logger: LoggerService,
@@ -76,6 +79,16 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         this.fetchData( true );
         this.createFilterOperations();
         this.createFilterForm();
+        this.registerSubscriptions();
+    }
+
+    public registerSubscriptions() {
+        this.onSelChanged = this.selection.onChange.asObservable();
+        this.onSelChanged
+            .subscribe(
+                () =>  this.onSelectionChange.emit( this.selection.selected ),
+                ( error: any ) => this.logger.error('Error occurred while trying to watch for changes in grid selection')
+            );
     }
 
     public fetchData( initializing: boolean, showOverlay?: boolean ): void {
@@ -120,7 +133,9 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         this.fetchData( false );
     }
 
-    public ngOnDestroy(): void {}
+    public ngOnDestroy(): void {
+        this.onSelChanged = undefined;
+    }
 
     private processServerResp( resp: HunterServerResponse ): void {
         if ( HunterUtil.isNotEmpty( resp.headers ) ) {
@@ -210,7 +225,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
         } else {
             const direction: any = this.getDirection( sort );
             this.dynGridProps.defaDynGridDataReq.orderBy = [];
-            this.logger.log( 'After adding >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
+            this.logger.log( 'Before adding >>>>> ' + JSON.stringify(  this.dynGridProps.defaDynGridDataReq.orderBy ) );
             if ( direction !== undefined ) {
                 const oBy: GridFieldUserInput = new GridFieldUserInput();
                 oBy.dir = direction;
@@ -312,7 +327,7 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
                     }
                 });
                 if ( HunterUtil.isNotEmpty( indices ) ) {
-                    indices.sort( (a: number, b: number) => a - b );
+                    indices.sort( (a: number, b: number) => b - a ); // descending order so removing does not affect any index
                     indices.forEach( (i: number) => this.dynGridProps.defaDynGridDataReq.filterBy.slice( i, 1 ) );
                 }
             }

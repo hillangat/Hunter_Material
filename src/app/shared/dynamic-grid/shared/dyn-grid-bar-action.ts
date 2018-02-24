@@ -17,8 +17,8 @@ export class DynGridBarAction {
     public get text(): string { return this._text }
     public set text( value: string ) { this._text = value }
 
-    public get key(): string { return this._text }
-    public set key( value: string ) { this._text = value }
+    public get key(): string { return this._key }
+    public set key( value: string ) { this._key = value }
 
     public get index(): number { return this._index }
     public set index( value: number ) { this._index = value }

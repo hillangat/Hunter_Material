@@ -5,6 +5,7 @@ import { SecureRouteGuard } from './shared/route-guards.ts/secure-route-guard';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { MaterialCodeComponent } from './material-code/material-code/material-code.component';
 import { DynamicGridComponent } from './shared/dynamic-grid/dynamic-grid.component';
+import { ReceiverRegionsModule } from './receiver-regions/receiver-regions.module';
 
 export const appRoutes: Routes = [
     {
@@ -35,6 +36,12 @@ export const appRoutes: Routes = [
       path: 'profiles',
       loadChildren: './user-profile/user-profile.module#UserProfileModule',
       data: { title: 'Hunter User Profiles' },
+      canActivate: [ SecureRouteGuard ]
+    },
+    {
+      path: 'receiverRegions',
+      loadChildren: './receiver-regions/receiver-regions.module#ReceiverRegionsModule',
+      data: { title: 'Receiver Regions' },
       canActivate: [ SecureRouteGuard ]
     },
     {
