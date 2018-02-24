@@ -24,9 +24,7 @@ export class DynGridSelectorComponent {
     ) {
       console.log( 'confirming >>>>>>>>>>>>>>>>>>>> ' + JSON.stringify(data) );
       this.cellAction = data;
-      const actions: DynGridBarAction[] = this.taskService.getTaskGridDynGridBarActions();
-      const url: string = this.taskService.getTasksURL + '/all';
-      this.dynGridProps = this.taskService.getGenericGridDataProps( url, 'TASK_GRID', actions );
+      this.dynGridProps = this.cellAction.dynGridProps;
   }
 
   public closeDialog( dialogSelButton: 'YES' | 'NO' ) {

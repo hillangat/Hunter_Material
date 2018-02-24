@@ -1,3 +1,4 @@
+import { ServerStatusResponse } from 'app/shared/beans/server-status-response';
 import { HunterUtil } from './../../shared/utils/hunter-util';
 import { DynamicGridComponent } from './../../shared/dynamic-grid/dynamic-grid.component';
 import { ServerStatusesEnum } from './../../shared/beans/server-status-response';
@@ -103,15 +104,33 @@ export class TaskGroupsComponent implements OnInit {
             cellAction.notIconName = 'do_not_disturb';
             cellAction.yesIconName = 'add';
             cellAction.titleIcon = 'add';
+            cellAction.dynGridURL = this.taskService.getAvailGroupsForDynGrid;
+            cellAction.dynGridProps = this.taskService.getGenericGridDataProps(
+                    cellAction.dynGridURL, 'AVAIL_RECEIVER_GROUPS',
+                    this.taskService.getTaskGridDynGridBarActions(),
+                );
             const dialogRef = this.dialog.open(DynGridSelectorComponent, {
                 width: '1200px',
                 data: cellAction
               });
               dialogRef.afterClosed().subscribe( ( actionBean: CellActionBean) => {
                   if ( actionBean && actionBean.dialogSelButton === 'YES' && HunterUtil.isNotEmpty( actionBean.entryValues ) ) {
-                      const taskrows: Task[] = actionBean.entryValues as Task[];
-                      const taskIds: number[] = taskrows.map( (task: Task) => task.taskId );
-                      this.alertService.info( 'Adding selected groups to task: ' + JSON.stringify( taskIds ) );
+                      const taskrows: any[] = actionBean.entryValues as any[];
+                      const groupIds: number[] = taskrows.map( ( group: any ) => group['groupId'] );
+                      this.logger.log( 'Adding selected groups to task: ' + JSON.stringify( groupIds ) );
+                      this.taskService
+                          .addGroupToTask( this.taskId, groupIds )
+                          .subscribe(
+                              (resp: ServerStatusResponse) => {
+                                if ( resp.status === 'Success' ) {
+                                    this.taskGroupsGrid.refreshGrid();
+                                }
+                                this.logger.log( JSON.stringify( resp ) );
+                              },
+                              ( error: any ) => {
+                                  this.logger.error( JSON.stringify( error ) );
+                              }
+                          );
                   }
               });
         } else {

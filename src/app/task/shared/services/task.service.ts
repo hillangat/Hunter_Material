@@ -48,6 +48,7 @@ export class TaskService {
   public readonly getServiceProvidersSelValsURL  = this.taskBaseURL + 'action/providers/selVals/';
   public readonly createTaskMessageURL = 'message/action/tskMsg/create/';
   public readonly getAngularMessageURL = 'message/action/tskMsg/getAngularMsg/';
+  public readonly getAvailGroupsForDynGrid = this.taskBaseURL + 'action/task/availGroupsForDynGrid/';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
 
@@ -214,7 +215,7 @@ export class TaskService {
     return (
       this.http
           .post( this.addGrpToTask, JSON.stringify({ taskId: taskId, groupIds: groupIds }) )
-          .map( ( resp: Response) => resp.json() as ServerStatusResponse )
+          .map( ( resp: Response) => HunterUtil.alert( resp , this.alertService ) as ServerStatusResponse )
     );
   }
 

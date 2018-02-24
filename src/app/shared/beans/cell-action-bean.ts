@@ -1,3 +1,4 @@
+import { DynGridProperties } from './../dynamic-grid/shared/dyn-grid-properties';
 import { HunterTableConfig } from './hunter-table-configs';
 
 export class CellActionBean {
@@ -12,5 +13,7 @@ export class CellActionBean {
     public noButtonText: string;
     public cellRow: any;
     public entryValues: any;
+    public dynGridProps: DynGridProperties;
+    public dynGridURL: string;
     public actionHeader: HunterTableConfig
 }

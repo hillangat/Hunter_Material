@@ -2,7 +2,6 @@
     <ng-container [ngSwitch]='gridLoadState.toString()'>
         <div *ngSwitchCase="'LOADING'">
                 <br/>
-                <br/>
                 <app-prog-spinner [marginTop]='10' [message]="'Loading Grid Data. Please wait...'" [diameter]='40' ></app-prog-spinner>
         </div>
         <div *ngSwitchCase="'ERROR'" class='error' >Error occurred while loading data...<br/>
