@@ -26,7 +26,7 @@ export class HunterUtil {
     }
 
     public static alert( response: Response, alertService: AlertService ): any {
-        const serverRep: HunterServerResponse = response.json() as HunterServerResponse;
+        const serverRep: any = response.json();
         if ( serverRep.message != null ) {
             switch ( serverRep.status ) {
                 case ServerStatusesEnum.Success :
@@ -42,7 +42,7 @@ export class HunterUtil {
     }
 
     public static getDataOrAlert( response: Response, alertService: AlertService ): any[] {
-        const serverRep: HunterServerResponse = this.alert( response, alertService ) as HunterServerResponse;
+        const serverRep: HunterServerResponse = this.alert( response, alertService );
         return serverRep.status === ServerStatusesEnum.Success ? serverRep.data : [];
     }
 

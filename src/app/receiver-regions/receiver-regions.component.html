@@ -1,1 +1,32 @@
-<h1>Receiver region works1!</h1>
+<br/>
+<mat-card class='mat-elevation-z5 eithCenter' >
+    <h1>Kenyan Counties</h1>
+    <div style='max-height: 400px; overflow-y: scroll;margin-bottom: 50px;' >
+        <table cellspacing="10" >
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Region Level</th>
+                <th>Region Code</th>
+                <th>Population</th>
+                <th>Created By</th>
+                <th>Created On</th>
+                <th>Updated By</th>
+                <th>Updated On</th>
+            </tr>
+            <tr *ngFor='let region of baseHierarchies' >
+                <td>{{region.beanId}}</td>
+                <td>{{region.name}}</td>
+                <td>{{region.levelType}}</td>
+                <td>{{region.regionCode}}</td>
+                <td>{{region.popuplation}}</td>
+                <td>{{region.createdBy}}</td>
+                <td>{{formatDate(region.cretDate)}}</td>
+                <td>{{region.lastUpdatedBy}}</td>
+                <td>{{formatDate(region.lastUpdate)}}</td>
+            </tr>
+        </table>
+        <br/>
+        <button (click)='reloadRegions()' mat-raised-button ><mat-icon>replay</mat-icon>&nbsp;&nbsp;Refresh Regions</button>
+    </div>
+</mat-card>

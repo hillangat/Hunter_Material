@@ -6,7 +6,7 @@ export const receiverRegionRouters: Routes = [
       path: '',
       children: [
         {
-          path: '/main',
+          path: 'grid',
           component: ReceiverRegionsComponent
         }
       ]

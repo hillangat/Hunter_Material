@@ -22,7 +22,7 @@ export class DynGridSelectorComponent {
       @Inject(MAT_DIALOG_DATA) public data: any,
       public dialogRef: MatDialogRef<DynGridSelectorComponent>
     ) {
-      console.log( 'confirming >>>>>>>>>>>>>>>>>>>> ' + JSON.stringify(data) );
+      console.log( 'Confirming >>>>>>>>>>>>>>>>>>>> ' + JSON.stringify(data) );
       this.cellAction = data;
       this.dynGridProps = this.cellAction.dynGridProps;
   }
@@ -35,5 +35,11 @@ export class DynGridSelectorComponent {
   public onSelectionChange( selRows: any[] ): void {
     this.cellAction.entryValues = selRows;
   }
+
+  public onClickGridBarAction( dynGridBarAction: DynGridBarAction ) {
+    if ( dynGridBarAction.key === 'addTaskGroup' ) {
+        this.closeDialog( 'YES' );
+    }
+}
 
 }

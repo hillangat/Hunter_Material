@@ -107,7 +107,7 @@ export class TaskGroupsComponent implements OnInit {
             cellAction.dynGridURL = this.taskService.getAvailGroupsForDynGrid;
             cellAction.dynGridProps = this.taskService.getGenericGridDataProps(
                     cellAction.dynGridURL, 'AVAIL_RECEIVER_GROUPS',
-                    this.taskService.getTaskGridDynGridBarActions(),
+                    this.getAddTaskGroupPopupBarActions(),
                 );
             const dialogRef = this.dialog.open(DynGridSelectorComponent, {
                 width: '1200px',
@@ -165,5 +165,18 @@ export class TaskGroupsComponent implements OnInit {
         barActions.sort( (a: DynGridBarAction, b: DynGridBarAction) => (a.index - b.index) );
         return barActions;
     }
+
+    public getAddTaskGroupPopupBarActions(): DynGridBarAction[] {
+        const barActions: DynGridBarAction[] = [];
+        const createTask: DynGridBarAction = new DynGridBarAction();
+        createTask.text = 'Add Selected Groups';
+        createTask.displayType = HunterConstants.DISPLAY_TYP_BUTTON;
+        createTask.icon = 'add';
+        createTask.index = 1;
+        createTask.key = 'addTaskGroup';
+        barActions.push( createTask );
+        barActions.sort( (a: DynGridBarAction, b: DynGridBarAction) => (a.index - b.index) );
+        return barActions;
+      }
 
 }

@@ -118,7 +118,7 @@ export class TaskService {
         const result = HunterUtil.alert( response, this.alertService );
         return result;
       }).subscribe(response => {
-        this.logger.log( response );
+        this.logger.log( JSON.stringify( response ) );
       });
   }
 
