@@ -157,9 +157,11 @@ export class DynamicGridComponent implements OnInit, OnDestroy {
 
     /** Selects all rows if they are not all selected; otherwise clear selection. */
     public masterToggle() {
-        this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+        if ( this.isAllSelected() ) {
+            this.selection.clear()
+        } else {
+            this.dataSource.data.forEach(row => this.selection.select(row))
+        }
     }
 
     public onPageChange( pageEvent: PageEvent ): PageEvent {

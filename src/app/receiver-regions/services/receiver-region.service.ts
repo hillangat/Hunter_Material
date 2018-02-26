@@ -25,13 +25,10 @@ export class ReceiverRegionService {
         this.getAllRegionHierarchies( 'Kenya' );
     }
 
-    public getHiearchiesForLevelAndParent(
-        countryName: string, levelType: string, parent: number,
-        regionHiearchies: RegionHierarchy[]
-    ): RegionHierarchy[] {
+    public getHiearchiesForLevelAndParent( cName: string, level: string, parent: number, hrchs: RegionHierarchy[]): RegionHierarchy[] {
         return (
-            regionHiearchies
-            .filter( (r: RegionHierarchy) => r.levelType === levelType && r.genParent === parent )
+            hrchs
+            .filter( (r: RegionHierarchy) => r.levelType === level && r.genParent === parent )
             .sort( (a: RegionHierarchy, b: RegionHierarchy ) => a.id - b.id )
         );
     }
@@ -53,16 +50,17 @@ export class ReceiverRegionService {
     public getCountiesForCountry( countryId: number, countryName: string ): Observable<RegionHierarchy[]> {
         const baseHiearchies: RegionHierarchy[] = ReceiverRegionService.regionHierarchiesMap.get( countryName );
         if ( HunterUtil.isNotEmpty( baseHiearchies ) ) {
-            return Observable.of(
-                this.getHiearchiesForLevelAndParent( countryName, ReceiverRegionService.countyLevel, countryId, baseHiearchies )
-            );
+            const hierarchies: RegionHierarchy[] =  this.getHiearchiesForLevelAndParent(
+                countryName, ReceiverRegionService.countyLevel, countryId, baseHiearchies );
+            return Observable.of( hierarchies );
         } else {
             return (
                 this.getAllRegionHierarchies( countryName )
                     .map( ( regionHierarchies: RegionHierarchy[] ) => {
                         const h: RegionHierarchy[] = ReceiverRegionService.regionHierarchiesMap.get( countryName );
-                        return this.getHiearchiesForLevelAndParent(
+                        const hierarchies: RegionHierarchy[] = this.getHiearchiesForLevelAndParent(
                             countryName, ReceiverRegionService.countyLevel, countryId, h );
+                        return hierarchies;
                     })
             );
         }
@@ -74,9 +72,9 @@ export class ReceiverRegionService {
             const county: RegionHierarchy = baseHiearchies.find( (r: RegionHierarchy) => {
                 return r.levelType === ReceiverRegionService.countyLevel && r.beanId === countyId;
             });
-            return Observable.of(
-                this.getHiearchiesForLevelAndParent( countryName, ReceiverRegionService.constituencyLevel, county.id, baseHiearchies )
-            );
+            const hierarchies: RegionHierarchy[] =  this.getHiearchiesForLevelAndParent(
+                countryName, ReceiverRegionService.constituencyLevel, county.id, baseHiearchies );
+            return Observable.of( hierarchies );
         } else {
             return (
                 this.getAllRegionHierarchies( countryName )
@@ -85,8 +83,9 @@ export class ReceiverRegionService {
                         const county: RegionHierarchy = h.find( (r: RegionHierarchy) => {
                             return r.levelType === ReceiverRegionService.countyLevel && r.beanId === countyId;
                         });
-                        return this.getHiearchiesForLevelAndParent(
+                        const hierarchies: RegionHierarchy[] = this.getHiearchiesForLevelAndParent(
                             countryName, ReceiverRegionService.constituencyLevel, county.id, h );
+                        return hierarchies;
                     })
             );
         }
@@ -99,9 +98,9 @@ export class ReceiverRegionService {
             const cons: RegionHierarchy = h.find( (r: RegionHierarchy) => {
                 return r.levelType === ReceiverRegionService.constituencyLevel && r.beanId === constituencyId;
             });
-            return Observable.of(
-                this.getHiearchiesForLevelAndParent( countryName, ReceiverRegionService.constituencyLevel, cons.id, h )
-            );
+            const hierarchies: RegionHierarchy[] =  this.getHiearchiesForLevelAndParent(
+                countryName, ReceiverRegionService.constituencyLevel, cons.id, h );
+            return Observable.of( hierarchies );
         } else {
             return (
                 this.getAllRegionHierarchies( countryName )
@@ -110,8 +109,10 @@ export class ReceiverRegionService {
                         const cons: RegionHierarchy = h.find( (r: RegionHierarchy) => {
                             return r.levelType === ReceiverRegionService.constituencyLevel && r.beanId === constituencyId;
                         });
-                        return this.getHiearchiesForLevelAndParent(
+                        const hierarchies: RegionHierarchy[] = this.getHiearchiesForLevelAndParent(
                             countryName, ReceiverRegionService.wadeLevel, cons.id, h );
+                        console.log( JSON.stringify( h ) );
+                        return hierarchies;
                     })
             );
         }
