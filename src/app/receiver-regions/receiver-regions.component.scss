@@ -1,1 +1,46 @@
-// component css goes here
+.regionHierarchyTable {
+    border-collapse: collapse;
+    width: 100% !important;
+}
+
+.regionHierarchyTable thead th {
+    text-align: left;
+    background-color: #DEDEDE;
+    color: #051518;
+    padding: 10px;
+    border-bottom: 2px solid #CDCDCD;
+}
+
+.consCell {
+    background-color: rgb(239, 239, 239);
+}
+
+.wardCell {
+    background-color: rgb(245, 245, 245);
+}
+
+.consBorderBottom {
+    border-bottom: 1px solid rgb(225, 225, 225);;
+}
+
+.actionCol {
+    width: 60px !important;
+    text-align: center !important;
+}
+
+tbody {
+    display:block;
+    height:500px;
+    overflow:auto;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+thead {
+    width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+}
+table {
+    width:400px;
+}

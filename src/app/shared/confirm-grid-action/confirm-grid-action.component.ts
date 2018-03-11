@@ -13,7 +13,6 @@ export class ConfirmGridActionComponent {
     private cellAction: CellActionBean;
 
     constructor( @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ConfirmGridActionComponent> ) {
-        console.log( 'confirming >>>>>>>>>>>>>>>>>>>> ' + JSON.stringify(data) );
         this.cellAction = data;
     }
 

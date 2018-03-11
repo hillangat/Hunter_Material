@@ -1,32 +1,87 @@
 <br/>
-<mat-card class='mat-elevation-z5 eithCenter' >
-    <h1>Kenyan Counties</h1>
-    <div style='max-height: 400px; overflow-y: scroll;margin-bottom: 50px;' >
-        <table cellspacing="10" >
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Region Level</th>
-                <th>Region Code</th>
-                <th>Population</th>
-                <th>Created By</th>
-                <th>Created On</th>
-                <th>Updated By</th>
-                <th>Updated On</th>
-            </tr>
-            <tr *ngFor='let region of baseHierarchies' >
-                <td>{{region.beanId}}</td>
-                <td>{{region.name}}</td>
-                <td>{{region.levelType}}</td>
-                <td>{{region.regionCode}}</td>
-                <td>{{region.popuplation}}</td>
-                <td>{{region.createdBy}}</td>
-                <td>{{formatDate(region.cretDate)}}</td>
-                <td>{{region.lastUpdatedBy}}</td>
-                <td>{{formatDate(region.lastUpdate)}}</td>
-            </tr>
+<mat-card class='mat-elevation-z5 eithCenter'>
+    <mat-card-content>
+        <table cellspacing="10" class='regionHierarchyTable' >
+            <thead>
+                <tr>
+                    <th class='actionCol'>
+                        <ng-container>
+                            <mat-icon (click)='expandAll()' *ngIf='!allExpanded' aria-label='Expand' class='pointerCursor' >keyboard_arrow_right</mat-icon>
+                            <mat-icon (click)='collapseAll()'*ngIf='allExpanded' aria-label='Expand' class='pointerCursor' >keyboard_arrow_down</mat-icon>
+                        </ng-container>
+                    </th>
+                    <th>Name</th>
+                    <th>Region Level</th>
+                    <th>Region Code</th>
+                    <th>Population</th>
+                    <th>Created By</th>
+                    <th>Created On</th>
+                    <th>Updated By</th>
+                    <th>Updated On</th>
+                    <th class='actionCol' >Edit</th>
+                    <th class='actionCol' >Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor='let region of baseHierarchies' >
+                    <tr>
+                        <td [className]='getCellClass(region, true)'>
+                            <ng-container *ngIf="region.levelType !== 'Ward'" >
+                                <mat-icon (click)='loadChildrenFor(region)' *ngIf='!region.expanded' aria-label='Expand' class='pointerCursor' [style.margin-left.px]='getMarginLeft(region.levelType)' >keyboard_arrow_right</mat-icon>
+                                <mat-icon (click)='loadChildrenFor(region)'*ngIf='region.expanded' aria-label='Expand' class='pointerCursor'  [style.margin-left.px]='getMarginLeft(region.levelType)'>keyboard_arrow_down</mat-icon>
+                            </ng-container>
+                        </td>
+                        <td [className]='getCellClass(region)' >{{region.name}}</td>
+                        <td [className]='getCellClass(region)' >{{region.levelType}}</td>
+                        <td [className]='getCellClass(region)' >{{region.regionCode}}</td>
+                        <td [className]='getCellClass(region)' >{{region.population}}</td>
+                        <td [className]='getCellClass(region)' >{{region.createdBy}}</td>
+                        <td [className]='getCellClass(region)' >{{formatDate(region.cretDate)}}</td>
+                        <td [className]='getCellClass(region)' >{{region.lastUpdatedBy}}</td>
+                        <td [className]='getCellClass(region)' >{{formatDate(region.lastUpdate)}}</td>
+                        <td [className]='getCellClass(region, true)' ><button (click)="performAction(region, 'EDIT')" mat-icon-button ><mat-icon>mode_edit</mat-icon></button></td>
+                        <td [className]='getCellClass(region, true)' ><button (click)="performAction(region, 'DELETE')" mat-icon-button ><mat-icon>clear</mat-icon></button></td>
+                    </tr>
+                    <ng-container *ngFor='let child of region.children'>
+                        <tr>
+                            <td [className]='getCellClass(region, true)' >
+                                <ng-container *ngIf="child.levelType !== 'Ward'" >
+                                    <mat-icon (click)='loadChildrenFor(child)' *ngIf='!child.expanded' aria-label='Expand' class='pointerCursor' [style.margin-left.px]='getMarginLeft(child.levelType)' >keyboard_arrow_right</mat-icon>
+                                    <mat-icon (click)='loadChildrenFor(child)'*ngIf='child.expanded' aria-label='Expand' class='pointerCursor'  [style.margin-left.px]='getMarginLeft(child.levelType)'>keyboard_arrow_down</mat-icon>
+                                </ng-container>
+                            </td>
+                            <td [className]='getCellClass(child)' >{{child.name}}</td>
+                            <td [className]='getCellClass(child)' >{{child.levelType}}</td>
+                            <td [className]='getCellClass(child)' >{{child.regionCode}}</td>
+                            <td [className]='getCellClass(child)' >{{child.population}}</td>
+                            <td [className]='getCellClass(child)' >{{child.createdBy}}</td>
+                            <td [className]='getCellClass(child)' >{{formatDate(child.cretDate)}}</td>
+                            <td [className]='getCellClass(child)' >{{child.lastUpdatedBy}}</td>
+                            <td [className]='getCellClass(child)' >{{formatDate(child.lastUpdate)}}</td>
+                            <td [className]='getCellClass(child, true)' ><button (click)="performAction(child, 'EDIT')" mat-icon-button ><mat-icon>mode_edit</mat-icon></button></td>
+                            <td [className]='getCellClass(child, true)' ><button (click)="performAction(child, 'DELETE')" mat-icon-button ><mat-icon>clear</mat-icon></button></td>
+                        </tr>
+                        <ng-container *ngFor='let grand of child.children' >
+                            <tr>
+                                <td  [className]='getCellClass(region, true)'  ></td>
+                                <td [className]='getCellClass(grand)' >{{grand.name}}</td>
+                                <td [className]='getCellClass(grand)' >{{grand.levelType}}</td>
+                                <td [className]='getCellClass(grand)' >{{grand.regionCode}}</td>
+                                <td [className]='getCellClass(grand)' >{{grand.population}}</td>
+                                <td [className]='getCellClass(grand)' >{{grand.createdBy}}</td>
+                                <td [className]='getCellClass(grand)' >{{formatDate(grand.cretDate)}}</td>
+                                <td [className]='getCellClass(grand)' >{{grand.lastUpdatedBy}}</td>
+                                <td [className]='getCellClass(grand)' >{{formatDate(grand.lastUpdate)}}</td>
+                                <td [className]='getCellClass(grand, true)' ><button (click)="performAction(grand, 'EDIT')" mat-icon-button ><mat-icon>mode_edit</mat-icon></button></td>
+                                <td [className]='getCellClass(grand, true)' ><button (click)="performAction(grand, 'DELETE')" mat-icon-button ><mat-icon>clear</mat-icon></button></td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tbody>
         </table>
-        <br/>
+    </mat-card-content>
+    <mat-card-actions>
         <button (click)='reloadRegions()' mat-raised-button ><mat-icon>replay</mat-icon>&nbsp;&nbsp;Refresh Regions</button>
-    </div>
+    </mat-card-actions>
 </mat-card>

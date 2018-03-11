@@ -9,6 +9,8 @@ export class HunterConstants {
     public static readonly TASK_APPROVERS_SEL_URL = HunterConstants.HUNTER_BASE_URL + 'restful/users/approvers/selValues'
     public static readonly GATEWAY_CLIENTS_SEL_URL = HunterConstants.HUNTER_BASE_URL + 'restful/gateway/clients/selValues/'
 
+    public static readonly REGION_CONTROLLER_URL = HunterConstants.HUNTER_BASE_URL + 'region/';
+
     public static readonly DISPLAY_TYP_BUTTON = 'BUTTON';
     public static readonly DISPLAY_TYP_LINK = 'LINK';
     public static readonly DISPLAY_TYP_MAT_ICON = 'MAT_ICON';

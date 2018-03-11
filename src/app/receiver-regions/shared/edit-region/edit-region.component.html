@@ -1,0 +1,24 @@
+<div>
+  <div class='header' >
+    Edit {{ region.levelType }} : {{ region.name }}
+  </div>
+  <br/>
+  <mat-divider></mat-divider>
+  <form [formGroup]='formGroup' >
+      <mat-form-field>
+          <input formControlName='name' matInput placeholder='Region Name'>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+            <input formControlName='regionCode' matInput placeholder='Region Code'>
+        </mat-form-field>
+        <br/>
+      <mat-form-field>
+          <input formControlName='population' type='number' matInput placeholder='Region Population'>
+      </mat-form-field>
+  </form>
+  <div style='text-align:right;margin-top:15px;' >
+      <button (click)="closeDialog('YES')" mat-raised-button ><mat-icon>{{cellAction.yesIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.yesButtonText}}</button>
+      <button (click)="closeDialog('NO')" mat-raised-button ><mat-icon>{{cellAction.notIconName}}</mat-icon>&nbsp;&nbsp;{{cellAction.noButtonText}}</button>
+  </div>
+</div>

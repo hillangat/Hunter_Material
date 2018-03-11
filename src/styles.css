@@ -85,3 +85,7 @@ mat-expansion-panel-header {
 .splitFormFieldView > div > div:nth-child(2) {
     width:60%;
 }
+
+.pointerCursor {
+    cursor: pointer;
+}

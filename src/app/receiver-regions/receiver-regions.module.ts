@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { receiverRegionRouters } from './receiver-regions.routes';
 import { ReceiveRegionGridComponent } from './receive-region-grid/receive-region-grid.component';
 import { ReceiverRegionService } from './services/receiver-region.service';
+import { EditRegionComponent } from './shared/edit-region/edit-region.component';
 
 @NgModule({
     imports: [
@@ -19,12 +20,14 @@ import { ReceiverRegionService } from './services/receiver-region.service';
     ],
     declarations: [
         ReceiverRegionsComponent,
-        ReceiveRegionGridComponent
+        ReceiveRegionGridComponent,
+        EditRegionComponent
     ],
     exports: [
         ReceiverRegionsComponent,
     ],
-    providers: [ ReceiverRegionService ]
+    providers: [ ReceiverRegionService ],
+    entryComponents: [ EditRegionComponent ]
 })
 export class ReceiverRegionsModule {
     public static receiveRoutes: Routes = receiverRegionRouters;

@@ -1,3 +1,4 @@
+import { ReceiverRegionService } from './../../receiver-regions/services/receiver-region.service';
 import { HunterUtil } from 'app/shared/utils/hunter-util';
 import { JsonObject, JsonProperty } from 'json2typescript';
 
@@ -5,35 +6,34 @@ import { JsonObject, JsonProperty } from 'json2typescript';
 export class RegionHierarchy {
     @JsonProperty( 'id', Number, true )
     public id: number = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'beanId', Number, true )
     public beanId: number = undefined;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'name', String, true )
     public name: string = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'parent', Number, true )
     public parent: number = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'genParent', Number, true )
     public genParent: number = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'population', Number, true )
     public population: number = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'hunterPopuplation', Number, true )
     public hunterPopuplation: number;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'mapDots', String, true )
     public mapDots: string = undefined;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'levelType', String, true )
     public levelType: string = undefined;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'regionCode', String, true )
     public regionCode: string = undefined;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'city', String, true )
     public city: string = undefined;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'hasState', String, true )
     public hasState: boolean = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'cretDate', Number, true )
     private _cretDate: number = undefined;
-    @JsonProperty( 'id', Number, true )
+    @JsonProperty( 'lastUpdate', Number, true )
     private _lastUpdate: number = undefined;
-    @JsonProperty( 'id', String, true )
+    @JsonProperty( 'lastUpdatedBy', String, true )
     public lastUpdatedBy: string = undefined;
-    @JsonProperty( 'id', String, true )
 
     public set cretDate( value: number ) {
         this._cretDate = value;
@@ -54,6 +54,6 @@ export class RegionHierarchy {
 
     public cretDateStr: string = undefined;
     public lastUpdateStr: string = undefined;
-
-
+    public expanded = false;
+    public children: RegionHierarchy[];
 }
