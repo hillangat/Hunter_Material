@@ -14,6 +14,7 @@
                     <th>Region Level</th>
                     <th>Region Code</th>
                     <th>Population</th>
+                    <th>Hunter Population</th>
                     <th>Created By</th>
                     <th>Created On</th>
                     <th>Updated By</th>
@@ -35,6 +36,7 @@
                         <td [className]='getCellClass(region)' >{{region.levelType}}</td>
                         <td [className]='getCellClass(region)' >{{region.regionCode}}</td>
                         <td [className]='getCellClass(region)' >{{region.population}}</td>
+                        <td [className]='getCellClass(region)' >{{region.hunterPopuplation}}</td>
                         <td [className]='getCellClass(region)' >{{region.createdBy}}</td>
                         <td [className]='getCellClass(region)' >{{formatDate(region.cretDate)}}</td>
                         <td [className]='getCellClass(region)' >{{region.lastUpdatedBy}}</td>
@@ -54,6 +56,7 @@
                             <td [className]='getCellClass(child)' >{{child.levelType}}</td>
                             <td [className]='getCellClass(child)' >{{child.regionCode}}</td>
                             <td [className]='getCellClass(child)' >{{child.population}}</td>
+                            <td [className]='getCellClass(child)' >{{child.hunterPopuplation}}</td>
                             <td [className]='getCellClass(child)' >{{child.createdBy}}</td>
                             <td [className]='getCellClass(child)' >{{formatDate(child.cretDate)}}</td>
                             <td [className]='getCellClass(child)' >{{child.lastUpdatedBy}}</td>
@@ -68,6 +71,7 @@
                                 <td [className]='getCellClass(grand)' >{{grand.levelType}}</td>
                                 <td [className]='getCellClass(grand)' >{{grand.regionCode}}</td>
                                 <td [className]='getCellClass(grand)' >{{grand.population}}</td>
+                                <td [className]='getCellClass(grand)' >{{grand.hunterPopuplation}}</td>
                                 <td [className]='getCellClass(grand)' >{{grand.createdBy}}</td>
                                 <td [className]='getCellClass(grand)' >{{formatDate(grand.cretDate)}}</td>
                                 <td [className]='getCellClass(grand)' >{{grand.lastUpdatedBy}}</td>

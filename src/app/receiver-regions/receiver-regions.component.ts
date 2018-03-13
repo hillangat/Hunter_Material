@@ -50,7 +50,8 @@ export class ReceiverRegionsComponent implements OnInit {
         this.regionService
             .getCountiesForCountry( 1, 'Kenya' )
             .subscribe( (rs: RegionHierarchy[] ) => {
-                this.baseHierarchies = rs
+                this.baseHierarchies = rs;
+                this.baseHierarchies.sort( (a: RegionHierarchy, b: RegionHierarchy) => HunterUtil.compareStr( a.name, b.name ) );
             });
     }
 
@@ -71,6 +72,7 @@ export class ReceiverRegionsComponent implements OnInit {
                 .subscribe( (r: RegionHierarchy[]) => {
                     region.expanded = !region.expanded;
                     region.children = r;
+                    region.children.sort( (a: RegionHierarchy, b: RegionHierarchy) => HunterUtil.compareStr( a.name, b.name ) );
                     if ( expandAll && region.levelType !== 'Ward' ) {
                         region.children.forEach( (h: RegionHierarchy) => this.loadChildrenFor( h, true ) )
                     }
@@ -90,8 +92,8 @@ export class ReceiverRegionsComponent implements OnInit {
     public getMarginLeft( levelType: string ): number {
         switch ( levelType ) {
             case 'County': return 0;
-            case 'Constituency': return 10;
-            case 'Ward': return 20;
+            case 'Constituency': return 30;
+            case 'Ward': return 60;
             default: return 0;
         }
       }

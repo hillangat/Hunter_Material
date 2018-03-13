@@ -38,7 +38,8 @@ export class EditRegionComponent implements OnInit {
     this.formGroup = this.formBuilder.group( {
       name: [this.region.name, Validators.required ],
       regionCode: [ this.region.regionCode ],
-      population: [ this.region.population ]
+      population: [ this.region.population ],
+      hunterPopuplation: [ this.region.hunterPopuplation ]
     });
   }
 

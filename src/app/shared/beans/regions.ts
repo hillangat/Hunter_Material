@@ -10,8 +10,8 @@ export class Country {
     public capital: string;
     @JsonProperty( 'hasState', Boolean )
     public hasState: boolean;
-    @JsonProperty( 'hunterPopulation', Number )
-    public hunterPopulation: number;
+    @JsonProperty( 'hunterPopuplation', Number )
+    public hunterPopuplation: number;
     @JsonProperty( 'countryPopulation', Number )
     public countryPopulation: number;
     @JsonProperty( 'countryCode', String )
@@ -34,8 +34,8 @@ export class County {
     public countyName: string;
     @JsonProperty( 'countyPopulation', Number )
     public countyPopulation: number;
-    @JsonProperty( 'hunterPopulation', Number )
-    public hunterPopulation: number;
+    @JsonProperty( 'hunterPopuplation', Number )
+    public hunterPopuplation: number;
     @JsonProperty( 'mapDots', String )
     public mapDots: string;
     @JsonProperty( 'stateId', String )
@@ -62,8 +62,8 @@ export class Constituency {
     public cnsttncyName: string;
     @JsonProperty( 'cnsttncyPopulation', Number )
     public cnsttncyPopulation: number;
-    @JsonProperty( 'hunterPopulation', Number )
-    public hunterPopulation: number;
+    @JsonProperty( 'hunterPopuplation', Number )
+    public hunterPopuplation: number;
     @JsonProperty( 'cnsttncyCity', String )
     public cnsttncyCity: string;
     @JsonProperty( 'constituencyCode', String )
@@ -90,8 +90,8 @@ export class ConstituencyWard {
     public wardName: string;
     @JsonProperty( 'wardPopulation', Number )
     public wardPopulation: number;
-    @JsonProperty( 'hunterPopulation', Number )
-    public hunterPopulation: number;
+    @JsonProperty( 'hunterPopuplation', Number )
+    public hunterPopuplation: number;
     @JsonProperty( 'mapDots', String )
     public mapDots: string;
     @JsonProperty( 'constituencyWardCode', String )

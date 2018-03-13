@@ -42,6 +42,7 @@ export class ReceiverRegionService {
                     const response: HunterServerResponse = HunterUtil.alert( resp, this.alertService );
                     const array: any = response && HunterUtil.isNotEmpty( response.data ) ? response.data : [];
                     const hiearachies: RegionHierarchy[] = array as RegionHierarchy[];
+                    hiearachies.sort( (a: RegionHierarchy, b: RegionHierarchy) => HunterUtil.compareStr( a.name, b.name ) );
                     ReceiverRegionService.regionHierarchiesMap.set( countryName, hiearachies );
                     return ReceiverRegionService.regionHierarchiesMap.get( countryName );
                 })

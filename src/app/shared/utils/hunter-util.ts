@@ -74,4 +74,8 @@ export class HunterUtil {
         return this.notNullUndefined(strVal) && strVal.trim().length > 0;
     }
 
+    public static compareStr( a: string, b: string ): number {
+        return a === b ? 0 : a < b ? -1 : 1;
+    }
+
 }

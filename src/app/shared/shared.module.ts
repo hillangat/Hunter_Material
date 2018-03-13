@@ -11,6 +11,7 @@ import { OverlayService } from 'app/shared/overlay/shared/overlay.service';
 import { OverlayComponent } from './overlay/overlay.component';
 import { ClickOutsideDirective } from './directives/click-outside-directive';
 import { DynGridSelectorComponent } from './dyn-grid-selector/dyn-grid-selector.component';
+import { HunterComboboxComponent } from './hunter-combobox/hunter-combobox.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { DynGridSelectorComponent } from './dyn-grid-selector/dyn-grid-selector.
     DynamicGridComponent,
     CardTitleHeaderComponent,
     ClickOutsideDirective,
-    DynGridSelectorComponent
+    DynGridSelectorComponent,
+    HunterComboboxComponent
 ],
   exports: [
     ProgSpinnerComponent,
@@ -35,7 +37,8 @@ import { DynGridSelectorComponent } from './dyn-grid-selector/dyn-grid-selector.
     DynamicGridComponent,
     CardTitleHeaderComponent,
     ReactiveFormsModule,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    HunterComboboxComponent
   ],
   providers: [ ]
 })
