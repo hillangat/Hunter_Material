@@ -2,20 +2,17 @@ import { DynGridBarAction } from './../../shared/dynamic-grid/shared/dyn-grid-ba
 import { TaskStatusComponent } from './../task-status/task-status.component';
 import { DynamicGridComponent } from './../../shared/dynamic-grid/dynamic-grid.component';
 import { LoggerService } from '../../shared/logger/logger-service';
-import {Element} from '../../material-code/material-code/material-code.component';
+
 import { Component, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatDialog } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { DialogTemplateComponent } from '../../sample-codes/dialog-template/dialog-template.component';
 import { TaskService } from '../shared/services/task.service';
 import { DynGridProperties } from '../../shared/dynamic-grid/shared/dyn-grid-properties';
-import { DynGridService } from '../../shared/dynamic-grid/services/dyn-grid.service/dyn-grid.service';
 import { ConfirmGridActionComponent } from '../../shared/confirm-grid-action/confirm-grid-action.component';
 import { CellActionBean } from '../../shared/beans/cell-action-bean';
 import { Router } from '@angular/router';
 import { HunterServerResponse } from '../../shared/beans/ServerResponse';
 import { ServerStatusesEnum, ServerStatusResponse } from '../../shared/beans/server-status-response';
+import { MatDialog } from '@angular/material';
 
 @Component({
     moduleId: module.id,
@@ -32,7 +29,6 @@ export class TaskGridComponent implements OnInit {
 
     constructor(
         private taskService: TaskService,
-        private dynGridService: DynGridService,
         private logger: LoggerService,
         private dialog: MatDialog,
         private router: Router

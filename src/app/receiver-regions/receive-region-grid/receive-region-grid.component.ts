@@ -20,7 +20,7 @@ export class ReceiveRegionGridComponent implements OnInit {
   public loadRegions() {
     this.regionService
         .getCountiesForCountry(1, 'Kenya')
-        .subscribe( (r: RegionHierarchy[] ) => this.baseHierarchies );
+        .subscribe( (r: RegionHierarchy[] ) => this.baseHierarchies = r );
   }
 
   public reloadRegions() {

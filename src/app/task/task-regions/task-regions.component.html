@@ -4,7 +4,14 @@
     </mat-card-header>
     <ng-container >
         <mat-card-content>
-            <h1>Task Region Works!!</h1>
+            <app-dynamic-grid
+                #taskRegionsGrid
+                (onClickActionCell)='onClickActionCell($event)'
+                (onClickGridBarAction)='onClickGridBarAction($event)'
+                (onSelectionChange)='onSelectionChange($event)'
+                [dynGridProps]='dynGridProps'
+                [percentWidth]='96'
+            ></app-dynamic-grid>
         </mat-card-content>
     </ng-container>
     <mat-card-actions>

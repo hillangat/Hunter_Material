@@ -6,6 +6,7 @@ import { adminRoutes } from './admin.routes';
 import { RouterModule } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
+import { ReceiverRegionService } from '../receiver-regions/services/receiver-region.service';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
     SharedModule,
     AngularMaterialModule
   ],
-  providers: [ AdminService ]
+  providers: [ AdminService, ReceiverRegionService ]
 })
 export class AdminModule {
   public static routes = adminRoutes;

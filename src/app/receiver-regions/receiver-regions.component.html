@@ -5,10 +5,17 @@
             <thead>
                 <tr>
                     <th class='actionCol'>
-                        <ng-container>
-                            <mat-icon (click)='expandAll()' *ngIf='!allExpanded' aria-label='Expand' class='pointerCursor' >keyboard_arrow_right</mat-icon>
-                            <mat-icon (click)='collapseAll()'*ngIf='allExpanded' aria-label='Expand' class='pointerCursor' >keyboard_arrow_down</mat-icon>
-                        </ng-container>
+                        <div class='regionSelection' >
+                            <div>
+                                <ng-container>
+                                    <mat-icon (click)='expandAll()' *ngIf='!allExpanded' aria-label='Expand' class='pointerCursor' >keyboard_arrow_right</mat-icon>
+                                    <mat-icon (click)='collapseAll()'*ngIf='allExpanded' aria-label='Expand' class='pointerCursor' >keyboard_arrow_down</mat-icon>
+                                </ng-container>
+                            </div>
+                            <div>
+                                <mat-checkbox (change)='onSelectCheckbox(undefined)' ></mat-checkbox>
+                            </div>
+                        </div>
                     </th>
                     <th>Name</th>
                     <th>Region Level</th>
@@ -27,10 +34,17 @@
                 <ng-container *ngFor='let region of baseHierarchies' >
                     <tr>
                         <td [className]='getCellClass(region, true)'>
-                            <ng-container *ngIf="region.levelType !== 'Ward'" >
-                                <mat-icon (click)='loadChildrenFor(region)' *ngIf='!region.expanded' aria-label='Expand' class='pointerCursor' [style.margin-left.px]='getMarginLeft(region.levelType)' >keyboard_arrow_right</mat-icon>
-                                <mat-icon (click)='loadChildrenFor(region)'*ngIf='region.expanded' aria-label='Expand' class='pointerCursor'  [style.margin-left.px]='getMarginLeft(region.levelType)'>keyboard_arrow_down</mat-icon>
-                            </ng-container>
+                            <div class='regionSelection' >
+                                <div>
+                                    <ng-container *ngIf="region.levelType !== 'Ward'" >
+                                        <mat-icon (click)='loadChildrenFor(region)' *ngIf='!region.expanded' aria-label='Expand' class='pointerCursor' [style.margin-left.px]='getMarginLeft(region.levelType)' >keyboard_arrow_right</mat-icon>
+                                        <mat-icon (click)='loadChildrenFor(region)'*ngIf='region.expanded' aria-label='Expand' class='pointerCursor'  [style.margin-left.px]='getMarginLeft(region.levelType)'>keyboard_arrow_down</mat-icon>
+                                    </ng-container>
+                                </div>
+                                <div>
+                                    <mat-checkbox  [checked]='region.selected' (change)='onSelectCheckbox(region)' ></mat-checkbox>
+                                </div>
+                            </div>
                         </td>
                         <td [className]='getCellClass(region)' >{{region.name}}</td>
                         <td [className]='getCellClass(region)' >{{region.levelType}}</td>
@@ -47,10 +61,17 @@
                     <ng-container *ngFor='let child of region.children'>
                         <tr>
                             <td [className]='getCellClass(region, true)' >
-                                <ng-container *ngIf="child.levelType !== 'Ward'" >
-                                    <mat-icon (click)='loadChildrenFor(child)' *ngIf='!child.expanded' aria-label='Expand' class='pointerCursor' [style.margin-left.px]='getMarginLeft(child.levelType)' >keyboard_arrow_right</mat-icon>
-                                    <mat-icon (click)='loadChildrenFor(child)'*ngIf='child.expanded' aria-label='Expand' class='pointerCursor'  [style.margin-left.px]='getMarginLeft(child.levelType)'>keyboard_arrow_down</mat-icon>
-                                </ng-container>
+                                <div class='regionSelection' >
+                                    <div>
+                                        <ng-container *ngIf="child.levelType !== 'Ward'" >
+                                            <mat-icon (click)='loadChildrenFor(child)' *ngIf='!child.expanded' aria-label='Expand' class='pointerCursor' [style.margin-left.px]='getMarginLeft(child.levelType)' >keyboard_arrow_right</mat-icon>
+                                            <mat-icon (click)='loadChildrenFor(child)'*ngIf='child.expanded' aria-label='Expand' class='pointerCursor'  [style.margin-left.px]='getMarginLeft(child.levelType)'>keyboard_arrow_down</mat-icon>
+                                        </ng-container>
+                                    </div>
+                                    <div>
+                                        <mat-checkbox  [checked]='child.selected' (change)='onSelectCheckbox(child)'  ></mat-checkbox>
+                                    </div>
+                                </div>
                             </td>
                             <td [className]='getCellClass(child)' >{{child.name}}</td>
                             <td [className]='getCellClass(child)' >{{child.levelType}}</td>
@@ -66,7 +87,12 @@
                         </tr>
                         <ng-container *ngFor='let grand of child.children' >
                             <tr>
-                                <td  [className]='getCellClass(region, true)'  ></td>
+                                <td  [className]='getCellClass(region, true)'  >
+                                    <div></div>
+                                    <div class='regionSelection' >
+                                        <mat-checkbox [checked]='grand.selected' (change)='onSelectCheckbox(grand)' ></mat-checkbox>
+                                    </div>
+                                </td>
                                 <td [className]='getCellClass(grand)' >{{grand.name}}</td>
                                 <td [className]='getCellClass(grand)' >{{grand.levelType}}</td>
                                 <td [className]='getCellClass(grand)' >{{grand.regionCode}}</td>

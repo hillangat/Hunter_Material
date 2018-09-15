@@ -18,10 +18,11 @@ import { CloneTaskComponent } from './clone-task/clone-task.component';
 import { TaskRegionsComponent } from './task-regions/task-regions.component';
 import { TaskTextMessageComponent } from './task-text-message/task-text-message.component';
 import { TaskEmailMessageComponent } from './task-email-message/task-email-message.component';
+import { AddRegionToTaskComponent } from './add-region-to-task/add-region-to-task.component';
 
 
 @NgModule({
-  entryComponents: [ TaskStatusComponent ],
+  entryComponents: [ TaskStatusComponent, AddRegionToTaskComponent ],
   declarations: [
     TaskComponent,
     TaskDetailsComponent,
@@ -35,8 +36,9 @@ import { TaskEmailMessageComponent } from './task-email-message/task-email-messa
     TaskSocialMessageComponent,
     TaskEmailMessageComponent,
     TaskGroupsComponent,
-    TaskRegionsComponent
-  ],
+    TaskRegionsComponent,
+    AddRegionToTaskComponent
+],
   imports: [
     CommonModule,  /** This must be the first import for material design to work */
     RouterModule.forChild( taskRoutes ),

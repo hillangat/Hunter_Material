@@ -1,0 +1,17 @@
+.dropdownsFormFields {
+    list-style: none;
+}
+
+.dropdownsFormFields li {
+    display: inline;
+    margin-left: 20px;
+}
+
+.progress-bar{
+    margin-bottom: 0px important;
+}
+
+.comboboxBox {
+    box-sizing: border-box;
+    border-radius: 4px;
+}

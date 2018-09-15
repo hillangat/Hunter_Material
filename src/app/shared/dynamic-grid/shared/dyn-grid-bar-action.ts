@@ -13,6 +13,8 @@ export class DynGridBarAction {
     private _displayType: string;
     @JsonProperty( 'icon', String )
     private _icon: string;
+    @JsonProperty( 'data', Object )
+    private _data: Object;
 
     public get text(): string { return this._text }
     public set text( value: string ) { this._text = value }
@@ -28,5 +30,8 @@ export class DynGridBarAction {
 
     public get icon(): string { return this._icon }
     public set icon( value: string ) { this._icon = value }
+
+    public get data(): Object { return this._data }
+    public set data( value: Object ) { this._data = value }
 
 }

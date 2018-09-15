@@ -55,5 +55,6 @@ export class RegionHierarchy {
     public cretDateStr: string = undefined;
     public lastUpdateStr: string = undefined;
     public expanded = false;
+    public selected = false;
     public children: RegionHierarchy[];
 }

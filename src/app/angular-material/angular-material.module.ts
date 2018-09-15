@@ -22,6 +22,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 import {
   MatCheckboxModule,
@@ -62,7 +64,8 @@ import {
     MatSidenavModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressBarModule
   ],
   exports: [
     CommonModule,
@@ -93,7 +96,8 @@ import {
     MatSidenavModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressBarModule
   ],
   declarations: [],
   providers: [

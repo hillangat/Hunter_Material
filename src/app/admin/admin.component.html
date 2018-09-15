@@ -47,7 +47,7 @@
                             </mat-card-header>
                             <ng-container *ngIf="gridState === 'SUCCESS'" >
                                 <mat-card-content>
-                                        <app-hunter-combobox></app-hunter-combobox>
+                                        <app-hunter-combobox #regionCombobox (onChangeDropdown)='onChangeDropdown($event)' ></app-hunter-combobox>
                                     </mat-card-content>
                             </ng-container>
                             <ng-container *ngIf="gridState === 'LOADING'" >

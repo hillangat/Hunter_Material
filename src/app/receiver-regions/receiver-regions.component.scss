@@ -46,3 +46,19 @@ thead {
 table {
     width:400px;
 }
+
+.regionSelection {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-size: .9em;
+    min-width: 40px;
+}
+
+.regionSelection div {
+    box-sizing: border-box;
+}
+
+.regionSelection mat-icon, .regionSelection mat-checkbox {
+    vertical-align: middle !important;
+}

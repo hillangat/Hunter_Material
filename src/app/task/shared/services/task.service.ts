@@ -38,6 +38,7 @@ export class TaskService {
   public readonly taskHistoryURL = this.taskBaseURL + 'action/task/history/getForTask/';
   public readonly getAvailTaskGroups = this.taskBaseURL + 'action/task/availGroups/';
   public readonly addGrpToTask = this.taskBaseURL + 'action/tskGrp/create';
+  public readonly addRegionToTaskURL = this.taskBaseURL + 'action/regions/addRegion/';
   public readonly currAccessToke = 'YWRtaW46OTk5OTk5';
   public readonly getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   public readonly getAllTasksURL = this.getTasksURL + '/all';
@@ -45,12 +46,26 @@ export class TaskService {
   public readonly getHistoryURL  = this.taskBaseURL + 'action/task/history/getForTask/';
   public readonly getGroupsURL  = this.taskBaseURL + 'action/task/groups/';
   public readonly removeGroupFromTaskURL  = this.taskBaseURL + 'action/tskGrp/destroy';
+  public readonly removeSelTaskRegionsFromTaskURL  = this.taskBaseURL + 'action/regions/removeSelRegionsRegionsFromTask/';
   public readonly getServiceProvidersSelValsURL  = this.taskBaseURL + 'action/providers/selVals/';
+  public readonly getTaskRegions  = HunterConstants.HUNTER_BASE_URL + 'region/action/task/regions/read/';
   public readonly createTaskMessageURL = 'message/action/tskMsg/create/';
   public readonly getAngularMessageURL = 'message/action/tskMsg/getAngularMsg/';
   public readonly getAvailGroupsForDynGrid = this.taskBaseURL + 'action/task/availGroupsForDynGrid/';
 
   constructor( private http: Http, private logger: LoggerService, private alertService: AlertService ) {}
+
+  public addRegionToTask( taskId: number, type: string, regionIds: SelectValue[] ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .post( this.addRegionToTaskURL + taskId + '/' + type,  regionIds)
+          .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as HunterServerResponse )
+          .catch( (error: any) => {
+            this.alertService.error( 'Application error occurred while creating message' )
+            return Observable.throw( error );
+          })
+    );
+  }
 
   public getMessageForTask( taskId: number ): Observable<HunterServerResponse> {
     return (
@@ -207,6 +222,14 @@ export class TaskService {
     return(
       this.http
           .post( this.removeGroupFromTaskURL, JSON.stringify({ taskId: taskId, groupId: groupId }) )
+          .map( (response: Response) => HunterUtil.alert( response , this.alertService ) )
+    );
+  }
+
+  public removeSelRegionsFromTask( taskId: number, selRegions: SelectValue[] ): Observable<HunterServerResponse> {
+    return(
+      this.http
+          .post( this.removeSelTaskRegionsFromTaskURL + taskId, selRegions)
           .map( (response: Response) => HunterUtil.alert( response , this.alertService ) )
     );
   }

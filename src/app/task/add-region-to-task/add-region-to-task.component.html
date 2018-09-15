@@ -1,0 +1,18 @@
+<div class='addTaskRegionCover'>
+  <div>
+    <app-hunter-combobox [widthPercent]='96' #regionCombobox (onChangeDropdown)='onChangeDropdown($event)' ></app-hunter-combobox>
+  </div>
+  <div class='regionTypeText'>Counties</div>
+  <div>
+    <div class='task-regions-grid-container' >
+      <app-dynamic-grid
+      #taskRegionsGrid
+      (onClickActionCell)='onClickActionCell($event)'
+      (onClickGridBarAction)='onClickGridBarAction($event)'
+      (onSelectionChange)='onSelectionChange($event)'
+      [dynGridProps]='dynGridProps'
+      [percentWidth]='96'
+  ></app-dynamic-grid>
+  </div>
+  </div>
+</div>

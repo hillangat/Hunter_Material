@@ -1,3 +1,4 @@
+import { SelectValue } from './../shared/beans/SelectValue';
 import { HunterUtil } from './../shared/utils/hunter-util';
 import { SelectionModel } from '@angular/cdk/collections';
 import { LoggerService } from 'app/shared/logger/logger-service';
@@ -9,6 +10,9 @@ import { MatSelectionList, MatListOption, MatSelectionListChange } from '@angula
 import { ServerStatusResponse } from 'app/shared/beans/server-status-response';
 import { States } from 'app/shared/enums/states.enum';
 import { AlertService } from '../shared/services/alert.service';
+import { Dropdown } from '../shared/hunter-combobox/shared/hunter-combobox-input';
+import { HunterComboboxComponent } from '../shared/hunter-combobox/hunter-combobox.component';
+import { ReceiverRegionService } from '../receiver-regions/services/receiver-region.service';
 
 @Component({
     moduleId: module.id,
@@ -21,12 +25,14 @@ export class AdminComponent implements OnInit {
     @ViewChild( MatSelectionList ) cacheOptions: MatSelectionList;
 
     public availCaches: CacheRefresh[];
+    @ViewChild('regionCombobox') public regionCombobox: HunterComboboxComponent;
     public gridState: States = States.LOADING;
 
     constructor(
         private adminService: AdminService,
         private logger: LoggerService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private regionService: ReceiverRegionService
     ) {}
 
     public refreshSelCaches() {
@@ -104,6 +110,52 @@ export class AdminComponent implements OnInit {
                     this.gridState = States.ERROR_OCCURRED;
                 }
             );
+    }
+
+    public onChangeDropdown(region: Dropdown): void {
+        if ( !region.selVal ) {
+            this.setValsOnDropdownChange(region.name, [])
+            return;
+        }
+        switch ( region.name ) {
+            case 'Country' :
+                this.regionService
+                    .getCountiesSelVal(Number(region.selVal.value))
+                    .subscribe(
+                        (selVals: SelectValue[]) => {
+                            this.setValsOnDropdownChange(region.name, selVals)
+                        },
+                        (error: any) => {
+                            this.setValsOnDropdownChange(region.name, [])
+                        }
+                    )
+                break;
+            case 'County' :
+                this.regionService
+                    .getConstituenciesSelVal(Number(region.selVal.value))
+                    .subscribe((selVals: SelectValue[]) => {
+                        this.setValsOnDropdownChange(region.name, selVals)
+                    },
+                    (error: any) => {
+                        this.setValsOnDropdownChange(region.name, [])
+                    })
+                break;
+            case 'Constituency' :
+                this.regionService
+                    .getWardsSelVal(Number(region.selVal.value))
+                    .subscribe((selVals: SelectValue[]) => {
+                        this.setValsOnDropdownChange(region.name, selVals)
+                    },
+                    (error: any) => {
+                        this.setValsOnDropdownChange(region.name, [])
+                    })
+                break;
+            default: this.setValsOnDropdownChange(region.name, [])
+        }
+    }
+
+    public setValsOnDropdownChange(name: string, selVals: SelectValue[]): void {
+        this.regionCombobox.setValsOnDropdownChange(name, selVals);
     }
 
 }

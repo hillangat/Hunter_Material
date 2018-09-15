@@ -1,3 +1,15 @@
-<p>
-  hunter-combobox works!
-</p>
+<div class='comboboxBox' [formGroup]='formGroup' [style.width.%]='widthPercent'>
+  <ul class='dropdownsFormFields' >
+    <li *ngFor='let dropdown of comboboxInput.dropdowns' >
+      <mat-form-field>
+        <mat-select disabled={{dropdown.disabled}} (change)='_onChangeDropdown($event, dropdown)' id={{dropdown.name}} placeholder={{dropdown.placeholder}} formControlName={{dropdown.name}}>
+          <mat-option>Select Region</mat-option>
+          <mat-option *ngFor='let val of dropdown.selVals' value={{val.value}}>
+            {{val.text}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </li>
+  </ul>
+  <mat-progress-bar class='progress-bar' *ngIf='dropChangeInProg' mode='query'></mat-progress-bar>
+</div>

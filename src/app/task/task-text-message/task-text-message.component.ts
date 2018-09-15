@@ -110,7 +110,7 @@ export class TaskTextMessageComponent implements OnInit {
         }
     }
 
-    private createTaskMessage() {
+    private createTaskMessage(): void {
         if ( this.textMsgFormGroup.valid ) {
             this.taskService
             .createTaskMessage( this.task.taskId, this.textMsgFormGroup.value )
@@ -133,7 +133,7 @@ export class TaskTextMessageComponent implements OnInit {
         }
     }
 
-    private resetTheForm() {
+    private resetTheForm(): void {
         this.textMsgFormGroup.reset();
     }
 
@@ -160,13 +160,13 @@ export class TaskTextMessageComponent implements OnInit {
 
     }
 
-    private getProviderId() {
+    private getProviderId(): String {
         const present: boolean = HunterUtil.notNullUndefined( this.task.taskMessage ) &&
             HunterUtil.notNullUndefined( this.task.taskMessage.provider );
-        return present ? this.task.taskMessage.provider.providerId : undefined;
+        return present ? String( this.task.taskMessage.provider.providerId ) : undefined;
     }
 
-    private furnishTask() {
+    private furnishTask(): void {
         this.createFormGroup();
         this.loadProvidersSelVals();
         this.loadLifeStatuses();

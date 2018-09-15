@@ -1,3 +1,4 @@
+import { SelectValue } from './../../shared/beans/SelectValue';
 import { filter } from 'RXJS/operators';
 import { Observable } from 'RXJS';
 import { HunterUtil } from './../../shared/utils/hunter-util';
@@ -93,13 +94,13 @@ export class ReceiverRegionService {
         }
     }
 
-public updateRegion( region: RegionHierarchy ): Observable<ServerStatusResponse> {
+    public updateRegion( region: RegionHierarchy ): Observable<ServerStatusResponse> {
         return (
           this.http
               .post( HunterConstants.REGION_CONTROLLER_URL + 'action/hierarchies/edit', JSON.stringify( region ) )
               .map( (response: Response) => HunterUtil.alert( response, this.alertService ) as ServerStatusResponse)
         );
-      }
+    }
 
     public getWardsForConstituency( countryName: string, constituencyId: number ): Observable<RegionHierarchy[]> {
         const baseHiearchies: RegionHierarchy[] = ReceiverRegionService.regionHierarchiesMap.get( countryName );
@@ -135,6 +136,66 @@ public updateRegion( region: RegionHierarchy ): Observable<ServerStatusResponse>
 
     public refreshAllHierachies( countryName: string ) {
         return this.getAllRegionHierarchies( countryName );
+    }
+
+    public getCountriesSelVal(): Observable<SelectValue[]> {
+        return (
+            this.http
+                .post(HunterConstants.HUNTER_BASE_URL + 'region/action/countries/read/', null)
+                .map( (resp: Response) => {
+                   const respJson: HunterServerResponse = HunterUtil.alert(resp, this.alertService);
+                   const selVals: SelectValue[] = [];
+                   if ( HunterUtil.isNotEmpty(respJson.data) ) {
+                       respJson.data.forEach((c: any) => selVals.push(new SelectValue(c['countryId'], c['countryName'])))
+                   }
+                   return selVals;
+                })
+        );
+    }
+
+    public getCountiesSelVal(coutryId: number): Observable<SelectValue[]> {
+        return (
+            this.http
+                .post(HunterConstants.HUNTER_BASE_URL + 'region/action/counties/allForCountry/' + coutryId, null)
+                .map( (resp: Response) => {
+                   const respJson: HunterServerResponse = HunterUtil.alert(resp, this.alertService);
+                   const selVals: SelectValue[] = [];
+                   if ( HunterUtil.isNotEmpty(respJson.data) ) {
+                       respJson.data.forEach((c: any) => selVals.push(new SelectValue(c['countyId'], c['countyName'])))
+                   }
+                   return selVals;
+                })
+        );
+    }
+
+    public getConstituenciesSelVal(countyId: number): Observable<SelectValue[]> {
+        return (
+            this.http
+                .post(HunterConstants.HUNTER_BASE_URL + 'region/action/constituencies/read/' + countyId, null)
+                .map( (resp: Response) => {
+                   const respJson: HunterServerResponse = HunterUtil.alert(resp, this.alertService);
+                   const selVals: SelectValue[] = [];
+                   if ( HunterUtil.isNotEmpty(respJson.data) ) {
+                       respJson.data.forEach((c: any) => selVals.push(new SelectValue(c['constituencyId'], c['constituencyName'])))
+                   }
+                   return selVals;
+                })
+        );
+    }
+
+    public getWardsSelVal(constituencyId: number): Observable<SelectValue[]> {
+        return (
+            this.http
+                .post(HunterConstants.HUNTER_BASE_URL + 'region/action/constituencyWards/read/' + constituencyId, null)
+                .map( (resp: Response) => {
+                   const respJson: HunterServerResponse = HunterUtil.alert(resp, this.alertService);
+                   const selVals: SelectValue[] = [];
+                   if ( HunterUtil.isNotEmpty(respJson.data) ) {
+                       respJson.data.forEach((c: any) => selVals.push(new SelectValue(c['constituencyWardId'], c['constituencyWardName'])))
+                   }
+                   return selVals;
+                })
+        );
     }
 
 }

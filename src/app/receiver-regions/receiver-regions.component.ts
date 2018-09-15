@@ -1,5 +1,5 @@
+import { HunterUtil } from './../shared/utils/hunter-util';
 import { ServerStatusResponse } from './../shared/beans/server-status-response';
-import { HunterUtil } from 'app/shared/utils/hunter-util';
 import { Observable } from 'RXJS';
 import { Router, NavigationEnd } from '@angular/router';
 import { ReceiverRegionService } from './services/receiver-region.service';
@@ -229,7 +229,33 @@ export class ReceiverRegionsComponent implements OnInit {
                 (r: RegionHierarchy[]) => this.loadRegions(),
                 ( error: any ) => this.logger.error( JSON.stringify( error ) ),
                 () => this.overlayService.removeOverlay()
-        );
+            );
+    }
+
+    public setSelected(regions: RegionHierarchy[], select: boolean): void {
+        if ( HunterUtil.isNotEmpty(regions) ) {
+            regions.forEach( (r: RegionHierarchy) => r.selected = select );
+        }
+    }
+
+    public onSelectCheckbox(selRegion: any): void {
+        if ( !selRegion ) {
+            this.baseHierarchies.forEach( (h: RegionHierarchy) => {
+                h.selected = !h.selected;
+                if ( HunterUtil.isNotEmpty(h.children) ) {
+                    h.children.forEach( (c: RegionHierarchy) => {
+                        c.selected = h.selected;
+                        if ( HunterUtil.isNotEmpty(c.children) ) {
+                            c.children.forEach( (g: RegionHierarchy) => {
+                                g.selected = c.selected;
+                            });
+                        }
+                    });
+                }
+            });
+        } else {
+            (selRegion as RegionHierarchy).selected = !(selRegion as RegionHierarchy).selected;
+        }
     }
 
 }

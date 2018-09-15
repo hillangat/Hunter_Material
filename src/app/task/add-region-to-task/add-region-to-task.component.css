@@ -1,0 +1,15 @@
+.addTaskRegionCover {
+    min-height: 400px;
+}
+
+.task-regions-grid-container {
+    width: 100%;
+}
+
+.regionTypeText {
+    width: 100% !important;
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: -25px;
+    margin-bottom: 10px;
+}
